@@ -17,4 +17,5 @@ public class HardCoded {
     public static final String NATIVE_EXISTS = "Native does not exist";
     public static final String ATTENDANCE_TAKEN = "Attendance already taken";
     public static final String WEEKDAYS_ONLY = "Uh oh!.. No attendance on weekends!";
+    public static final String PERMANENT_ATTENDANCE = "permanent_attendance";
 }
