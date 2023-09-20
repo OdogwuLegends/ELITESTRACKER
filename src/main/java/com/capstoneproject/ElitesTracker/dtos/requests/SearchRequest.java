@@ -4,10 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @Builder
-public class LoginRequest {
+public class SearchRequest {
+    private String startDate;
+    private String endDate;
     private String semicolonEmail;
-    private String password;
+    private String cohort;
 }

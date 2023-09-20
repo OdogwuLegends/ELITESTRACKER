@@ -6,6 +6,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AttendanceResponse {
+@Builder
+public class LoginResponse {
+    private String semicolonEmail;
     private String message;
+    private boolean isLoggedIn;
 }

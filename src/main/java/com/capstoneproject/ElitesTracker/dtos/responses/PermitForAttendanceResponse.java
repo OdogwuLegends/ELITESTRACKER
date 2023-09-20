@@ -1,11 +1,8 @@
 package com.capstoneproject.ElitesTracker.dtos.responses;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-public class AttendanceResponse {
+@Builder
+public class PermitForAttendanceResponse {
     private String message;
 }

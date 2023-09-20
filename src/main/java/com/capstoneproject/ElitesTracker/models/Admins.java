@@ -3,15 +3,15 @@ package com.capstoneproject.ElitesTracker.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static com.capstoneproject.ElitesTracker.utils.HardCoded.MOCK_SEMICOLON_DB;
+import static com.capstoneproject.ElitesTracker.utils.HardCoded.ADMINS;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Entity(name = MOCK_SEMICOLON_DB)
-public class MockSemicolonDB {
+@Entity(name = ADMINS)
+public class Admins {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +24,4 @@ public class MockSemicolonDB {
 
     @Column(nullable = false, unique = true)
     private String semicolonEmail;
-
-    @Column(nullable = false)
-    private String cohort;
 }

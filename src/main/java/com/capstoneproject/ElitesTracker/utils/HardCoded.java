@@ -2,11 +2,14 @@ package com.capstoneproject.ElitesTracker.utils;
 
 public class HardCoded {
     public static final String ELITE_USER = "elite_user";
-    public static final String MOCK_SEMICOLON_DB = "mock_semicolon_db";
+    public static final String NATIVES = "natives";
+    public static final String NATIVE_CHECK = "native";
+    public static final String ADMINS = "admins";
     public static final String ATTENDANCE = "attendance";
     public static final String TEST_IP = "test_ip";
     public static final String ELITE_USER_ID = "elite_user_id";
-    public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss";
+    public static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
+    public static final String DATE_FORMAT = "dd/MM/yyyy";
     public static final String EMPTY_STRING = "";
     public static final String X_FORWARDED_FOR = "X-FORWARDED-FOR";
     public static final String WELCOME_MESSAGE = "Welcome %s, Registration successful";
@@ -14,8 +17,26 @@ public class HardCoded {
     public static final String ATTENDANCE_MESSAGE = "Hi %s, Attendance taken. Enjoy today's lectures!";
     public static final String SATURDAY = "SATURDAY";
     public static final String SUNDAY = "SUNDAY";
-    public static final String NATIVE_EXISTS = "Native does not exist";
-    public static final String ATTENDANCE_TAKEN = "Attendance already taken";
+    public static final String NATIVE_DOES_NOT_EXIST = "Native does not exist";
+    public static final String NATIVE_NOT_FOUND = "Native not found in Cohort %s";
+    public static final String ADMIN_DOES_NOT_EXIST = "Admin does not exist";
+    public static final String USER_DOES_NOT_EXIST = "User does not exist, or incorrect details provided";
+    public static final String ATTENDANCE_TAKEN = "Attendance taken with this device already! Please try again tomorrow";
     public static final String WEEKDAYS_ONLY = "Uh oh!.. No attendance on weekends!";
-    public static final String PERMANENT_ATTENDANCE = "permanent_attendance";
+    public static final String ATTENDANCE_SHEET = "attendance_sheet";
+    public static final String MAC_ADDRESS_NOT_FOUND = "MAC Address not found";
+    public static final String FORMAT_MAC_ADDRESS = "%02X:";
+    public static final String USER_NAME_NOT_CORRECT = "Email not correct";
+    public static final String PASSWORD_NOT_CORRECT = "Password not correct";
+    public static final String LOGIN_MESSAGE = "Log in successful";
+    public static final String DIFFERENT_DEVICE = "Please use the device you registered with to complete this process";
+    public static final String NO_RECORD_FOUND = "No attendance record found";
+    public static final String BASE_IP_ADDRESS = "172.16.0.";
+    public static final String CONNECT_TO_SEMICOLON_WIFI = "Please connect to Semicolon WiFi network to take attendance";
+    public static final String EDIT_STATUS_MESSAGE = "Attendance status updated successfully!";
+    public static final String DELETE_USER_MESSAGE = "User deleted successfully!";
+    public static final String NOT_PERMITTED_FOR_ATTENDANCE = "Not permitted to take attendance currently. Please see an Admin.";
+    public static final String PERMISSION_MODIFIED_MESSAGE = "Permission successfully modified";
+    public static final String PERMISSIONS_MODIFIED_MESSAGE = "Permissions successfully modified";
+    public static final String COHORT_NOT_FOUND_MESSAGE = "Cohort %s not found";
 }

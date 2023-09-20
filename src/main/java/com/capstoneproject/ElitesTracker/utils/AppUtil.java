@@ -1,0 +1,282 @@
+package com.capstoneproject.ElitesTracker.utils;
+
+import com.capstoneproject.ElitesTracker.dtos.requests.UserRegistrationRequest;
+import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
+import com.capstoneproject.ElitesTracker.exceptions.NoAttendanceOnWeekendsException;
+import com.capstoneproject.ElitesTracker.models.Natives;
+import com.capstoneproject.ElitesTracker.services.interfaces.NativesService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Formatter;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.NO_ATTENDANCE_ON_WEEKENDS_EXCEPTION;
+import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.NO_MAC_ADDRESS_FOUND_EXCEPTION;
+import static com.capstoneproject.ElitesTracker.utils.HardCoded.*;
+
+
+public class AppUtil {
+
+
+    public static String getCurrentTimeStamp(){
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        return currentTime.format(formatter);
+    }
+    public static String getCurrentDayOfWeek(){
+        LocalDateTime currentDayOfWeek = LocalDateTime.now();
+        DayOfWeek dayOfWeek = currentDayOfWeek.getDayOfWeek();
+        return dayOfWeek.toString();
+    }
+    public static String stringDateToString(String userInput) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        LocalDate dateToFormat = LocalDate.parse(userInput, dateFormatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        return dateToFormat.format(formatter);
+    }
+    public static LocalDate stringToLocalDate(String userInput) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        return LocalDate.parse(userInput, dateFormatter);
+    }
+    public static String localDateToString() {
+        LocalDate dateToFormat = LocalDate.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        return dateToFormat.format(dateFormatter);
+    }
+    public static String formatLocalDateToString(LocalDate currentTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        return currentTime.format(formatter);
+    }
+    public static String subStringDate(String date) {
+        int indexOfSpace = date.indexOf(' ');
+
+        if (indexOfSpace != -1) {
+            return date.substring(0, indexOfSpace);
+        } else {
+            return date;
+        }
+    }
+    public static String subStringIp(String ipAddress) {
+        if (ipAddress != null && ipAddress.length() >= 9) {
+            return ipAddress.substring(0, 9);
+        } else {
+            return ipAddress;
+        }
+    }
+
+    public static String welcomeMessage(String name) {
+        return String.format(WELCOME_MESSAGE,name);
+    }
+    public static String nativeNotFoundMessage(String cohort) {
+        return String.format(NATIVE_NOT_FOUND,cohort);
+    }
+    public static String cohortNotFoundMessage(String cohort) {
+        return String.format(COHORT_NOT_FOUND_MESSAGE,cohort);
+    }
+
+    public static String savedNameMessage(String firstName, String lastName){
+        return String.format(SAVED_SUCCESSFULLY_MSG, firstName, lastName);
+    }
+    public static String attendanceMessage(String firstName){
+        return String.format(ATTENDANCE_MESSAGE,firstName);
+    }
+    public static void noAttendanceOnWeekendsCheck(){
+        String today = getCurrentDayOfWeek();
+        if(today.equalsIgnoreCase(SATURDAY) || today.equalsIgnoreCase(SUNDAY)){
+            throw new NoAttendanceOnWeekendsException(NO_ATTENDANCE_ON_WEEKENDS_EXCEPTION.getMessage());
+        }
+    }
+
+    public static String retrieveActualIP(HttpServletRequest request){
+        String clientIP = request.getHeader("X-Forwarded-For");
+
+        boolean isEmpty = clientIP == null || clientIP.isEmpty() || "unknown".equalsIgnoreCase(clientIP);
+
+        if (isEmpty) {
+            clientIP = request.getHeader("Proxy-Client-IP");
+        }
+        if (isEmpty) {
+            clientIP = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (isEmpty) {
+            clientIP = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (isEmpty) {
+            clientIP = request.getHeader("HTTP_X_FORWARDED");
+        }
+        if (isEmpty) {
+            clientIP = request.getHeader("HTTP_X_CLUSTER_CLIENT_IP");
+        }
+        if (isEmpty) {
+            clientIP = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (isEmpty) {
+            clientIP = request.getHeader("HTTP_FORWARDED_FOR");
+        }
+        if (isEmpty) {
+            clientIP = request.getHeader("HTTP_FORWARDED");
+        }
+        if (isEmpty) {
+            clientIP = request.getRemoteAddr();
+        }
+        return clientIP;
+    }
+
+    public static String getMacAddress(String ip) {
+        try {
+            InetAddress ipAddress = InetAddress.getByName(ip);
+            NetworkInterface networkInterface = NetworkInterface.getByInetAddress(ipAddress);
+
+            if (networkInterface != null) {
+                byte[] macBytes = networkInterface.getHardwareAddress();
+                if (macBytes != null) {
+                    return formatMacAddress(macBytes);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        throw new EntityDoesNotExistException(NO_MAC_ADDRESS_FOUND_EXCEPTION.getMessage());
+    }
+
+    private static String formatMacAddress(byte[] macBytes) {
+        StringBuilder macAddress = new StringBuilder();
+        try (Formatter formatter = new Formatter(macAddress, Locale.US)) {
+            for (byte b : macBytes) {
+                formatter.format(FORMAT_MAC_ADDRESS, b);
+            }
+            return macAddress.substring(0, macAddress.length() - 1);
+        }
+    }
+
+//    public static String getMACAddressTheSecond(String ip) {
+//        String str = "";
+//        String macAddress = "";
+//        try {
+//            Process p = Runtime.getRuntime().exec("nbtstat -A " + ip);
+//            InputStreamReader ir = new InputStreamReader(p.getInputStream());
+//            LineNumberReader input = new LineNumberReader(ir);
+//            for (int i = 1; i < 100; i++) {
+//                str = input.readLine();
+//                if (str != null) {
+//                    if (str.indexOf("MAC Address") > 1) {
+//                        macAddress = str.substring(str.indexOf("MAC Address") + 14, str.length());
+//                        break;
+//                    }
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace(System.out);
+//        }
+//        return macAddress;
+//    }
+//    static Pattern macpt = null;
+//    public static String getMac(String ip) {
+//
+//        // Find OS and set command according to OS
+//        String OS = System.getProperty("os.name").toLowerCase();
+//
+//        String[] cmd;
+//        if (OS.contains("win")) {
+//            // Windows
+//            macpt = Pattern
+//                    .compile("[0-9a-f]+-[0-9a-f]+-[0-9a-f]+-[0-9a-f]+-[0-9a-f]+-[0-9a-f]+");
+//            String[] a = { "arp", "-a", ip };
+//            cmd = a;
+//        } else {
+//            // Mac OS X, Linux
+//            macpt = Pattern
+//                    .compile("[0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+:[0-9a-f]+");
+//            String[] a = { "arp", ip };
+//            cmd = a;
+//        }
+//
+//        try {
+//            // Run command
+//            Process p = Runtime.getRuntime().exec(cmd);
+//            p.waitFor();
+//            // read output with BufferedReader
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(
+//                    p.getInputStream()));
+//            String line = reader.readLine();
+//
+//            // Loop trough lines
+//            while (line != null) {
+//                Matcher m = macpt.matcher(line);
+//
+//                // when Matcher finds a Line then return it as result
+//                if (m.find()) {
+//                    System.out.println("Found");
+//                    System.out.println("MAC: " + m.group(0));
+//                    return m.group(0);
+//                }
+//
+//                line = reader.readLine();
+//            }
+//
+//        } catch (IOException | InterruptedException e1) {
+//            e1.printStackTrace();
+//        }
+//
+//        // Return empty string if no MAC is found
+//        return "";
+//    }
+
+    public static String getMacAddressFourth() throws Exception {
+        String macAddress = null;
+        String command = "ifconfig";
+
+        String osName = System.getProperty("os.name");
+        System.out.println("Operating System is " + osName);
+
+        if (osName.startsWith("Windows")) {
+            command = "ipconfig /all";
+        } else if (osName.startsWith("Linux") || osName.startsWith("Mac") || osName.startsWith("HP-UX")
+                || osName.startsWith("NeXTStep") || osName.startsWith("Solaris") || osName.startsWith("SunOS")
+                || osName.startsWith("FreeBSD") || osName.startsWith("NetBSD")) {
+            command = "ifconfig -a";
+        } else if (osName.startsWith("OpenBSD")) {
+            command = "netstat -in";
+        } else if (osName.startsWith("IRIX") || osName.startsWith("AIX") || osName.startsWith("Tru64")) {
+            command = "netstat -ia";
+        } else if (osName.startsWith("Caldera") || osName.startsWith("UnixWare") || osName.startsWith("OpenUNIX")) {
+            command = "ndstat";
+        } else {// Note: Unsupported system.
+            throw new Exception("The current operating system '" + osName + "' is not supported.");
+        }
+
+        Process pid = Runtime.getRuntime().exec(command);
+        BufferedReader in = new BufferedReader(new InputStreamReader(pid.getInputStream()));
+        Pattern p = Pattern.compile("([\\w]{1,2}(-|:)){5}[\\w]{1,2}");
+        while (true) {
+            String line = in.readLine();
+            System.out.println("line " + line);
+            if (line == null)
+                break;
+
+            Matcher m = p.matcher(line);
+            if (m.find()) {
+                macAddress = m.group();
+                break;
+            }
+        }
+        in.close();
+        return macAddress;
+    }
+}

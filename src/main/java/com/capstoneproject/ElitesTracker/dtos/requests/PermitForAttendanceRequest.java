@@ -1,13 +1,11 @@
 package com.capstoneproject.ElitesTracker.dtos.requests;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-@Getter
 @Setter
-@Builder
-public class LoginRequest {
+@Getter
+public class PermitForAttendanceRequest {
     private String semicolonEmail;
-    private String password;
+    private String cohort;
+    private boolean isAttendancePermit;
 }

@@ -1,13 +1,14 @@
 package com.capstoneproject.ElitesTracker.dtos.requests;
 
+import com.capstoneproject.ElitesTracker.enums.AttendanceStatus;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class MockDbRequest {
-    private String firstName;
-    private String lastName;
+public class EditAttendanceRequest {
     private String semicolonEmail;
     private String cohort;
+    private String date;
+    private AttendanceStatus attendanceStatus;
 }

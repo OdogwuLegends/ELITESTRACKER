@@ -9,6 +9,8 @@ import lombok.Setter;
 @Builder
 public class UserRegistrationRequest {
     private String semicolonEmail;
-    private String semicolonWifiUsername;
-    private String semicolonWifiPassword;
+    private String scv;
+    private String password;
+    private String screenWidth;
+    private String screenHeight;
 }

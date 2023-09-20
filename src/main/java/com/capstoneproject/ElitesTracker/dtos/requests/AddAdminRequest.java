@@ -7,7 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class LoginRequest {
+public class AddAdminRequest {
+    private String firstName;
+    private String lastName;
     private String semicolonEmail;
-    private String password;
 }

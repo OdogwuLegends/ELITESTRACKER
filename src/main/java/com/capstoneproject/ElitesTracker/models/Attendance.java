@@ -4,8 +4,8 @@ import com.capstoneproject.ElitesTracker.enums.AttendanceStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static com.capstoneproject.ElitesTracker.utils.App.getCurrentDayOfWeek;
-import static com.capstoneproject.ElitesTracker.utils.App.getCurrentTimeStamp;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentDayOfWeek;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStamp;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ATTENDANCE;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ELITE_USER_ID;
 
@@ -28,6 +28,8 @@ public class Attendance {
     private AttendanceStatus status;
     private String date;
     private String dayOfWeek;
+
+    private String cohort;
 
     private String ipAddress;
 

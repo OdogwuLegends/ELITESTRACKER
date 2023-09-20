@@ -7,7 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class LoginRequest {
+public class AddNativeRequest {
+    private String firstName;
+    private String lastName;
     private String semicolonEmail;
-    private String password;
+    private String cohort;
+    private String semicolonID;
 }
