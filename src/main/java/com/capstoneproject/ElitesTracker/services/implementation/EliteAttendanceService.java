@@ -6,15 +6,19 @@ import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceResponse;
 import com.capstoneproject.ElitesTracker.exceptions.*;
 import com.capstoneproject.ElitesTracker.models.Attendance;
 import com.capstoneproject.ElitesTracker.models.EliteUser;
+import com.capstoneproject.ElitesTracker.models.TimeEligibility;
 import com.capstoneproject.ElitesTracker.services.interfaces.AttendanceService;
+import com.capstoneproject.ElitesTracker.services.interfaces.TimeEligibilityService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.DISABLED;
 import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.PRESENT;
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
@@ -25,6 +29,7 @@ import static com.capstoneproject.ElitesTracker.utils.HardCoded.EDIT_STATUS_MESS
 @Slf4j
 public class EliteAttendanceService implements AttendanceService {
     private final com.capstoneproject.ElitesTracker.repositories.AttendanceRepository attendanceRepository;
+    private final TimeEligibilityService timeEligibilityService;
 
     @Override
     public AttendanceResponse saveAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest, EliteUser eliteUser) {
@@ -39,14 +44,15 @@ public class EliteAttendanceService implements AttendanceService {
 
         Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(IpAddress);
 
-        if((foundAttendance.isPresent()) && (subStringDate(foundAttendance.get().getDate()).equals(localDateToString()))){
+        if((foundAttendance.isPresent()) && (subStringDate(foundAttendance.get().getDate()).equals(localDateTodayToString()))){
             throw new AttendanceAlreadyTakenException(ATTENDANCE_ALREADY_TAKEN_EXCEPTION.getMessage());
         } else if (isAnotherDevice(request,eliteUser)) {
             throw new NotSameDeviceException(DIFFERENT_DEVICE_EXCEPTION.getMessage());
-        } else if (!eliteUser.isPermittedForAttendance()) {
+        } else if (eliteUser.getPermission().equals(DISABLED)) {
             throw new NotPermittedForAttendanceException(NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
         } else{
-            buildNewAttendance(eliteUser, response, IpAddress);
+//            buildNewAttendance(eliteUser, response, IpAddress);
+            checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress);
         }
 //
 //        //TODO REFACTOR THIS
@@ -80,6 +86,32 @@ public class EliteAttendanceService implements AttendanceService {
         return attendanceRepository.findAll();
     }
 
+    private void checkTimeFrameAndBuildAttendance(EliteUser eliteUser, AttendanceResponse response, String IpAddress){
+        List<TimeEligibility> timeFrames = timeEligibilityService.findAllTimeFrames();
+
+        if(timeFrames.isEmpty()){
+            throw new EntityDoesNotExistException(NO_TIME_LIMITS_SET_EXCEPTION.getMessage());
+        }
+
+        TimeEligibility timeEligibility = timeFrames.get(0);
+        LocalTime startTime = LocalTime.of(timeEligibility.getStartHour(),timeEligibility.getStartMinute());
+        LocalTime endTime = LocalTime.of(timeEligibility.getEndHour(),timeEligibility.getEndMinute());
+        LocalTime currentTime = LocalTime.now();
+        LocalTime baseTime = LocalTime.of(18,0);
+
+        if(currentTime.isBefore(startTime) && currentTime.isBefore(endTime)){
+            throw new TimeLimitException(beforeAttendanceMessage(localTimeToString(startTime)));
+        }
+        if(currentTime.isAfter(endTime) && currentTime.isBefore(baseTime)){
+            String end = localTimeToString(endTime);
+            String start = localTimeToString(startTime);
+            throw new TimeLimitException(afterAttendanceMessage(end,start));
+        }
+        if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)){
+            buildNewAttendance(eliteUser, response, IpAddress);
+        }
+    }
+
     private void buildNewAttendance(EliteUser eliteUser, AttendanceResponse response, String IpAddress) {
         Attendance newAttendance = new Attendance();
         newAttendance.setStatus(PRESENT);
@@ -92,4 +124,23 @@ public class EliteAttendanceService implements AttendanceService {
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
         return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) || !eliteUser.getScreenHeight().equals(request.getScreenHeight());
     }
+
+//    private void timeForAttendance(){
+//        // Get the current time
+//        LocalTime currentTime = LocalTime.now();
+//
+//        // Define the start and end times for the time limit
+//        LocalTime startTime = LocalTime.of(10, 0);      // 10:00 AM
+//        LocalTime endTime = LocalTime.of(10, 30);       // 10:30 AM
+//
+//        // Check if the current time is within the time limit
+//        if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+//            // The current time is within the time limit (between 10:00 AM and 10:30 AM)
+//            System.out.println("Within the time limit.");
+//        } else {
+//            // The current time is outside the time limit
+//            System.out.println("Outside the time limit.");
+//        }
+//    }
+
 }

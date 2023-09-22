@@ -7,6 +7,7 @@ import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceSheetResponse;
 import com.capstoneproject.ElitesTracker.services.interfaces.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,8 @@ import static com.capstoneproject.ElitesTracker.utils.ApiValues.*;
 @RestController
 @RequestMapping(NATIVES_BASE_URL)
 @AllArgsConstructor
+@CrossOrigin("*")
+@Slf4j
 public class NativesController {
     private final UserService userService;
 

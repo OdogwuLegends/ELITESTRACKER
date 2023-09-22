@@ -1,5 +1,6 @@
 package com.capstoneproject.ElitesTracker.models;
 
+import com.capstoneproject.ElitesTracker.enums.AttendancePermission;
 import com.capstoneproject.ElitesTracker.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,7 +44,9 @@ public class EliteUser {
 
     private String semicolonID;
     private String createdAt;
-    private boolean isPermittedForAttendance;
+
+    @Enumerated(value = EnumType.STRING)
+    private AttendancePermission permission;
 
     @PrePersist
     public void setCreatedAt(){

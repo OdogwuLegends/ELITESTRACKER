@@ -1,16 +1,12 @@
 package com.capstoneproject.ElitesTracker.controllers;
 
-import com.capstoneproject.ElitesTracker.dtos.requests.AddAdminRequest;
-import com.capstoneproject.ElitesTracker.dtos.requests.AddNativeRequest;
-import com.capstoneproject.ElitesTracker.dtos.requests.EditAttendanceRequest;
-import com.capstoneproject.ElitesTracker.dtos.requests.SearchRequest;
-import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceResponse;
-import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceSheetResponse;
-import com.capstoneproject.ElitesTracker.dtos.responses.UserRegistrationResponse;
+import com.capstoneproject.ElitesTracker.dtos.requests.*;
+import com.capstoneproject.ElitesTracker.dtos.responses.*;
 import com.capstoneproject.ElitesTracker.services.interfaces.AdminsService;
 import com.capstoneproject.ElitesTracker.services.interfaces.NativesService;
 import com.capstoneproject.ElitesTracker.services.interfaces.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +18,7 @@ import static com.capstoneproject.ElitesTracker.utils.ApiValues.*;
 @RequestMapping(BASE_SUPER_ADMIN_URL)
 @CrossOrigin("*")
 @AllArgsConstructor
+@Slf4j
 public class AdminController {
     private final NativesService nativesService;
     private final AdminsService adminsService;
@@ -37,9 +34,37 @@ public class AdminController {
         UserRegistrationResponse response = adminsService.addNewAdmin(request);
         return ResponseEntity.ok().body(response);
     }
+    @DeleteMapping("/removeAdmin")
+    public ResponseEntity<DeleteResponse> removeAdmin(@RequestBody DeleteRequest request){
+        DeleteResponse response = adminsService.removeAdmin(request);
+        return ResponseEntity.ok().body(response);
+    }
+    @DeleteMapping("/removeCohort")
+    public ResponseEntity<DeleteResponse> removeCohort(@RequestBody DeleteRequest request){
+        DeleteResponse response = userService.removeCohort(request);
+        return ResponseEntity.ok().body(response);
+    }
+    @PostMapping("/setTimeFrame")
+    public ResponseEntity<?> setAttendanceTime(@RequestBody SetTimeRequest request){
+        TimeResponse response = userService.setTimeForAttendance(request);
+        return ResponseEntity.ok().body(response);
+    }
     @PatchMapping("/editAttendanceStatus")
     public ResponseEntity<AttendanceResponse> editNativeAttendanceStatus(@RequestBody EditAttendanceRequest request){
         AttendanceResponse response = userService.editAttendanceStatus(request);
+        return ResponseEntity.ok().body(response);
+    }
+    @PatchMapping("/setAttendancePermitForNative")
+    public ResponseEntity<PermitForAttendanceResponse> setAttendancePermitForNative(@RequestBody PermitForAttendanceRequest request){
+        log.info("controller permission {}",request.getPermission());
+        log.info("controller cohort {}",request.getCohort());
+        PermitForAttendanceResponse response = userService.setAttendancePermitForNative(request);
+        return ResponseEntity.ok().body(response);
+    }
+    @PatchMapping("/setAttendancePermitForCohort")
+    public ResponseEntity<PermitForAttendanceResponse> setAttendancePermitForCohort(@RequestBody PermitForAttendanceRequest request){
+        log.info("controller email {}",request.getSemicolonEmail());
+        PermitForAttendanceResponse response = userService.setAttendancePermitForCohort(request);
         return ResponseEntity.ok().body(response);
     }
     @GetMapping("/generateAttendanceForNative")

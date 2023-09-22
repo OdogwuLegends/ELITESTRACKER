@@ -4,20 +4,25 @@ import com.capstoneproject.ElitesTracker.dtos.requests.*;
 import com.capstoneproject.ElitesTracker.dtos.responses.*;
 import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
 import com.capstoneproject.ElitesTracker.exceptions.IncorrectDetailsException;
+import com.capstoneproject.ElitesTracker.exceptions.UserExistsException;
 import com.capstoneproject.ElitesTracker.models.Admins;
+import com.capstoneproject.ElitesTracker.models.Attendance;
 import com.capstoneproject.ElitesTracker.models.EliteUser;
 import com.capstoneproject.ElitesTracker.models.Natives;
+import com.capstoneproject.ElitesTracker.repositories.AttendanceRepository;
 import com.capstoneproject.ElitesTracker.repositories.EliteUserRepository;
 import com.capstoneproject.ElitesTracker.services.interfaces.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.ENABLED;
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.enums.Role.ADMIN;
 import static com.capstoneproject.ElitesTracker.enums.Role.NATIVE;
@@ -27,16 +32,21 @@ import static com.capstoneproject.ElitesTracker.utils.HardCoded.*;
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional
 public class EliteUserService implements UserService {
     private final EliteUserRepository eliteUserRepository;
     private final AdminsService adminsService;
     private final NativesService nativesService;
     private final AttendanceService attendanceService;
     private final SearchService searchService;
+    private final TimeEligibilityService timeEligibilityService;
 
 
     @Override
     public UserRegistrationResponse registerUser(UserRegistrationRequest request) throws EntityDoesNotExistException {
+
+        checkIfUserExists(request);
+
         UserRegistrationResponse response = new UserRegistrationResponse();
         checkIfAdminOrNative(request, response);
         return response;
@@ -84,6 +94,11 @@ public class EliteUserService implements UserService {
     }
 
     @Override
+    public TimeResponse setTimeForAttendance(SetTimeRequest request) {
+        return timeEligibilityService.setTimeForAttendance(request);
+    }
+
+    @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForNative(SearchRequest request) {
         EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
         return searchService.searchAttendanceReportForNative(request,foundUser);
@@ -101,8 +116,9 @@ public class EliteUserService implements UserService {
         if(!foundUser.getCohort().equals(request.getCohort())){
             throw new EntityDoesNotExistException(nativeNotFoundMessage(request.getCohort()));
         }
-        foundUser.setPermittedForAttendance(request.isAttendancePermit());
+        foundUser.setPermission(request.getPermission());
         eliteUserRepository.save(foundUser);
+
         return PermitForAttendanceResponse.builder()
                 .message(PERMISSION_MODIFIED_MESSAGE)
                 .build();
@@ -118,12 +134,13 @@ public class EliteUserService implements UserService {
 
         for (int i = 0; i < foundNatives.size(); i++) {
             if(foundNatives.get(i).getCohort().equals(request.getCohort())){
-                foundNatives.get(i).setPermittedForAttendance(request.isAttendancePermit());
+                foundNatives.get(i).setPermission(request.getPermission());
                 eliteUserRepository.save(foundNatives.get(i));
             }
         }
+
         return PermitForAttendanceResponse.builder()
-                .message(PERMISSIONS_MODIFIED_MESSAGE)
+                .message(PERMISSION_MODIFIED_MESSAGE)
                 .build();
     }
     @Override
@@ -139,17 +156,18 @@ public class EliteUserService implements UserService {
     }
     @Override
     public DeleteResponse removeCohort(DeleteRequest request) {
-        List<EliteUser> foundUser = findAllNativesInACohort(request.getCohort());
-        List<Natives> foundNatives = nativesService.findAllNativesInACohort(request.getCohort());
+        List<EliteUser> foundUserList = findAllNativesInACohort(request.getCohort());
+        List<Natives> foundNativesList = nativesService.findAllNativesInACohort(request.getCohort());
+//        List<Attendance> foundAttendanceList = attendanceRepository.findAll();
 
-        if(foundUser.isEmpty()){
+        if(foundUserList.isEmpty()){
             throw new EntityDoesNotExistException(cohortNotFoundMessage(request.getCohort()));
         }
 
-        for (int i = 0; i < foundUser.size(); i++) {
-            if(foundUser.get(i).getCohort().equals(request.getCohort())){
-                eliteUserRepository.delete(foundUser.get(i));
-                nativesService.deleteNative(foundNatives.get(i));
+        for (int i = 0; i < foundUserList.size(); i++) {
+            if(foundUserList.get(i).getCohort().equals(request.getCohort())){
+                eliteUserRepository.delete(foundUserList.get(i));
+                nativesService.deleteNative(foundNativesList.get(i));
             }
         }
         return DeleteResponse.builder()
@@ -182,7 +200,7 @@ public class EliteUserService implements UserService {
                 .password(request.getPassword()) //Encode password after security added
                 .semicolonID(request.getScv().toUpperCase())
                 .role(NATIVE)
-                .isPermittedForAttendance(true)
+                .permission(ENABLED)
                 .screenWidth(request.getScreenWidth())
                 .screenHeight(request.getScreenHeight())
                 .build();
@@ -199,6 +217,27 @@ public class EliteUserService implements UserService {
                 .screenHeight(request.getScreenHeight())
                 .build();
     }
+
+    private void checkIfUserExists(UserRegistrationRequest request){
+        List<EliteUser> eliteUserList = eliteUserRepository.findAll();
+        for (EliteUser eliteUser : eliteUserList){
+            if(eliteUser.getSemicolonEmail().equalsIgnoreCase(request.getSemicolonEmail())){
+                throw new UserExistsException(userAlreadyExistsMessage(request.getSemicolonEmail()));
+            }
+        }
+    }
+//    private static boolean deserializeValue(String value) {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        boolean isAttendancePermit;
+//
+//        try {
+//            PermitForAttendanceRequest request = objectMapper.readValue(value, PermitForAttendanceRequest.class);
+//            isAttendancePermit = request.isAttendancePermit();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//        return isAttendancePermit;
+//    }
 
     private Admins getExistingAdmin(String email) throws EntityDoesNotExistException {
         return adminsService.findAdminByEmail(email);

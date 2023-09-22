@@ -4,10 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-//@Builder
-@Setter
 @Getter
+@Setter
 @Builder
-public class PermitForAttendanceResponse {
+public class ResetDeviceResponse {
     private String message;
 }

@@ -15,10 +15,13 @@ public interface UserService {
     AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest);
     List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request);
     AttendanceResponse editAttendanceStatus(EditAttendanceRequest request);
+    TimeResponse setTimeForAttendance(SetTimeRequest request);
     List<AttendanceSheetResponse> generateAttendanceReportForNative(SearchRequest request);
     List<AttendanceSheetResponse> generateAttendanceReportForCohort(SearchRequest request);
     List<EliteUser> findAllNativesInACohort(String cohort);
     PermitForAttendanceResponse setAttendancePermitForNative(PermitForAttendanceRequest request);
     PermitForAttendanceResponse setAttendancePermitForCohort(PermitForAttendanceRequest request);
     DeleteResponse removeCohort(DeleteRequest request);
+
+    ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request);
 }

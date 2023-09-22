@@ -4,10 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-//@Builder
 @Setter
 @Getter
 @Builder
-public class PermitForAttendanceResponse {
+public class TimeResponse {
     private String message;
 }

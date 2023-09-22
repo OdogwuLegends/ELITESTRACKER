@@ -5,6 +5,7 @@ import com.capstoneproject.ElitesTracker.dtos.requests.DeleteRequest;
 import com.capstoneproject.ElitesTracker.dtos.responses.DeleteResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.UserRegistrationResponse;
 import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
+import com.capstoneproject.ElitesTracker.exceptions.UserExistsException;
 import com.capstoneproject.ElitesTracker.models.Admins;
 import com.capstoneproject.ElitesTracker.repositories.AdminsRepository;
 import com.capstoneproject.ElitesTracker.services.interfaces.AdminsService;
@@ -12,10 +13,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.ADMIN_DOES_NOT_EXIST_EXCEPTION;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.savedNameMessage;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.userAlreadyExistsMessage;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.DELETE_USER_MESSAGE;
 
 @Service
@@ -25,6 +28,9 @@ public class EliteAdminService implements AdminsService {
 
     @Override
     public UserRegistrationResponse addNewAdmin(AddAdminRequest request) {
+
+        checkIfAdminExists(request);
+
         UserRegistrationResponse response = new UserRegistrationResponse();
         Admins newAdmin = new Admins();
         BeanUtils.copyProperties(request,newAdmin);
@@ -55,4 +61,12 @@ public class EliteAdminService implements AdminsService {
         return adminsRepository.existsBySemicolonEmail(email);
     }
 
+    private void checkIfAdminExists(AddAdminRequest request){
+        List<Admins> adminsList = adminsRepository.findAll();
+        for (Admins admin : adminsList){
+            if (admin.getSemicolonEmail().equalsIgnoreCase(request.getSemicolonEmail())){
+                throw new UserExistsException(userAlreadyExistsMessage(request.getSemicolonEmail()));
+            }
+        }
+    }
 }

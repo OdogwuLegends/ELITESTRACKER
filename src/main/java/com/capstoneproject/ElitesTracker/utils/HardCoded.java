@@ -21,6 +21,7 @@ public class HardCoded {
     public static final String NATIVE_NOT_FOUND = "Native not found in Cohort %s";
     public static final String ADMIN_DOES_NOT_EXIST = "Admin does not exist";
     public static final String USER_DOES_NOT_EXIST = "User does not exist, or incorrect details provided";
+    public static final String USER_EXIST_MESSAGE = "User with %s already exists!";
     public static final String ATTENDANCE_TAKEN = "Attendance taken with this device already! Please try again tomorrow";
     public static final String WEEKDAYS_ONLY = "Uh oh!.. No attendance on weekends!";
     public static final String ATTENDANCE_SHEET = "attendance_sheet";
@@ -37,6 +38,9 @@ public class HardCoded {
     public static final String DELETE_USER_MESSAGE = "User deleted successfully!";
     public static final String NOT_PERMITTED_FOR_ATTENDANCE = "Not permitted to take attendance currently. Please see an Admin.";
     public static final String PERMISSION_MODIFIED_MESSAGE = "Permission successfully modified";
-    public static final String PERMISSIONS_MODIFIED_MESSAGE = "Permissions successfully modified";
     public static final String COHORT_NOT_FOUND_MESSAGE = "Cohort %s not found";
+    public static final String TIME_SET_MESSAGE = "Time range set successfully!";
+    public static final String TIME_LIMITS_SET_MESSAGE = "No time limits set. Please see an Admin";
+    public static final String BEFORE_ATTENDANCE_TIME_MESSAGE = "Not yet time for attendance, please wait until %s AM";
+    public static final String AFTER_ATTENDANCE_TIME_MESSAGE = "Past %s AM. Please see an Admin to take attendance, or try again tomorrow by %s AM";
 }

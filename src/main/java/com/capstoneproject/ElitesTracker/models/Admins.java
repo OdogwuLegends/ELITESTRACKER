@@ -3,6 +3,7 @@ package com.capstoneproject.ElitesTracker.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStamp;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ADMINS;
 
 @Getter
@@ -24,4 +25,11 @@ public class Admins {
 
     @Column(nullable = false, unique = true)
     private String semicolonEmail;
+
+    private String createdAt;
+
+    @PrePersist
+    public void setCreatedAt(){
+        this.createdAt = getCurrentTimeStamp();
+    }
 }

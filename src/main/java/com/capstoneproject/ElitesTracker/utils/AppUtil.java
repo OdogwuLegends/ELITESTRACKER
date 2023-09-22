@@ -1,15 +1,8 @@
 package com.capstoneproject.ElitesTracker.utils;
 
-import com.capstoneproject.ElitesTracker.dtos.requests.UserRegistrationRequest;
 import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
 import com.capstoneproject.ElitesTracker.exceptions.NoAttendanceOnWeekendsException;
-import com.capstoneproject.ElitesTracker.models.Natives;
-import com.capstoneproject.ElitesTracker.services.interfaces.NativesService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +12,7 @@ import java.net.NetworkInterface;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Formatter;
 import java.util.Locale;
@@ -53,7 +47,7 @@ public class AppUtil {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         return LocalDate.parse(userInput, dateFormatter);
     }
-    public static String localDateToString() {
+    public static String localDateTodayToString() {
         LocalDate dateToFormat = LocalDate.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         return dateToFormat.format(dateFormatter);
@@ -61,6 +55,14 @@ public class AppUtil {
     public static String formatLocalDateToString(LocalDate currentTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         return currentTime.format(formatter);
+    }
+    public static LocalTime stringToLocalTime(String timeFormat){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return LocalTime.parse(timeFormat, formatter);
+    }
+    public static String localTimeToString(LocalTime timeFormat){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return timeFormat.format(formatter);
     }
     public static String subStringDate(String date) {
         int indexOfSpace = date.indexOf(' ');
@@ -87,6 +89,15 @@ public class AppUtil {
     }
     public static String cohortNotFoundMessage(String cohort) {
         return String.format(COHORT_NOT_FOUND_MESSAGE,cohort);
+    }
+    public static String userAlreadyExistsMessage(String email) {
+        return String.format(USER_EXIST_MESSAGE,email);
+    }
+    public static String beforeAttendanceMessage(String time) {
+        return String.format(BEFORE_ATTENDANCE_TIME_MESSAGE,time);
+    }
+    public static String afterAttendanceMessage(String endTime, String startTime) {
+        return String.format(AFTER_ATTENDANCE_TIME_MESSAGE,endTime,startTime);
     }
 
     public static String savedNameMessage(String firstName, String lastName){
