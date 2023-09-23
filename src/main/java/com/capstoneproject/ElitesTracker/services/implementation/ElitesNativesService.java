@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.NATIVE_DOES_NOT_EXIST_EXCEPTION;
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.savedNameMessage;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.savedNativeMessage;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.userAlreadyExistsMessage;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.DELETE_USER_MESSAGE;
 
@@ -39,7 +39,7 @@ public class ElitesNativesService implements NativesService {
         newNative.setFirstName(request.getFirstName().toUpperCase());
         newNative.setLastName(request.getLastName().toUpperCase());
         Natives savedNative = nativesRepository.save(newNative);
-        response.setMessage(savedNameMessage(savedNative.getFirstName().toUpperCase(),savedNative.getLastName().toUpperCase()));
+        response.setMessage(savedNativeMessage(savedNative.getFirstName().toUpperCase(),savedNative.getLastName().toUpperCase(),request.getCohort()));
         return response;
     }
 

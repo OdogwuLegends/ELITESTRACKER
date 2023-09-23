@@ -32,7 +32,7 @@ class ElitesNativesServiceTest {
         String email = "g.obinali@native.semicolon.africa";
         Natives foundNative = elitesNativesService.findNativeByEmail(email);
         assertThat(foundNative).isNotNull();
-        assertEquals("Goodness", foundNative.getFirstName());
+        assertEquals("GOODNESS", foundNative.getFirstName());
     }
 
     @Test
@@ -48,7 +48,7 @@ class ElitesNativesServiceTest {
         String scv = "scv15006";
         Natives foundNative = elitesNativesService.findNativeByEmailAndScv(email,scv);
         assertThat(foundNative).isNotNull();
-        assertEquals("Hemba", foundNative.getLastName());
+        assertEquals("HEMBA", foundNative.getLastName());
         assertEquals("15", foundNative.getCohort());
     }
     @Test

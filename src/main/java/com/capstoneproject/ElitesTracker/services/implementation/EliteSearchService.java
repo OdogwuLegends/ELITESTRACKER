@@ -74,6 +74,7 @@ public class EliteSearchService implements SearchService {
         if(attendanceList.isEmpty()) {
             throw new RecordNotFoundException(RECORD_NOT_FOUND_EXCEPTION.getMessage());
         }
+
         List<AttendanceSheetResponse> attendanceSheet = buildAttendanceLogForSelf(request, foundUser, attendanceList);
 
         if(attendanceSheet.isEmpty()){

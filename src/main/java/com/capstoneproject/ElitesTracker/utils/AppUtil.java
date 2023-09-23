@@ -100,8 +100,11 @@ public class AppUtil {
         return String.format(AFTER_ATTENDANCE_TIME_MESSAGE,endTime,startTime);
     }
 
-    public static String savedNameMessage(String firstName, String lastName){
-        return String.format(SAVED_SUCCESSFULLY_MSG, firstName, lastName);
+    public static String savedNativeMessage(String firstName, String lastName, String cohort){
+        return String.format(SAVED_NATIVE_MSG, firstName, lastName, cohort);
+    }
+    public static String savedAdminMessage(String firstName, String lastName){
+        return String.format(SAVED_ADMIN_MSG, firstName, lastName);
     }
     public static String attendanceMessage(String firstName){
         return String.format(ATTENDANCE_MESSAGE,firstName);

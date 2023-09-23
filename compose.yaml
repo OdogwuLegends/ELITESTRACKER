@@ -1,0 +1,23 @@
+version: '3'
+services:
+  springboot-app:
+    build: .
+    image: elites_tracker:latest
+    ports:
+      - "8093:8092"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/elites_tracker
+      SPRING_DATASOURCE_USERNAME: Legends
+      SPRING_DATASOURCE_PASSWORD: Wilianborges4191$
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: Wilianborges4191$
+      MYSQL_DATABASE: elites_tracker
+      MYSQL_USER: Legends
+      MYSQL_PASSWORD: Wilianborges4191$
+    ports:
+      - "3206:3306"

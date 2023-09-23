@@ -6,6 +6,7 @@ import com.capstoneproject.ElitesTracker.models.TimeEligibility;
 import com.capstoneproject.ElitesTracker.repositories.TimeEligibilityRepository;
 import com.capstoneproject.ElitesTracker.services.interfaces.TimeEligibilityService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import static com.capstoneproject.ElitesTracker.utils.HardCoded.TIME_SET_MESSAGE
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class EliteTimeEligibilityService implements TimeEligibilityService {
     private TimeEligibilityRepository timeEligibilityRepository;
 

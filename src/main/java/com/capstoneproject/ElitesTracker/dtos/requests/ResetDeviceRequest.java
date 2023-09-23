@@ -10,6 +10,7 @@ import lombok.Setter;
 public class ResetDeviceRequest {
     private String adminSemicolonEmail;
     private String adminPassword;
+    private String nativeSemicolonEmail;
     private String screenWidth;
     private String screenHeight;
 }

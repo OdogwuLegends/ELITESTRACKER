@@ -2,6 +2,7 @@ package com.capstoneproject.ElitesTracker.services.implementation;
 
 import com.capstoneproject.ElitesTracker.dtos.requests.*;
 import com.capstoneproject.ElitesTracker.dtos.responses.*;
+import com.capstoneproject.ElitesTracker.exceptions.AdminsNotPermittedException;
 import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
 import com.capstoneproject.ElitesTracker.exceptions.IncorrectDetailsException;
 import com.capstoneproject.ElitesTracker.exceptions.UserExistsException;
@@ -75,10 +76,23 @@ public class EliteUserService implements UserService {
         return eliteUserRepository.findBySemicolonEmail(email).orElseThrow(
                 ()-> new EntityDoesNotExistException(USER_DOES_NOT_EXIST_EXCEPTION.getMessage()));
     }
+
     @Override
     public AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest) {
+        if(!request.getSemicolonEmail().contains(NATIVE_CHECK)){
+            throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
+        }
         EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+
         return attendanceService.saveAttendance(request,httpServletRequest,foundUser);
+    }
+    @Override
+    public AttendanceResponse takeAttendanceTest(AttendanceRequest request, String IpAddress) {
+        if(!request.getSemicolonEmail().contains(NATIVE_CHECK)){
+            throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
+        }
+        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+        return attendanceService.saveAttendanceTest(request,IpAddress,foundUser);
     }
 
     @Override
@@ -154,11 +168,10 @@ public class EliteUserService implements UserService {
         }
         return cohortList;
     }
-    @Override
+//    @Override
     public DeleteResponse removeCohort(DeleteRequest request) {
         List<EliteUser> foundUserList = findAllNativesInACohort(request.getCohort());
         List<Natives> foundNativesList = nativesService.findAllNativesInACohort(request.getCohort());
-//        List<Attendance> foundAttendanceList = attendanceRepository.findAll();
 
         if(foundUserList.isEmpty()){
             throw new EntityDoesNotExistException(cohortNotFoundMessage(request.getCohort()));
@@ -173,6 +186,20 @@ public class EliteUserService implements UserService {
         return DeleteResponse.builder()
                 .message(DELETE_USER_MESSAGE)
                 .build();
+    }
+
+    @Override
+    public ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request) {
+        LoginRequest loginRequest = LoginRequest.builder()
+                .semicolonEmail(request.getAdminSemicolonEmail())
+                .password(request.getAdminPassword())
+                .build();
+        loginUser(loginRequest);
+        EliteUser foundNative = findUserByEmail(request.getNativeSemicolonEmail());
+        foundNative.setScreenWidth(request.getScreenWidth());
+        foundNative.setScreenHeight(request.getScreenHeight());
+        eliteUserRepository.save(foundNative);
+        return ResetDeviceResponse.builder().message(DEVICE_RESET_MESSAGE).build();
     }
 
     private void checkIfAdminOrNative(UserRegistrationRequest request, UserRegistrationResponse response) throws EntityDoesNotExistException {
@@ -226,18 +253,6 @@ public class EliteUserService implements UserService {
             }
         }
     }
-//    private static boolean deserializeValue(String value) {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        boolean isAttendancePermit;
-//
-//        try {
-//            PermitForAttendanceRequest request = objectMapper.readValue(value, PermitForAttendanceRequest.class);
-//            isAttendancePermit = request.isAttendancePermit();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//        return isAttendancePermit;
-//    }
 
     private Admins getExistingAdmin(String email) throws EntityDoesNotExistException {
         return adminsService.findAdminByEmail(email);

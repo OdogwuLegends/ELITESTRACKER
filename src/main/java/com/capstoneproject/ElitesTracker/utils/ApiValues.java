@@ -10,6 +10,7 @@ public class ApiValues {
     public static final String ADD_ADMIN = "/addAdmin";
     public static final String NATIVES_BASE_URL = "/api/v1/natives";
     public static final String GENERATE_REPORT_FOR_SELF = "/generateReportForSelf";
+    public static final String RESET_DEVICE = "/resetDevice";
 
 
 }

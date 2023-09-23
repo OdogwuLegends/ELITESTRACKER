@@ -39,11 +39,11 @@ public class AdminController {
         DeleteResponse response = adminsService.removeAdmin(request);
         return ResponseEntity.ok().body(response);
     }
-    @DeleteMapping("/removeCohort")
-    public ResponseEntity<DeleteResponse> removeCohort(@RequestBody DeleteRequest request){
-        DeleteResponse response = userService.removeCohort(request);
-        return ResponseEntity.ok().body(response);
-    }
+//    @DeleteMapping("/removeCohort")
+//    public ResponseEntity<DeleteResponse> removeCohort(@RequestBody DeleteRequest request){
+//        DeleteResponse response = userService.removeCohort(request);
+//        return ResponseEntity.ok().body(response);
+//    }
     @PostMapping("/setTimeFrame")
     public ResponseEntity<?> setAttendanceTime(@RequestBody SetTimeRequest request){
         TimeResponse response = userService.setTimeForAttendance(request);
@@ -56,14 +56,11 @@ public class AdminController {
     }
     @PatchMapping("/setAttendancePermitForNative")
     public ResponseEntity<PermitForAttendanceResponse> setAttendancePermitForNative(@RequestBody PermitForAttendanceRequest request){
-        log.info("controller permission {}",request.getPermission());
-        log.info("controller cohort {}",request.getCohort());
         PermitForAttendanceResponse response = userService.setAttendancePermitForNative(request);
         return ResponseEntity.ok().body(response);
     }
     @PatchMapping("/setAttendancePermitForCohort")
     public ResponseEntity<PermitForAttendanceResponse> setAttendancePermitForCohort(@RequestBody PermitForAttendanceRequest request){
-        log.info("controller email {}",request.getSemicolonEmail());
         PermitForAttendanceResponse response = userService.setAttendancePermitForCohort(request);
         return ResponseEntity.ok().body(response);
     }

@@ -49,7 +49,7 @@ public class EliteAttendanceService implements AttendanceService {
         } else if (isAnotherDevice(request,eliteUser)) {
             throw new NotSameDeviceException(DIFFERENT_DEVICE_EXCEPTION.getMessage());
         } else if (eliteUser.getPermission().equals(DISABLED)) {
-            throw new NotPermittedForAttendanceException(NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
+            throw new NotPermittedForAttendanceException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
         } else{
 //            buildNewAttendance(eliteUser, response, IpAddress);
             checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress);
@@ -58,6 +58,26 @@ public class EliteAttendanceService implements AttendanceService {
 //        //TODO REFACTOR THIS
 //        List<TemporaryAttendance> temporaryAttendances = temporaryAttendanceRepository.findAll();
 //        permanentAttendanceService.savePermanentAttendances(temporaryAttendances);
+        return response;
+    }
+
+    @Override
+    public AttendanceResponse saveAttendanceTest(AttendanceRequest request, String IpAddress, EliteUser eliteUser) {
+//        noAttendanceOnWeekendsCheck();
+
+        AttendanceResponse response = new AttendanceResponse();
+
+        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(IpAddress);
+
+        if((foundAttendance.isPresent()) && (subStringDate(foundAttendance.get().getDate()).equals(localDateTodayToString()))){
+            throw new AttendanceAlreadyTakenException(ATTENDANCE_ALREADY_TAKEN_EXCEPTION.getMessage());
+        } else if (isAnotherDevice(request,eliteUser)) {
+            throw new NotSameDeviceException(DIFFERENT_DEVICE_EXCEPTION.getMessage());
+        } else if (eliteUser.getPermission().equals(DISABLED)) {
+            throw new NotPermittedForAttendanceException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
+        } else{
+            checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress);
+        }
         return response;
     }
 

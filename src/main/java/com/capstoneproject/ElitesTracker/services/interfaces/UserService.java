@@ -13,6 +13,7 @@ public interface UserService {
     LoginResponse loginUser(LoginRequest request);
     EliteUser findUserByEmail(String email);
     AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest);
+    AttendanceResponse takeAttendanceTest(AttendanceRequest request, String IpAddress);
     List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request);
     AttendanceResponse editAttendanceStatus(EditAttendanceRequest request);
     TimeResponse setTimeForAttendance(SetTimeRequest request);
@@ -21,7 +22,6 @@ public interface UserService {
     List<EliteUser> findAllNativesInACohort(String cohort);
     PermitForAttendanceResponse setAttendancePermitForNative(PermitForAttendanceRequest request);
     PermitForAttendanceResponse setAttendancePermitForCohort(PermitForAttendanceRequest request);
-    DeleteResponse removeCohort(DeleteRequest request);
-
+//    DeleteResponse removeCohort(DeleteRequest request);
     ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request);
 }

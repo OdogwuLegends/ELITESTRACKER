@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.savedNameMessage;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.savedAdminMessage;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -36,7 +36,7 @@ public class MockEliteAdminServiceTest {
 
         UserRegistrationResponse response = eliteAdminService.addNewAdmin(buildAdminRequest());
         assertNotNull(response);
-        assertEquals(savedNameMessage("PATIENCE","PAT"),response.getMessage());
+        assertEquals(savedAdminMessage("PATIENCE","PAT"),response.getMessage());
     }
 
     @Test

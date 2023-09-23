@@ -1,9 +1,11 @@
 package com.capstoneproject.ElitesTracker.controllers;
 
 import com.capstoneproject.ElitesTracker.dtos.requests.AttendanceRequest;
+import com.capstoneproject.ElitesTracker.dtos.requests.ResetDeviceRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.SearchRequest;
 import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceSheetResponse;
+import com.capstoneproject.ElitesTracker.dtos.responses.ResetDeviceResponse;
 import com.capstoneproject.ElitesTracker.services.interfaces.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -33,5 +35,10 @@ public class NativesController {
     public ResponseEntity<?> generateAttendanceReportForSelf(@RequestBody SearchRequest request){
         List<AttendanceSheetResponse> responses = userService.generateAttendanceReportForSelf(request);
         return ResponseEntity.ok().body(responses);
+    }
+    @PatchMapping(RESET_DEVICE)
+    public ResponseEntity<ResetDeviceResponse> resetDevice(@RequestBody ResetDeviceRequest request){
+        ResetDeviceResponse response = userService.resetNativeDevice(request);
+        return ResponseEntity.ok().body(response);
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.ADMIN_DOES_NOT_EXIST_EXCEPTION;
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.savedNameMessage;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.savedAdminMessage;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.userAlreadyExistsMessage;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.DELETE_USER_MESSAGE;
 
@@ -37,7 +37,7 @@ public class EliteAdminService implements AdminsService {
         newAdmin.setFirstName(request.getFirstName().toUpperCase());
         newAdmin.setLastName(request.getLastName().toUpperCase());
         Admins savedAdmin = adminsRepository.save(newAdmin);
-        response.setMessage(savedNameMessage(savedAdmin.getFirstName().toUpperCase(),savedAdmin.getLastName().toUpperCase()));
+        response.setMessage(savedAdminMessage(savedAdmin.getFirstName().toUpperCase(),savedAdmin.getLastName().toUpperCase()));
         return response;
     }
 

@@ -30,7 +30,7 @@ class EliteAdminServiceTest {
         String email = "patience@semicolon.africa";
         Admins foundAdmin = eliteAdminService.findAdminByEmail(email);
         assertThat(foundAdmin).isNotNull();
-        assertEquals("Pat",foundAdmin.getLastName());
+        assertEquals("PAT",foundAdmin.getLastName());
     }
     @Test
     void findAdminWithWrongEmailThrowsException(){
