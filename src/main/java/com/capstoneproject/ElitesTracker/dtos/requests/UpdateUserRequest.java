@@ -7,7 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class DeleteRequest {
-    private String semicolonEmail;
+public class UpdateUserRequest {
+    private String firstName;
+    private String lastName;
     private String cohort;
+    private String semicolonEmail;
 }

@@ -30,7 +30,6 @@ public class NativesController {
         AttendanceResponse response = userService.takeAttendance(request, httpServletRequest);
         return ResponseEntity.ok().body(response);
     }
-
     @GetMapping(GENERATE_REPORT_FOR_SELF)
     public ResponseEntity<?> generateAttendanceReportForSelf(@RequestBody SearchRequest request){
         List<AttendanceSheetResponse> responses = userService.generateAttendanceReportForSelf(request);

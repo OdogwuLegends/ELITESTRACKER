@@ -7,19 +7,27 @@ import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
 import com.capstoneproject.ElitesTracker.exceptions.IncorrectDetailsException;
 import com.capstoneproject.ElitesTracker.exceptions.UserExistsException;
 import com.capstoneproject.ElitesTracker.models.Admins;
-import com.capstoneproject.ElitesTracker.models.Attendance;
 import com.capstoneproject.ElitesTracker.models.EliteUser;
 import com.capstoneproject.ElitesTracker.models.Natives;
-import com.capstoneproject.ElitesTracker.repositories.AttendanceRepository;
 import com.capstoneproject.ElitesTracker.repositories.EliteUserRepository;
 import com.capstoneproject.ElitesTracker.services.interfaces.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.TextNode;
+import com.github.fge.jackson.jsonpointer.JsonPointer;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.github.fge.jsonpatch.JsonPatchOperation;
+import com.github.fge.jsonpatch.ReplaceOperation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,9 +86,16 @@ public class EliteUserService implements UserService {
     }
 
     @Override
+    public UpdateUserResponse updateUserProfile(UpdateUserRequest request) {
+        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+        JsonPatch updatePatch = buildUpdatePatch(request);
+        return applyPatch(updatePatch, foundUser);
+    }
+
+    @Override
     public AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest) {
         if(!request.getSemicolonEmail().contains(NATIVE_CHECK)){
-            throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
+            throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_OPERATION_EXCEPTION.getMessage());
         }
         EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
 
@@ -89,7 +104,7 @@ public class EliteUserService implements UserService {
     @Override
     public AttendanceResponse takeAttendanceTest(AttendanceRequest request, String IpAddress) {
         if(!request.getSemicolonEmail().contains(NATIVE_CHECK)){
-            throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
+            throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_OPERATION_EXCEPTION.getMessage());
         }
         EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
         return attendanceService.saveAttendanceTest(request,IpAddress,foundUser);
@@ -125,7 +140,7 @@ public class EliteUserService implements UserService {
     }
 
     @Override
-    public PermitForAttendanceResponse setAttendancePermitForNative(PermitForAttendanceRequest request) {
+    public PermissionForAttendanceResponse setAttendancePermissionForNative(PermissionForAttendanceRequest request) {
         EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
         if(!foundUser.getCohort().equals(request.getCohort())){
             throw new EntityDoesNotExistException(nativeNotFoundMessage(request.getCohort()));
@@ -133,13 +148,13 @@ public class EliteUserService implements UserService {
         foundUser.setPermission(request.getPermission());
         eliteUserRepository.save(foundUser);
 
-        return PermitForAttendanceResponse.builder()
+        return PermissionForAttendanceResponse.builder()
                 .message(PERMISSION_MODIFIED_MESSAGE)
                 .build();
     }
 
     @Override
-    public PermitForAttendanceResponse setAttendancePermitForCohort(PermitForAttendanceRequest request) {
+    public PermissionForAttendanceResponse setAttendancePermitForCohort(PermissionForAttendanceRequest request) {
         List<EliteUser> foundNatives = findAllNativesInACohort(request.getCohort());
 
         if(foundNatives.isEmpty()){
@@ -147,28 +162,56 @@ public class EliteUserService implements UserService {
         }
 
         for (int i = 0; i < foundNatives.size(); i++) {
-            if(foundNatives.get(i).getCohort().equals(request.getCohort())){
+            EliteUser nativeToEdit = foundNatives.get(i);
+            if(nativeToEdit.getCohort().equals(request.getCohort())){
                 foundNatives.get(i).setPermission(request.getPermission());
                 eliteUserRepository.save(foundNatives.get(i));
             }
         }
 
-        return PermitForAttendanceResponse.builder()
+        return PermissionForAttendanceResponse.builder()
                 .message(PERMISSION_MODIFIED_MESSAGE)
                 .build();
     }
+
     @Override
     public List<EliteUser> findAllNativesInACohort(String cohort) {
         List<EliteUser> foundNatives = eliteUserRepository.findAll();
+
         List<EliteUser> cohortList = new ArrayList<>();
-        for (int i = 0; i < foundNatives.size(); i++) {
-            if(foundNatives.get(i).getCohort().equals(cohort)){
-                cohortList.add(foundNatives.get(i));
+        for (EliteUser foundNative : foundNatives) {
+            if (foundNative.getCohort() != null && foundNative.getCohort().equals(cohort)) {
+                cohortList.add(foundNative);
             }
         }
         return cohortList;
     }
-//    @Override
+    @Override
+    public DeleteResponse removeNative(DeleteRequest request) {
+        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+        if(!foundUser.getCohort().equals(request.getCohort())){
+            throw new EntityDoesNotExistException(nativeNotFoundMessage(request.getCohort()));
+        }
+        Natives foundNative = nativesService.findNativeByEmail(request.getSemicolonEmail());
+        eliteUserRepository.delete(foundUser);
+        nativesService.deleteNative(foundNative);
+        return DeleteResponse.builder()
+                .message(DELETE_USER_MESSAGE)
+                .build();
+    }
+
+    @Override
+    public DeleteResponse removeAdmin(DeleteRequest request) {
+        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+        Admins foundAdmin = adminsService.findAdminByEmail(request.getSemicolonEmail());
+        eliteUserRepository.delete(foundUser);
+        adminsService.removeAdmin(foundAdmin);
+        return DeleteResponse.builder()
+                .message(DELETE_USER_MESSAGE)
+                .build();
+    }
+
+    @Override
     public DeleteResponse removeCohort(DeleteRequest request) {
         List<EliteUser> foundUserList = findAllNativesInACohort(request.getCohort());
         List<Natives> foundNativesList = nativesService.findAllNativesInACohort(request.getCohort());
@@ -267,4 +310,57 @@ public class EliteUserService implements UserService {
     private boolean isNative(UserRegistrationRequest request) {
         return nativesService.isNative(request.getSemicolonEmail(),request.getScv().toUpperCase());
     }
+
+    private UpdateUserResponse applyPatch(JsonPatch updatePatch, EliteUser eliteUser) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        //1. Convert user to JsonNode
+        JsonNode userNode = objectMapper.convertValue(eliteUser, JsonNode.class);
+        try {
+            //2. Apply patch to JsonNode from step 1
+            JsonNode updatedNode = updatePatch.apply(userNode);
+            //3. Convert updatedNode back to user
+            EliteUser updatedUser = objectMapper.convertValue(updatedNode, EliteUser.class);
+            //4. Save updated User
+            eliteUserRepository.save(updatedUser);
+            return  new UpdateUserResponse(PROFILE_UPDATE_SUCCESSFUL);
+        }catch (JsonPatchException exception){
+            throw new IncorrectDetailsException(exception.getMessage());
+        }
+    }
+
+    private JsonPatch buildUpdatePatch(UpdateUserRequest updateUserRequest) {
+        Field[] fields = updateUserRequest.getClass().getDeclaredFields();
+
+        List<ReplaceOperation> operations = Arrays.stream(fields)
+                .filter(field -> validateFields(updateUserRequest, field))
+                .map(field->buildReplaceOperation(updateUserRequest, field))
+                .toList();
+
+        List<JsonPatchOperation> patchOperations = new ArrayList<>(operations);
+        return new JsonPatch(patchOperations);
+    }
+
+    private static boolean validateFields(UpdateUserRequest updateUserRequest, Field field) {
+        List<String> list = List.of("interests","street","houseNumber","country","state", "gender","profileImage");
+        field.setAccessible(true);
+        try {
+            return field.get(updateUserRequest) != null && !list.contains(field.getName());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static ReplaceOperation buildReplaceOperation(UpdateUserRequest updateUserRequest, Field field) {
+        field.setAccessible(true);
+        try {
+            String path = JSON_PATCH_PATH_PREFIX + field.getName();
+            JsonPointer pointer = new JsonPointer(path);
+            String value = field.get(updateUserRequest).toString();
+            TextNode node = new TextNode(value);
+            return new ReplaceOperation(pointer, node);
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
 }

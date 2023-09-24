@@ -12,6 +12,7 @@ public interface UserService {
     UserRegistrationResponse registerUser(UserRegistrationRequest request) throws EntityDoesNotExistException;
     LoginResponse loginUser(LoginRequest request);
     EliteUser findUserByEmail(String email);
+    UpdateUserResponse updateUserProfile(UpdateUserRequest request);
     AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest);
     AttendanceResponse takeAttendanceTest(AttendanceRequest request, String IpAddress);
     List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request);
@@ -20,8 +21,10 @@ public interface UserService {
     List<AttendanceSheetResponse> generateAttendanceReportForNative(SearchRequest request);
     List<AttendanceSheetResponse> generateAttendanceReportForCohort(SearchRequest request);
     List<EliteUser> findAllNativesInACohort(String cohort);
-    PermitForAttendanceResponse setAttendancePermitForNative(PermitForAttendanceRequest request);
-    PermitForAttendanceResponse setAttendancePermitForCohort(PermitForAttendanceRequest request);
-//    DeleteResponse removeCohort(DeleteRequest request);
+    PermissionForAttendanceResponse setAttendancePermissionForNative(PermissionForAttendanceRequest request);
+    PermissionForAttendanceResponse setAttendancePermitForCohort(PermissionForAttendanceRequest request);
+    DeleteResponse removeNative(DeleteRequest request);
+    DeleteResponse removeAdmin(DeleteRequest request);
+    DeleteResponse removeCohort(DeleteRequest request);
     ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request);
 }

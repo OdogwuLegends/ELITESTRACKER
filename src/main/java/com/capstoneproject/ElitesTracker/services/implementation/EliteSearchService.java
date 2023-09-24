@@ -90,20 +90,20 @@ public class EliteSearchService implements SearchService {
         List<AttendanceSheetResponse> attendanceSheet = new ArrayList<>();
 
         for (int i = 0; i < attendanceList.size(); i++) {
-            if ((foundUser.getId() != attendanceList.get(i).getUser().getId())) {
-                throw new EntityDoesNotExistException(nativeNotFoundMessage(foundUser.getCohort()));
+            if ((foundUser.getCohort().equals(attendanceList.get(i).getUser().getCohort()))) {
+                if((startDate.equals(subStringDate(attendanceList.get(i).getDate()))) || (endDate.equals(subStringDate(attendanceList.get(i).getDate())))){
+                    AttendanceSheetResponse foundReport = AttendanceSheetResponse.builder()
+                            .serialNumber(String.valueOf(i + 1))
+                            .firstName(attendanceList.get(i).getUser().getFirstName())
+                            .lastName(attendanceList.get(i).getUser().getLastName())
+                            .cohort(attendanceList.get(i).getCohort())
+                            .attendanceStatus(attendanceList.get(i).getStatus().toString())
+                            .date(attendanceList.get(i).getDate())
+                            .build();
+                    attendanceSheet.add(foundReport);
+                }
             }
-            if((startDate.equals(subStringDate(attendanceList.get(i).getDate()))) || (endDate.equals(subStringDate(attendanceList.get(i).getDate())))){
-                AttendanceSheetResponse foundReport = AttendanceSheetResponse.builder()
-                        .serialNumber(String.valueOf(i + 1))
-                        .firstName(attendanceList.get(i).getUser().getFirstName())
-                        .lastName(attendanceList.get(i).getUser().getLastName())
-                        .cohort(attendanceList.get(i).getCohort())
-                        .attendanceStatus(attendanceList.get(i).getStatus().toString())
-                        .date(attendanceList.get(i).getDate())
-                        .build();
-                attendanceSheet.add(foundReport);
-            }
+
         }
         return attendanceSheet;
     }

@@ -35,19 +35,6 @@ public class Test {
 //        assertNotNull(userRegistrationResponse);
 //    }
 
-    //    @Test
-//    void nativeCanGenerateAttendanceForSelf(){
-//        response = elitesNativesService.addNewNative(buildKinzy());
-//        assertNotNull(response);
-//        userRegistrationResponse = eliteUserService.registerUser(buildSixthUser());
-//        assertNotNull(userRegistrationResponse);
-//
-//        setTimeFrame();
-//        eliteUserService.takeAttendanceTest(secondAttendanceDetails(),"172.16.0.72");
-//        List<AttendanceSheetResponse> timeFrame = eliteUserService.generateAttendanceReportForSelf(buildSearchRequest());
-//        assertNotNull(timeFrame);
-//        assertThat(1).isEqualTo(timeFrame.size());
-//    }
 
     //    @Test
 //    void nativeCanTakeAttendanceWithinSetTimeFrame(){

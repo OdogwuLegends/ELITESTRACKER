@@ -52,7 +52,7 @@ public class AppUtil {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         return dateToFormat.format(dateFormatter);
     }
-    public static String formatLocalDateToString(LocalDate currentTime){
+    public static String localDateToString(LocalDate currentTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         return currentTime.format(formatter);
     }

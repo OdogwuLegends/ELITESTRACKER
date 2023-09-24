@@ -28,6 +28,7 @@ public class HardCoded {
     public static final String ATTENDANCE_SHEET = "attendance_sheet";
     public static final String MAC_ADDRESS_NOT_FOUND = "MAC Address not found";
     public static final String FORMAT_MAC_ADDRESS = "%02X:";
+    public static final String JSON_PATCH_PATH_PREFIX = "/";
     public static final String USER_NAME_NOT_CORRECT = "Email not correct";
     public static final String PASSWORD_NOT_CORRECT = "Password not correct";
     public static final String LOGIN_MESSAGE = "Log in successful";
@@ -38,7 +39,7 @@ public class HardCoded {
     public static final String EDIT_STATUS_MESSAGE = "Attendance status updated successfully!";
     public static final String DELETE_USER_MESSAGE = "User deleted successfully!";
     public static final String NATIVE_NOT_PERMITTED_FOR_ATTENDANCE = "Not permitted to take attendance currently. Please see an Admin.";
-    public static final String ADMIN_NOT_PERMITTED_FOR_ATTENDANCE = "Admins not permitted to take attendance.";
+    public static final String ADMIN_NOT_PERMITTED_FOR_OPERATION = "Admins not permitted for this operation";
     public static final String PERMISSION_MODIFIED_MESSAGE = "Permission successfully modified";
     public static final String COHORT_NOT_FOUND_MESSAGE = "Cohort %s not found";
     public static final String TIME_SET_MESSAGE = "Time range set successfully!";
@@ -46,4 +47,5 @@ public class HardCoded {
     public static final String BEFORE_ATTENDANCE_TIME_MESSAGE = "Not yet time for attendance, please wait until %s ";
     public static final String AFTER_ATTENDANCE_TIME_MESSAGE = "Past %s . Please see an Admin to take attendance, or try again tomorrow by %s ";
     public static final String DEVICE_RESET_MESSAGE = "Device reset successful!";
+    public static final String PROFILE_UPDATE_SUCCESSFUL = "Profile update successful!";
 }

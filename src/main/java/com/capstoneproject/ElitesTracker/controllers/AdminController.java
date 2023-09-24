@@ -36,14 +36,19 @@ public class AdminController {
     }
     @DeleteMapping("/removeAdmin")
     public ResponseEntity<DeleteResponse> removeAdmin(@RequestBody DeleteRequest request){
-        DeleteResponse response = adminsService.removeAdmin(request);
+        DeleteResponse response = userService.removeAdmin(request);
         return ResponseEntity.ok().body(response);
     }
-//    @DeleteMapping("/removeCohort")
-//    public ResponseEntity<DeleteResponse> removeCohort(@RequestBody DeleteRequest request){
-//        DeleteResponse response = userService.removeCohort(request);
-//        return ResponseEntity.ok().body(response);
-//    }
+    @DeleteMapping("/removeNative")
+    public ResponseEntity<DeleteResponse> removeNative(@RequestBody DeleteRequest request){
+        DeleteResponse response = userService.removeNative(request);
+        return ResponseEntity.ok().body(response);
+    }
+    @DeleteMapping("/removeCohort")
+    public ResponseEntity<DeleteResponse> removeCohort(@RequestBody DeleteRequest request){
+        DeleteResponse response = userService.removeCohort(request);
+        return ResponseEntity.ok().body(response);
+    }
     @PostMapping("/setTimeFrame")
     public ResponseEntity<?> setAttendanceTime(@RequestBody SetTimeRequest request){
         TimeResponse response = userService.setTimeForAttendance(request);
@@ -55,13 +60,13 @@ public class AdminController {
         return ResponseEntity.ok().body(response);
     }
     @PatchMapping("/setAttendancePermitForNative")
-    public ResponseEntity<PermitForAttendanceResponse> setAttendancePermitForNative(@RequestBody PermitForAttendanceRequest request){
-        PermitForAttendanceResponse response = userService.setAttendancePermitForNative(request);
+    public ResponseEntity<PermissionForAttendanceResponse> setAttendancePermitForNative(@RequestBody PermissionForAttendanceRequest request){
+        PermissionForAttendanceResponse response = userService.setAttendancePermissionForNative(request);
         return ResponseEntity.ok().body(response);
     }
     @PatchMapping("/setAttendancePermitForCohort")
-    public ResponseEntity<PermitForAttendanceResponse> setAttendancePermitForCohort(@RequestBody PermitForAttendanceRequest request){
-        PermitForAttendanceResponse response = userService.setAttendancePermitForCohort(request);
+    public ResponseEntity<PermissionForAttendanceResponse> setAttendancePermitForCohort(@RequestBody PermissionForAttendanceRequest request){
+        PermissionForAttendanceResponse response = userService.setAttendancePermitForCohort(request);
         return ResponseEntity.ok().body(response);
     }
     @GetMapping("/generateAttendanceForNative")

@@ -42,8 +42,7 @@ public class EliteAdminService implements AdminsService {
     }
 
     @Override
-    public DeleteResponse removeAdmin(DeleteRequest request) {
-        Admins foundAdmin = findAdminByEmail(request.getSemicolonEmail());
+    public DeleteResponse removeAdmin(Admins foundAdmin) {
         adminsRepository.delete(foundAdmin);
         return DeleteResponse.builder()
                 .message(DELETE_USER_MESSAGE)

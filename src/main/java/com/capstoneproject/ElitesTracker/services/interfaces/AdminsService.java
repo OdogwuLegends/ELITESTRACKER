@@ -8,7 +8,7 @@ import com.capstoneproject.ElitesTracker.models.Admins;
 
 public interface AdminsService {
     UserRegistrationResponse addNewAdmin(AddAdminRequest request);
-    DeleteResponse removeAdmin(DeleteRequest request);
+    DeleteResponse removeAdmin(Admins foundAdmin);
     Admins findAdminByEmail(String email);
     boolean isExistingAdmin(String email);
 
