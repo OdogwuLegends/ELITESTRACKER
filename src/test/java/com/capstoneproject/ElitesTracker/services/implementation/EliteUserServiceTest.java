@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,13 +19,14 @@ import java.util.List;
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.DISABLED;
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.ENABLED;
 import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.ABSENT;
-import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.PRESENT;
+import static com.capstoneproject.ElitesTracker.services.implementation.TestVariables.*;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles("dev")
 class EliteUserServiceTest {
     @Autowired
     private EliteUserService eliteUserService;
@@ -40,7 +42,7 @@ class EliteUserServiceTest {
 
     @Test
     void onlySavedUserCanRegister(){
-        assertThrows(EntityDoesNotExistException.class,()-> eliteUserService.registerUser(buildUnsavedUser()));
+        assertThrows(EntityDoesNotExistException.class,()-> eliteUserService.registerUser(buildBobReg()));
     }
 
     @Test
@@ -97,13 +99,41 @@ class EliteUserServiceTest {
         assertThrows(EntityDoesNotExistException.class,()-> eliteUserService.findUserByEmail("hello@semicolon.africa"));
     }
     @Test
+    void adminCanUpdateNativeProfile(){
+        response = elitesNativesService.addNewNative(buildCoutinho());
+        assertNotNull(response);
+        userRegistrationResponse = eliteUserService.registerUser(buildCoutinhoReg());
+        assertNotNull(userRegistrationResponse);
+
+        response = eliteAdminService.addNewAdmin(buildSeyi());
+        assertNotNull(response);
+        userRegistrationResponse = eliteUserService.registerUser(buildSeyiReg());
+        assertNotNull(userRegistrationResponse);
+
+        EliteUser foundUser = eliteUserService.findUserByEmail("d.coutinho@native.semicolon.africa");
+        assertNotNull(foundUser);
+        assertEquals("DOMINIK",foundUser.getFirstName());
+        assertEquals("14",foundUser.getCohort());
+
+        UpdateUserResponse updateUserResponse = eliteUserService.updateUserProfile(updateCoutinho());
+        assertNotNull(updateUserResponse);
+        assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
+
+        foundUser = eliteUserService.findUserByEmail("d.coutinho@native.semicolon.africa");
+        assertNotNull(foundUser);
+        assertEquals("DOMINIC",foundUser.getFirstName());
+        assertEquals("15",foundUser.getCohort());
+        assertEquals("d.coutinho@native.semicolon.africa",foundUser.getSemicolonEmail());
+    }
+    @Test
     void nativeCanTakeAttendance(){
         response = elitesNativesService.addNewNative(buildChiboy());
         assertNotNull(response);
         userRegistrationResponse = eliteUserService.registerUser(buildChiboyReg());
         assertNotNull(userRegistrationResponse);
 
-        setTimeFrame();
+        SetTimeRequest request = setTimeFrame();
+        eliteUserService.setTimeForAttendance(request);
 
         AttendanceResponse attendanceResponse = eliteUserService.takeAttendanceTest(chiboyAttendanceDetails(),"172.16.0.70");
         assertNotNull(attendanceResponse);
@@ -115,7 +145,9 @@ class EliteUserServiceTest {
         assertNotNull(response);
         userRegistrationResponse = eliteUserService.registerUser(buildChibuzoReg());
         assertNotNull(userRegistrationResponse);
-        setTimeFrame();
+
+        SetTimeRequest request = setTimeFrame();
+        eliteUserService.setTimeForAttendance(request);
 
         assertThrows(AdminsNotPermittedException.class,()-> eliteUserService.takeAttendanceTest(chibuzoAttendanceDetails(),"172.16.0.71"));
     }
@@ -127,7 +159,9 @@ class EliteUserServiceTest {
         userRegistrationResponse = eliteUserService.registerUser(buildWhiteReg());
         assertNotNull(userRegistrationResponse);
 
-        setTimeFrame();
+        SetTimeRequest setTimeRequest = setTimeFrame();
+        eliteUserService.setTimeForAttendance(setTimeRequest);
+
         AttendanceResponse attendanceResponse = eliteUserService.takeAttendanceTest(whiteAttendanceDetails(),"172.16.0.72");
         assertThat(attendanceResponse).isNotNull();
 
@@ -149,7 +183,9 @@ class EliteUserServiceTest {
         userRegistrationResponse = eliteUserService.registerUser(buildKinzyReg());
         assertNotNull(userRegistrationResponse);
 
-        setTimeFrame();
+       SetTimeRequest setTimeRequest = setTimeFrame();
+       eliteUserService.setTimeForAttendance(setTimeRequest);
+
         eliteUserService.takeAttendanceTest(kinzyAttendanceDetails(),"172.16.0.73");
         List<AttendanceSheetResponse> attendanceLog = eliteUserService.generateAttendanceReportForSelf(buildKinzySearchRequest());
         assertNotNull(attendanceLog);
@@ -171,7 +207,9 @@ class EliteUserServiceTest {
         assertNotNull(response);
         userRegistrationResponse = eliteUserService.registerUser(buildFemzReg());
         assertNotNull(userRegistrationResponse);
-        setTimeFrame();
+
+        SetTimeRequest setTimeRequest = setTimeFrame();
+        eliteUserService.setTimeForAttendance(setTimeRequest);
 
         eliteUserService.takeAttendanceTest(blackAttendanceDetails(),"172.16.0.74");
         List<AttendanceSheetResponse> attendanceLog = eliteUserService.generateAttendanceReportForNative(buildBlackSearchRequest());
@@ -311,512 +349,5 @@ class EliteUserServiceTest {
     }
 
 
-    private static UserRegistrationRequest buildUnsavedUser() {
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("bob@native.semicolon.africa")
-                .password("password")
-                .scv("SCV15125")
-                .screenHeight("300")
-                .screenWidth("450")
-                .build();
-    }
-    private UserRegistrationRequest buildPatienceReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("patience@semicolon.africa")
-                .password("password")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildLegendReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("l.odogwu@native.semicolon.africa")
-                .password("odogwu123")
-                .scv("scv15008")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildGabrielReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("gabriel@semicolon.africa")
-                .password("password")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildNewguyReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("newguy@semicolon.africa")
-                .password("newPassword")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildChiboyReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("c.ugbo@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv15009")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildKinzyReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("s.lawal@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv15010")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildWhiteReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("f.nwadike@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv15011")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildChibuzoReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("chibuzo@semicolon.africa")
-                .password("password")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildBlackReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("f.chiemela@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv15012")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildFemzReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("femi@semicolon.africa")
-                .password("password")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildJonathanReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("jonathan@semicolon.africa")
-                .password("password")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildPreciousReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("precious@semicolon.africa")
-                .password("password")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildKimReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("kimberly@semicolon.africa")
-                .password("password")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildSikiruReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("sikiru@semicolon.africa")
-                .password("politician")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildJerryReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("jerry@semicolon.africa")
-                .password("password")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildInemReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("i.udousoro@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv15013")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildNedReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("b.osisiogu@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv15014")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildOluchiReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("o.duru@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv15015")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildJideReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("b.farinde@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv15016")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildBoyReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("b.boy@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv14001")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildSecondBoyReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("s.boy@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv14003")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private UserRegistrationRequest buildGirlReg(){
-        return UserRegistrationRequest.builder()
-                .semicolonEmail("g.girl@native.semicolon.africa")
-                .password("newPassword")
-                .scv("scv14002")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private AddAdminRequest buildPatience(){
-        return AddAdminRequest.builder()
-                .firstName("Patience")
-                .lastName("Pat")
-                .semicolonEmail("patience@semicolon.africa")
-                .build();
-    }
-    private AddAdminRequest buildChibuzo(){
-        return AddAdminRequest.builder()
-                .firstName("Chibuzo")
-                .lastName("Ekejiuba")
-                .semicolonEmail("chibuzo@semicolon.africa")
-                .build();
-    }
-    private AddAdminRequest buildFemz(){
-        return AddAdminRequest.builder()
-                .firstName("Femi")
-                .lastName("Oladeji")
-                .semicolonEmail("femi@semicolon.africa")
-                .build();
-    }
-    private AddAdminRequest buildJonathan(){
-        return AddAdminRequest.builder()
-                .firstName("Jonathan")
-                .lastName("Martins")
-                .semicolonEmail("jonathan@semicolon.africa")
-                .build();
-    }
-    private AddAdminRequest buildPrecious(){
-        return AddAdminRequest.builder()
-                .firstName("Precious")
-                .lastName("Onyeukwu")
-                .semicolonEmail("precious@semicolon.africa")
-                .build();
-    }
-    private AddAdminRequest buildKim(){
-        return AddAdminRequest.builder()
-                .firstName("Kimberly")
-                .lastName("Mojoyin")
-                .semicolonEmail("kimberly@semicolon.africa")
-                .build();
-    }
-    private AddAdminRequest buildSikiru(){
-        return AddAdminRequest.builder()
-                .firstName("Sikiru")
-                .lastName("Siks")
-                .semicolonEmail("sikiru@semicolon.africa")
-                .build();
-    }
-    private AddAdminRequest buildJerry(){
-        return AddAdminRequest.builder()
-                .firstName("Jerry")
-                .lastName("Chukwuma")
-                .semicolonEmail("jerry@semicolon.africa")
-                .build();
-    }
-    private AddAdminRequest buildGabriel(){
-        return AddAdminRequest.builder()
-                .firstName("Gabriel")
-                .lastName("Gab")
-                .semicolonEmail("gabriel@semicolon.africa")
-                .build();
-    }
-    private AddAdminRequest buildNewGuy(){
-        return AddAdminRequest.builder()
-                .firstName("NewGuy")
-                .lastName("Guy")
-                .semicolonEmail("newguy@semicolon.africa")
-                .build();
-    }
-    private AddNativeRequest buildLegend(){
-        return AddNativeRequest.builder()
-                .firstName("Odogwu")
-                .lastName("Legend")
-                .cohort("15")
-                .semicolonEmail("l.odogwu@native.semicolon.africa")
-                .semicolonID("SCV15008")
-                .build();
-    }
-    private AddNativeRequest buildChiboy(){
-        return AddNativeRequest.builder()
-                .firstName("Chinedu")
-                .lastName("Ugbo")
-                .cohort("15")
-                .semicolonEmail("c.ugbo@native.semicolon.africa")
-                .semicolonID("SCV15009")
-                .build();
-    }
-    private AddNativeRequest buildKinzy(){
-        return AddNativeRequest.builder()
-                .firstName("Kinzy")
-                .lastName("Kinzy")
-                .cohort("15")
-                .semicolonEmail("s.lawal@native.semicolon.africa")
-                .semicolonID("SCV15010")
-                .build();
-    }
-    private AddNativeRequest buildWhite(){
-        return AddNativeRequest.builder()
-                .firstName("Favour")
-                .lastName("White")
-                .cohort("15")
-                .semicolonEmail("f.nwadike@native.semicolon.africa")
-                .semicolonID("SCV15011")
-                .build();
-    }
-    private AddNativeRequest buildBlack(){
-        return AddNativeRequest.builder()
-                .firstName("Favour")
-                .lastName("Black")
-                .cohort("15")
-                .semicolonEmail("f.chiemela@native.semicolon.africa")
-                .semicolonID("SCV15012")
-                .build();
-    }
-    private AddNativeRequest buildInem(){
-        return AddNativeRequest.builder()
-                .firstName("Inemesit")
-                .lastName("Udousoro")
-                .cohort("15")
-                .semicolonEmail("i.udousoro@native.semicolon.africa")
-                .semicolonID("SCV15013")
-                .build();
-    }
-    private AddNativeRequest buildNed(){
-        return AddNativeRequest.builder()
-                .firstName("Benjamin")
-                .lastName("Osisiogu")
-                .cohort("15")
-                .semicolonEmail("b.osisiogu@native.semicolon.africa")
-                .semicolonID("SCV15014")
-                .build();
-    }
-    private AddNativeRequest buildOluchi(){
-        return AddNativeRequest.builder()
-                .firstName("Oluchi")
-                .lastName("Duru")
-                .cohort("15")
-                .semicolonEmail("o.duru@native.semicolon.africa")
-                .semicolonID("SCV15015")
-                .build();
-    }
-    private AddNativeRequest buildJide(){
-        return AddNativeRequest.builder()
-                .firstName("Babajide")
-                .lastName("Farinde")
-                .cohort("15")
-                .semicolonEmail("b.farinde@native.semicolon.africa")
-                .semicolonID("SCV15016")
-                .build();
-    }
-    private AddNativeRequest buildFirstBoy(){
-        return AddNativeRequest.builder()
-                .firstName("Boy")
-                .lastName("Boy")
-                .cohort("14")
-                .semicolonEmail("b.boy@native.semicolon.africa")
-                .semicolonID("SCV14001")
-                .build();
-    }
-    private AddNativeRequest buildSecondBoy(){
-        return AddNativeRequest.builder()
-                .firstName("SecondBoy")
-                .lastName("Boy")
-                .cohort("14")
-                .semicolonEmail("s.boy@native.semicolon.africa")
-                .semicolonID("SCV14003")
-                .build();
-    }
-    private AddNativeRequest buildGirl(){
-        return AddNativeRequest.builder()
-                .firstName("Girl")
-                .lastName("Girl")
-                .cohort("14")
-                .semicolonEmail("g.girl@native.semicolon.africa")
-                .semicolonID("SCV14002")
-                .build();
-    }
-    private LoginRequest buildLegendLoginRequest(){
-        return LoginRequest.builder()
-                .semicolonEmail("l.odogwu@native.semicolon.africa")
-                .password("odogwu123")
-                .build();
-    }
-    private LoginRequest buildLoginRequestWithWrongEmail(){
-        return LoginRequest.builder()
-                .semicolonEmail("newguy@semicolon.africa")
-                .password("password")
-                .build();
-    }
-    private LoginRequest buildLoginRequestWithWrongPassword(){
-        return LoginRequest.builder()
-                .semicolonEmail("newguy@semicolon.africa")
-                .password("adminPassword")
-                .build();
-    }
 
-    private AttendanceRequest chiboyAttendanceDetails(){
-        return AttendanceRequest.builder()
-                .attendanceStatus(PRESENT)
-                .semicolonEmail("c.ugbo@native.semicolon.africa")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private AttendanceRequest whiteAttendanceDetails(){
-        return AttendanceRequest.builder()
-                .attendanceStatus(PRESENT)
-                .semicolonEmail("f.nwadike@native.semicolon.africa")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private AttendanceRequest kinzyAttendanceDetails(){
-        return AttendanceRequest.builder()
-                .attendanceStatus(PRESENT)
-                .semicolonEmail("s.lawal@native.semicolon.africa")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private AttendanceRequest blackAttendanceDetails(){
-        return AttendanceRequest.builder()
-                .attendanceStatus(PRESENT)
-                .semicolonEmail("f.chiemela@native.semicolon.africa")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-
-    private AttendanceRequest chibuzoAttendanceDetails(){
-        return AttendanceRequest.builder()
-                .attendanceStatus(PRESENT)
-                .semicolonEmail("chibuzo@semicolon.africa")
-                .screenWidth("550")
-                .screenHeight("100")
-                .build();
-    }
-    private void setTimeFrame() {
-        SetTimeRequest request = SetTimeRequest.builder()
-                .startHour(1)
-                .startMinute(0)
-                .endHour(23)
-                .endMinute(59)
-                .build();
-        eliteUserService.setTimeForAttendance(request);
-    }
-    private SearchRequest buildKinzySearchRequest(){
-        return SearchRequest.builder()
-                .startDate(localDateToString(LocalDate.now()))
-                .endDate(localDateToString(LocalDate.now()))
-                .semicolonEmail("s.lawal@native.semicolon.africa")
-                .cohort("15")
-                .build();
-    }
-    private SearchRequest buildBlackSearchRequest(){
-        return SearchRequest.builder()
-                .startDate(localDateToString(LocalDate.now()))
-                .endDate(localDateToString(LocalDate.now()))
-                .semicolonEmail("f.chiemela@native.semicolon.africa")
-                .cohort("15")
-                .build();
-    }
-    private SearchRequest buildCohort15SearchRequest(){
-        return SearchRequest.builder()
-                .startDate(localDateToString(LocalDate.now()))
-                .endDate(localDateToString(LocalDate.now()))
-                .cohort("15")
-                .build();
-    }
-    private SetTimeRequest buildSetTimeFrameForAttendance(){
-        return SetTimeRequest.builder()
-                .startHour(1)
-                .startMinute(0)
-                .endHour(23)
-                .endMinute(59)
-                .build();
-    }
-    private PermissionForAttendanceRequest modifyPermissionForInem(){
-        return PermissionForAttendanceRequest.builder()
-                .cohort("15")
-                .semicolonEmail("i.udousoro@native.semicolon.africa")
-                .permission(DISABLED)
-                .build();
-    }
-    private PermissionForAttendanceRequest modifyPermissionForCohort15(){
-        return PermissionForAttendanceRequest.builder()
-                .cohort("15")
-                .permission(DISABLED)
-                .build();
-    }
-    private DeleteRequest removeCohort14(){
-        return DeleteRequest.builder()
-                .cohort("14")
-                .build();
-    }
-    private DeleteRequest removeSecondBoyInCohort14(){
-        return DeleteRequest.builder()
-                .semicolonEmail("s.boy@native.semicolon.africa")
-                .cohort("14")
-                .build();
-    }
-    private ResetDeviceRequest changeNativeDevice(){
-        return ResetDeviceRequest.builder()
-                .adminSemicolonEmail("sikiru@semicolon.africa")
-                .adminPassword("politician")
-                .nativeSemicolonEmail("b.farinde@native.semicolon.africa")
-                .screenWidth("1000")
-                .screenHeight("1650")
-                .build();
-    }
 }

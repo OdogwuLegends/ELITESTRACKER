@@ -26,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.ENABLED;
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
@@ -85,11 +82,20 @@ public class EliteUserService implements UserService {
                 ()-> new EntityDoesNotExistException(USER_DOES_NOT_EXIST_EXCEPTION.getMessage()));
     }
 
+//    @Override
+//    public UpdateUserResponse updateUserProfile(UpdateUserRequest request) {
+//        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+//        Natives foundNative = nativesService.findNativeByEmail(request.getSemicolonEmail());
+////        UpdateUserRequest editedRequest = editFieldsToUppercase(request);
+//        JsonPatch updatePatch = buildUpdatePatch(request);
+//        return applyPatch(updatePatch, foundUser, foundNative);
+//    }
     @Override
     public UpdateUserResponse updateUserProfile(UpdateUserRequest request) {
-        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
-        JsonPatch updatePatch = buildUpdatePatch(request);
-        return applyPatch(updatePatch, foundUser);
+        editToUpperCase(request);
+        return UpdateUserResponse.builder()
+                .message(PROFILE_UPDATE_SUCCESSFUL)
+                .build();
     }
 
     @Override
@@ -310,19 +316,28 @@ public class EliteUserService implements UserService {
     private boolean isNative(UserRegistrationRequest request) {
         return nativesService.isNative(request.getSemicolonEmail(),request.getScv().toUpperCase());
     }
+    private void editToUpperCase(UpdateUserRequest request) {
+        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+        if(Objects.nonNull(request.getFirstName()) && !request.getFirstName().equals(""))foundUser.setFirstName(request.getFirstName().toUpperCase());
+        if(Objects.nonNull(request.getLastName()) && !request.getLastName().equals(""))foundUser.setLastName(request.getLastName().toUpperCase());
+        if(Objects.nonNull(request.getCohort()) && !request.getCohort().equals(""))foundUser.setCohort(request.getCohort().toUpperCase());
+        if(Objects.nonNull(request.getSemicolonID()) && !request.getSemicolonID().equals(""))foundUser.setSemicolonID(request.getSemicolonID().toUpperCase());
+        if(Objects.nonNull(request.getUpdatedSemicolonEmail()) && !request.getUpdatedSemicolonEmail().equals(""))foundUser.setSemicolonEmail(request.getUpdatedSemicolonEmail());
+        eliteUserRepository.save(foundUser);
+    }
 
-    private UpdateUserResponse applyPatch(JsonPatch updatePatch, EliteUser eliteUser) {
+    private UpdateUserResponse applyPatch(JsonPatch updatePatch, EliteUser eliteUser, Natives foundNative) {
         ObjectMapper objectMapper = new ObjectMapper();
-        //1. Convert user to JsonNode
         JsonNode userNode = objectMapper.convertValue(eliteUser, JsonNode.class);
+        JsonNode nativeNode = objectMapper.convertValue(foundNative, JsonNode.class);
         try {
-            //2. Apply patch to JsonNode from step 1
-            JsonNode updatedNode = updatePatch.apply(userNode);
-            //3. Convert updatedNode back to user
-            EliteUser updatedUser = objectMapper.convertValue(updatedNode, EliteUser.class);
-            //4. Save updated User
+            JsonNode userUpdatedNode = updatePatch.apply(userNode);
+            JsonNode nativeUpdatedNode = updatePatch.apply(nativeNode);
+            EliteUser updatedUser = objectMapper.convertValue(userUpdatedNode, EliteUser.class);
+            Natives updatedNative = objectMapper.convertValue(nativeUpdatedNode,Natives.class);
             eliteUserRepository.save(updatedUser);
-            return  new UpdateUserResponse(PROFILE_UPDATE_SUCCESSFUL);
+            nativesService.updateNativeProfile(updatedNative);
+            return new UpdateUserResponse(PROFILE_UPDATE_SUCCESSFUL);
         }catch (JsonPatchException exception){
             throw new IncorrectDetailsException(exception.getMessage());
         }
@@ -341,10 +356,10 @@ public class EliteUserService implements UserService {
     }
 
     private static boolean validateFields(UpdateUserRequest updateUserRequest, Field field) {
-        List<String> list = List.of("interests","street","houseNumber","country","state", "gender","profileImage");
+
         field.setAccessible(true);
         try {
-            return field.get(updateUserRequest) != null && !list.contains(field.getName());
+            return field.get(updateUserRequest) != null;
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -355,12 +370,20 @@ public class EliteUserService implements UserService {
         try {
             String path = JSON_PATCH_PATH_PREFIX + field.getName();
             JsonPointer pointer = new JsonPointer(path);
-            String value = field.get(updateUserRequest).toString();
+            String value = field.get(updateUserRequest).toString().toUpperCase();
             TextNode node = new TextNode(value);
             return new ReplaceOperation(pointer, node);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
     }
-
+    private static UpdateUserRequest editFieldsToUppercase(UpdateUserRequest request){
+        return UpdateUserRequest.builder()
+                .firstName(request.getFirstName().toUpperCase())
+                .lastName(request.getLastName().toUpperCase())
+                .semicolonID(request.getSemicolonID().toUpperCase())
+                .cohort(request.getCohort())
+                .semicolonEmail(request.getSemicolonEmail())
+                .build();
+    }
 }

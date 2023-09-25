@@ -12,4 +12,6 @@ public class UpdateUserRequest {
     private String lastName;
     private String cohort;
     private String semicolonEmail;
+    private String updatedSemicolonEmail;
+    private String semicolonID;
 }

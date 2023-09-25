@@ -2,6 +2,7 @@ package com.capstoneproject.ElitesTracker.services.implementation;
 
 import com.capstoneproject.ElitesTracker.dtos.requests.AddNativeRequest;
 import com.capstoneproject.ElitesTracker.dtos.responses.DeleteResponse;
+import com.capstoneproject.ElitesTracker.dtos.responses.UpdateUserResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.UserRegistrationResponse;
 import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
 import com.capstoneproject.ElitesTracker.exceptions.UserExistsException;
@@ -21,6 +22,7 @@ import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.NATIVE_D
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.savedNativeMessage;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.userAlreadyExistsMessage;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.DELETE_USER_MESSAGE;
+import static com.capstoneproject.ElitesTracker.utils.HardCoded.PROFILE_UPDATE_SUCCESSFUL;
 
 @Service
 @AllArgsConstructor
@@ -47,6 +49,12 @@ public class ElitesNativesService implements NativesService {
     public Natives findNativeByEmail(String email) {
         Optional<Natives> semicolonNative = nativesRepository.findBySemicolonEmail(email);
         return semicolonNative.orElseThrow(()-> new EntityDoesNotExistException(NATIVE_DOES_NOT_EXIST_EXCEPTION.getMessage()));
+    }
+
+    @Override
+    public UpdateUserResponse updateNativeProfile(Natives nativeToUpdate) {
+        nativesRepository.save(nativeToUpdate);
+        return UpdateUserResponse.builder().message(PROFILE_UPDATE_SUCCESSFUL).build();
     }
 
     @Override

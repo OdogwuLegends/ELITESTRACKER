@@ -22,6 +22,7 @@ import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.DISAB
 import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.PRESENT;
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
+import static com.capstoneproject.ElitesTracker.utils.HardCoded.BASE_IP_ADDRESS;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.EDIT_STATUS_MESSAGE;
 
 @Service
@@ -38,9 +39,9 @@ public class EliteAttendanceService implements AttendanceService {
         AttendanceResponse response = new AttendanceResponse();
         String IpAddress = retrieveActualIP(httpServletRequest);
 
-//        if(!subStringIp(IpAddress).equals(BASE_IP_ADDRESS)){
-//            throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
-//        }
+        if(!subStringIp(IpAddress).equals(BASE_IP_ADDRESS)){
+            throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
+        }
 
         Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(IpAddress);
 
@@ -51,19 +52,18 @@ public class EliteAttendanceService implements AttendanceService {
         } else if (eliteUser.getPermission().equals(DISABLED)) {
             throw new NotPermittedForAttendanceException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
         } else{
-//            buildNewAttendance(eliteUser, response, IpAddress);
             checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress);
         }
-//
-//        //TODO REFACTOR THIS
-//        List<TemporaryAttendance> temporaryAttendances = temporaryAttendanceRepository.findAll();
-//        permanentAttendanceService.savePermanentAttendances(temporaryAttendances);
         return response;
     }
 
     @Override
     public AttendanceResponse saveAttendanceTest(AttendanceRequest request, String IpAddress, EliteUser eliteUser) {
 //        noAttendanceOnWeekendsCheck();
+
+        if(!subStringIp(IpAddress).equals("172.16.0.")){
+            throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
+        }
 
         AttendanceResponse response = new AttendanceResponse();
 
@@ -117,7 +117,7 @@ public class EliteAttendanceService implements AttendanceService {
         LocalTime startTime = LocalTime.of(timeEligibility.getStartHour(),timeEligibility.getStartMinute());
         LocalTime endTime = LocalTime.of(timeEligibility.getEndHour(),timeEligibility.getEndMinute());
         LocalTime currentTime = LocalTime.now();
-        LocalTime baseTime = LocalTime.of(18,0);
+        LocalTime baseTime = LocalTime.of(23,59);
 
         if(currentTime.isBefore(startTime) && currentTime.isBefore(endTime)){
             throw new TimeLimitException(beforeAttendanceMessage(localTimeToString(startTime)));
@@ -144,23 +144,4 @@ public class EliteAttendanceService implements AttendanceService {
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
         return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) || !eliteUser.getScreenHeight().equals(request.getScreenHeight());
     }
-
-//    private void timeForAttendance(){
-//        // Get the current time
-//        LocalTime currentTime = LocalTime.now();
-//
-//        // Define the start and end times for the time limit
-//        LocalTime startTime = LocalTime.of(10, 0);      // 10:00 AM
-//        LocalTime endTime = LocalTime.of(10, 30);       // 10:30 AM
-//
-//        // Check if the current time is within the time limit
-//        if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
-//            // The current time is within the time limit (between 10:00 AM and 10:30 AM)
-//            System.out.println("Within the time limit.");
-//        } else {
-//            // The current time is outside the time limit
-//            System.out.println("Outside the time limit.");
-//        }
-//    }
-
 }
