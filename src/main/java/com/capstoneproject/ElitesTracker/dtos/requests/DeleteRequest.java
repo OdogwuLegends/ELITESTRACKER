@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class DeleteRequest {
-    private String semicolonEmail;
+    private String adminSemicolonEmail;
+    private String nativeSemicolonEmail;
     private String cohort;
 }

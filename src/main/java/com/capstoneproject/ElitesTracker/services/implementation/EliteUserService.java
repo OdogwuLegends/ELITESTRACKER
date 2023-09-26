@@ -2,6 +2,7 @@ package com.capstoneproject.ElitesTracker.services.implementation;
 
 import com.capstoneproject.ElitesTracker.dtos.requests.*;
 import com.capstoneproject.ElitesTracker.dtos.responses.*;
+import com.capstoneproject.ElitesTracker.enums.AdminPrivileges;
 import com.capstoneproject.ElitesTracker.exceptions.AdminsNotPermittedException;
 import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
 import com.capstoneproject.ElitesTracker.exceptions.IncorrectDetailsException;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import static com.capstoneproject.ElitesTracker.enums.AdminPrivileges.*;
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.ENABLED;
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.enums.Role.ADMIN;
@@ -92,6 +94,9 @@ public class EliteUserService implements UserService {
 //    }
     @Override
     public UpdateUserResponse updateUserProfile(UpdateUserRequest request) {
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSubAdminPrivilege(foundAdmin);
+
         editToUpperCase(request);
         return UpdateUserResponse.builder()
                 .message(PROFILE_UPDATE_SUCCESSFUL)
@@ -100,9 +105,7 @@ public class EliteUserService implements UserService {
 
     @Override
     public AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest) {
-        if(!request.getSemicolonEmail().contains(NATIVE_CHECK)){
-            throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_OPERATION_EXCEPTION.getMessage());
-        }
+//        checkForAdmin(request);
         EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
 
         return attendanceService.saveAttendance(request,httpServletRequest,foundUser);
@@ -118,36 +121,49 @@ public class EliteUserService implements UserService {
 
     @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request) {
-        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+        EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
         return searchService.searchAttendanceReportForSelf(request, foundUser);
     }
 
     @Override
     public AttendanceResponse editAttendanceStatus(EditAttendanceRequest request) {
-        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSubAdminPrivilege(foundAdmin);
+
+        EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
         return attendanceService.editAttendanceStatus(request, foundUser);
     }
 
     @Override
     public TimeResponse setTimeForAttendance(SetTimeRequest request) {
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSubAdminPrivilege(foundAdmin);
         return timeEligibilityService.setTimeForAttendance(request);
     }
 
     @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForNative(SearchRequest request) {
-        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
-        return searchService.searchAttendanceReportForNative(request,foundUser);
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSubAdminPrivilege(foundAdmin);
+
+        EliteUser foundNative = findUserByEmail(request.getNativeSemicolonEmail());
+        return searchService.searchAttendanceReportForNative(request,foundNative);
     }
 
 
     @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForCohort(SearchRequest request) {
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSubAdminPrivilege(foundAdmin);
         return searchService.searchAttendanceReportForCohort(request);
     }
 
     @Override
     public PermissionForAttendanceResponse setAttendancePermissionForNative(PermissionForAttendanceRequest request) {
-        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSubAdminPrivilege(foundAdmin);
+
+        EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
         if(!foundUser.getCohort().equals(request.getCohort())){
             throw new EntityDoesNotExistException(nativeNotFoundMessage(request.getCohort()));
         }
@@ -161,6 +177,9 @@ public class EliteUserService implements UserService {
 
     @Override
     public PermissionForAttendanceResponse setAttendancePermitForCohort(PermissionForAttendanceRequest request) {
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSubAdminPrivilege(foundAdmin);
+
         List<EliteUser> foundNatives = findAllNativesInACohort(request.getCohort());
 
         if(foundNatives.isEmpty()){
@@ -194,11 +213,14 @@ public class EliteUserService implements UserService {
     }
     @Override
     public DeleteResponse removeNative(DeleteRequest request) {
-        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSuperAdminPrivilege(foundAdmin);
+
+        EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
         if(!foundUser.getCohort().equals(request.getCohort())){
             throw new EntityDoesNotExistException(nativeNotFoundMessage(request.getCohort()));
         }
-        Natives foundNative = nativesService.findNativeByEmail(request.getSemicolonEmail());
+        Natives foundNative = nativesService.findNativeByEmail(request.getNativeSemicolonEmail());
         eliteUserRepository.delete(foundUser);
         nativesService.deleteNative(foundNative);
         return DeleteResponse.builder()
@@ -208,10 +230,13 @@ public class EliteUserService implements UserService {
 
     @Override
     public DeleteResponse removeAdmin(DeleteRequest request) {
-        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
-        Admins foundAdmin = adminsService.findAdminByEmail(request.getSemicolonEmail());
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSuperAdminPrivilege(foundAdmin);
+
+        EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
+        Admins adminToRemove = adminsService.findAdminByEmail(request.getNativeSemicolonEmail());
         eliteUserRepository.delete(foundUser);
-        adminsService.removeAdmin(foundAdmin);
+        adminsService.removeAdmin(adminToRemove);
         return DeleteResponse.builder()
                 .message(DELETE_USER_MESSAGE)
                 .build();
@@ -219,6 +244,9 @@ public class EliteUserService implements UserService {
 
     @Override
     public DeleteResponse removeCohort(DeleteRequest request) {
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSuperAdminPrivilege(foundAdmin);
+
         List<EliteUser> foundUserList = findAllNativesInACohort(request.getCohort());
         List<Natives> foundNativesList = nativesService.findAllNativesInACohort(request.getCohort());
 
@@ -239,6 +267,9 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request) {
+//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+//        checkForSubAdminPrivilege(foundAdmin);
+
         LoginRequest loginRequest = LoginRequest.builder()
                 .semicolonEmail(request.getAdminSemicolonEmail())
                 .password(request.getAdminPassword())
@@ -289,6 +320,7 @@ public class EliteUserService implements UserService {
                 .semicolonEmail(existingAdmin.getSemicolonEmail())
                 .password(request.getPassword()) //Encode password after security added
                 .role(ADMIN)
+                .adminPrivilegesList(setSubAdmin())
                 .screenWidth(request.getScreenWidth())
                 .screenHeight(request.getScreenHeight())
                 .build();
@@ -385,5 +417,26 @@ public class EliteUserService implements UserService {
                 .cohort(request.getCohort())
                 .semicolonEmail(request.getSemicolonEmail())
                 .build();
+    }
+    private static void checkForAdmin(AttendanceRequest request) {
+        if(!request.getSemicolonEmail().contains(NATIVE_CHECK)){
+            throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_OPERATION_EXCEPTION.getMessage());
+        }
+    }
+    private static Set<AdminPrivileges> setSubAdmin(){
+        Set<AdminPrivileges> privilege = new TreeSet<>();
+        privilege.add(CLASS_PARENT);
+        return privilege;
+    }
+
+    private void checkForSubAdminPrivilege(EliteUser foundAdmin) {
+        if(!foundAdmin.getAdminPrivilegesList().contains(SUB_ADMIN)){
+            throw new AdminsNotPermittedException(PRIVILEGE_NOT_GRANTED_EXCEPTION.getMessage());
+        }
+    }
+    private void checkForSuperAdminPrivilege(EliteUser foundAdmin) {
+        if(!foundAdmin.getAdminPrivilegesList().contains(SUPER_ADMIN)){
+            throw new AdminsNotPermittedException(PRIVILEGE_NOT_GRANTED_EXCEPTION.getMessage());
+        }
     }
 }

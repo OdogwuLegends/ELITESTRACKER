@@ -1,9 +1,16 @@
 package com.capstoneproject.ElitesTracker.models;
 
+import com.capstoneproject.ElitesTracker.enums.AdminPrivileges;
 import com.capstoneproject.ElitesTracker.enums.AttendancePermission;
 import com.capstoneproject.ElitesTracker.enums.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStamp;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ELITE_USER;
@@ -12,7 +19,6 @@ import static com.capstoneproject.ElitesTracker.utils.HardCoded.ELITE_USER;
 @Setter
 @Builder
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Entity(name = ELITE_USER)
 public class EliteUser {
     @Id
@@ -48,9 +54,16 @@ public class EliteUser {
     @Enumerated(value = EnumType.STRING)
     private AttendancePermission permission;
 
+    @ElementCollection
+    private Set<AdminPrivileges> adminPrivilegesList;
+
     @PrePersist
     public void setCreatedAt(){
         this.createdAt = getCurrentTimeStamp();
+    }
+
+    public EliteUser(){
+        this.adminPrivilegesList = new TreeSet<>();
     }
 
 }

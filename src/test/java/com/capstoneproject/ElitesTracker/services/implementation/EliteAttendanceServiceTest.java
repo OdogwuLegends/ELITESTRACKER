@@ -1,6 +1,5 @@
 package com.capstoneproject.ElitesTracker.services.implementation;
 
-import com.capstoneproject.ElitesTracker.dtos.requests.AttendanceRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.EditAttendanceRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.PermissionForAttendanceRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.SetTimeRequest;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.DISABLED;
 import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.ABSENT;
-import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.PRESENT;
 import static com.capstoneproject.ElitesTracker.services.implementation.TestVariables.*;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.attendanceMessage;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.localDateToString;
@@ -152,14 +150,14 @@ class EliteAttendanceServiceTest {
 
     private PermissionForAttendanceRequest disableInemPermission(){
         return PermissionForAttendanceRequest.builder()
-                .semicolonEmail("i.udousoro@native.semicolon.africa")
+                .nativeSemicolonEmail("i.udousoro@native.semicolon.africa")
                 .cohort("15")
                 .permission(DISABLED)
                 .build();
     }
     private EditAttendanceRequest editNedAttendance(){
         return EditAttendanceRequest.builder()
-                .semicolonEmail("b.osisiogu@native.semicolon.africa")
+                .NativeSemicolonEmail("b.osisiogu@native.semicolon.africa")
                 .cohort("15")
                 .attendanceStatus(ABSENT)
                 .date(localDateToString(LocalDate.now()))

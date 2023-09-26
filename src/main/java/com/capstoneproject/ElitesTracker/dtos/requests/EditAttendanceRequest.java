@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class EditAttendanceRequest {
-    private String semicolonEmail;
+    private String NativeSemicolonEmail;
     private String cohort;
     private String date;
+    private String adminSemicolonEmail;
     private AttendanceStatus attendanceStatus;
 }

@@ -12,4 +12,5 @@ public class SetTimeRequest {
     private int startMinute;
     private int endHour;
     private int endMinute;
+    private String adminSemicolonEmail;
 }

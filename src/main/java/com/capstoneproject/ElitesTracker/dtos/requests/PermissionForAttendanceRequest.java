@@ -8,7 +8,8 @@ import lombok.Setter;
 @Getter
 @Builder
 public class PermissionForAttendanceRequest {
-    private String semicolonEmail;
+    private String nativeSemicolonEmail;
     private String cohort;
     private AttendancePermission permission;
+    private String adminSemicolonEmail;
 }

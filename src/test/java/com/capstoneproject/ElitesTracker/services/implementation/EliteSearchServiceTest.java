@@ -137,7 +137,7 @@ class EliteSearchServiceTest {
         return SearchRequest.builder()
                 .startDate(localDateToString(LocalDate.now()))
                 .endDate(localDateToString(LocalDate.now()))
-                .semicolonEmail("l.odogwu@native.semicolon.africa")
+                .nativeSemicolonEmail("l.odogwu@native.semicolon.africa")
                 .cohort("15")
                 .build();
     }
@@ -145,7 +145,7 @@ class EliteSearchServiceTest {
         return SearchRequest.builder()
                 .startDate(localDateToString(LocalDate.now()))
                 .endDate(localDateToString(LocalDate.now()))
-                .semicolonEmail("c.ugbo@native.semicolon.africa")
+                .nativeSemicolonEmail("c.ugbo@native.semicolon.africa")
                 .cohort("15")
                 .build();
     }
@@ -153,7 +153,7 @@ class EliteSearchServiceTest {
         return SearchRequest.builder()
                 .startDate(localDateToString(LocalDate.now()))
                 .endDate(localDateToString(LocalDate.now()))
-                .semicolonEmail("f.nwadike@native.semicolon.africa")
+                .nativeSemicolonEmail("f.nwadike@native.semicolon.africa")
                 .cohort("15")
                 .build();
     }
@@ -161,7 +161,7 @@ class EliteSearchServiceTest {
         return SearchRequest.builder()
                 .startDate(localDateToString(LocalDate.now()))
                 .endDate(localDateToString(LocalDate.now()))
-                .semicolonEmail("b.farinde@native.semicolon.africa")
+                .nativeSemicolonEmail("b.farinde@native.semicolon.africa")
                 .cohort("15")
                 .build();
     }

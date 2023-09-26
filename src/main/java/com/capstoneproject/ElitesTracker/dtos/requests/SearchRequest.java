@@ -10,6 +10,7 @@ import lombok.Setter;
 public class SearchRequest {
     private String startDate;
     private String endDate;
-    private String semicolonEmail;
+    private String nativeSemicolonEmail;
+    private String adminSemicolonEmail;
     private String cohort;
 }

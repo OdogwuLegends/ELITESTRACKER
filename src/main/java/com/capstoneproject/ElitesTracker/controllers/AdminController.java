@@ -17,7 +17,7 @@ import java.util.List;
 import static com.capstoneproject.ElitesTracker.utils.ApiValues.*;
 
 @RestController
-@RequestMapping(BASE_SUPER_ADMIN_URL)
+@RequestMapping(BASE_ADMIN_URL)
 @CrossOrigin("*")
 @AllArgsConstructor
 @Slf4j

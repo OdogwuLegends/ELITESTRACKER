@@ -40,6 +40,7 @@ public class HardCoded {
     public static final String DELETE_USER_MESSAGE = "User deleted successfully!";
     public static final String NATIVE_NOT_PERMITTED_FOR_ATTENDANCE = "Not permitted to take attendance currently. Please see an Admin.";
     public static final String ADMIN_NOT_PERMITTED_FOR_OPERATION = "Admins not permitted for this operation";
+    public static final String PRIVILEGE_NOT_GRANTED = "You are not permitted for this operation";
     public static final String PERMISSION_MODIFIED_MESSAGE = "Permission successfully modified";
     public static final String COHORT_NOT_FOUND_MESSAGE = "Cohort %s not found";
     public static final String TIME_SET_MESSAGE = "Time range set successfully!";

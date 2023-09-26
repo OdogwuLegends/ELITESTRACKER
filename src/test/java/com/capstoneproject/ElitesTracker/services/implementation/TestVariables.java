@@ -490,7 +490,7 @@ public class TestVariables {
         return SearchRequest.builder()
                 .startDate(localDateToString(LocalDate.now()))
                 .endDate(localDateToString(LocalDate.now()))
-                .semicolonEmail("s.lawal@native.semicolon.africa")
+                .nativeSemicolonEmail("s.lawal@native.semicolon.africa")
                 .cohort("15")
                 .build();
     }
@@ -498,7 +498,7 @@ public class TestVariables {
         return SearchRequest.builder()
                 .startDate(localDateToString(LocalDate.now()))
                 .endDate(localDateToString(LocalDate.now()))
-                .semicolonEmail("f.chiemela@native.semicolon.africa")
+                .nativeSemicolonEmail("f.chiemela@native.semicolon.africa")
                 .cohort("15")
                 .build();
     }
@@ -520,7 +520,7 @@ public class TestVariables {
     public static PermissionForAttendanceRequest modifyPermissionForInem(){
         return PermissionForAttendanceRequest.builder()
                 .cohort("15")
-                .semicolonEmail("i.udousoro@native.semicolon.africa")
+                .nativeSemicolonEmail("i.udousoro@native.semicolon.africa")
                 .permission(DISABLED)
                 .build();
     }
@@ -537,7 +537,7 @@ public class TestVariables {
     }
     public static DeleteRequest removeSecondBoyInCohort14(){
         return DeleteRequest.builder()
-                .semicolonEmail("s.boy@native.semicolon.africa")
+                .nativeSemicolonEmail("s.boy@native.semicolon.africa")
                 .cohort("14")
                 .build();
     }
