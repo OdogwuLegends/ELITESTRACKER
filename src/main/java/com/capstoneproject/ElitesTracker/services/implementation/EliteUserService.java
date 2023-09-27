@@ -28,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.capstoneproject.ElitesTracker.enums.AdminPrivileges.*;
@@ -310,7 +312,8 @@ public class EliteUserService implements UserService {
                 .semicolonID(request.getScv().toUpperCase())
                 .role(NATIVE)
                 .permission(ENABLED)
-                .timeStamp(LocalTime.now())
+                .localTime(LocalTime.now())
+                .zonedDateTime(ZonedDateTime.now(ZoneId.of("Africa/Lagos")))
                 .screenWidth(request.getScreenWidth())
                 .screenHeight(request.getScreenHeight())
                 .build();
