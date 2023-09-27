@@ -113,7 +113,7 @@ public class EliteUserService implements UserService {
         log.info("Email coming from FE {}",request.getSemicolonEmail());
         log.info("Entire object from FE {}",request);
         EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
-
+        log.info("Found user {}",foundUser);
         return attendanceService.saveAttendance(request,httpServletRequest,foundUser);
     }
     @Override

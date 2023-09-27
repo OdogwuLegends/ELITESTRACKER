@@ -4,10 +4,7 @@ import com.capstoneproject.ElitesTracker.enums.AdminPrivileges;
 import com.capstoneproject.ElitesTracker.enums.AttendancePermission;
 import com.capstoneproject.ElitesTracker.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
@@ -19,6 +16,7 @@ import static com.capstoneproject.ElitesTracker.utils.HardCoded.ELITE_USER;
 
 @Getter
 @Setter
+@ToString
 @Builder
 @AllArgsConstructor
 @Entity(name = ELITE_USER)
