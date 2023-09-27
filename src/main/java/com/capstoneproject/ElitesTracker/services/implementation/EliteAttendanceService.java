@@ -155,7 +155,7 @@ public class EliteAttendanceService implements AttendanceService {
         } else if ((value.equals("ABSENT"))) {
             return ABSENT;
         }
-        throw new RuntimeException("Invalid value");
+        throw new IncorrectDetailsException("Invalid value");
     }
 
     public static void main(String[] args) {
