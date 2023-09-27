@@ -228,77 +228,77 @@ public class TestVariables {
         return AddAdminRequest.builder()
                 .firstName("Patience")
                 .lastName("Pat")
-                .adminSemicolonEmail("patience@semicolon.africa")
+                .semicolonEmail("patience@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildChibuzo(){
         return AddAdminRequest.builder()
                 .firstName("Chibuzo")
                 .lastName("Ekejiuba")
-                .adminSemicolonEmail("chibuzo@semicolon.africa")
+                .semicolonEmail("chibuzo@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildFemz(){
         return AddAdminRequest.builder()
                 .firstName("Femi")
                 .lastName("Oladeji")
-                .adminSemicolonEmail("femi@semicolon.africa")
+                .semicolonEmail("femi@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildJonathan(){
         return AddAdminRequest.builder()
                 .firstName("Jonathan")
                 .lastName("Martins")
-                .adminSemicolonEmail("jonathan@semicolon.africa")
+                .semicolonEmail("jonathan@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildPrecious(){
         return AddAdminRequest.builder()
                 .firstName("Precious")
                 .lastName("Onyeukwu")
-                .adminSemicolonEmail("precious@semicolon.africa")
+                .semicolonEmail("precious@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildKim(){
         return AddAdminRequest.builder()
                 .firstName("Kimberly")
                 .lastName("Mojoyin")
-                .adminSemicolonEmail("kimberly@semicolon.africa")
+                .semicolonEmail("kimberly@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildSikiru(){
         return AddAdminRequest.builder()
                 .firstName("Sikiru")
                 .lastName("Siks")
-                .adminSemicolonEmail("sikiru@semicolon.africa")
+                .semicolonEmail("sikiru@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildJerry(){
         return AddAdminRequest.builder()
                 .firstName("Jerry")
                 .lastName("Chukwuma")
-                .adminSemicolonEmail("jerry@semicolon.africa")
+                .semicolonEmail("jerry@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildGabriel(){
         return AddAdminRequest.builder()
                 .firstName("Gabriel")
                 .lastName("Gab")
-                .adminSemicolonEmail("gabriel@semicolon.africa")
+                .semicolonEmail("gabriel@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildSeyi(){
         return AddAdminRequest.builder()
                 .firstName("Seyi")
                 .lastName("Majek")
-                .adminSemicolonEmail("seyi@semicolon.africa")
+                .semicolonEmail("seyi@semicolon.africa")
                 .build();
     }
     public static AddAdminRequest buildNewGuy(){
         return AddAdminRequest.builder()
                 .firstName("NewGuy")
                 .lastName("Guy")
-                .adminSemicolonEmail("newguy@semicolon.africa")
+                .semicolonEmail("newguy@semicolon.africa")
                 .build();
     }
     public static AddNativeRequest buildLegend(){
@@ -306,7 +306,7 @@ public class TestVariables {
                 .firstName("Odogwu")
                 .lastName("Legend")
                 .cohort("15")
-                .nativeSemicolonEmail("l.odogwu@native.semicolon.africa")
+                .semicolonEmail("l.odogwu@native.semicolon.africa")
                 .semicolonID("SCV15008")
                 .build();
     }
@@ -315,7 +315,7 @@ public class TestVariables {
                 .firstName("Chinedu")
                 .lastName("Ugbo")
                 .cohort("15")
-                .nativeSemicolonEmail("c.ugbo@native.semicolon.africa")
+                .semicolonEmail("c.ugbo@native.semicolon.africa")
                 .semicolonID("SCV15009")
                 .build();
     }
@@ -324,7 +324,7 @@ public class TestVariables {
                 .firstName("Dominik")
                 .lastName("Coutinho")
                 .cohort("14")
-                .nativeSemicolonEmail("d.coutinho@native.semicolon.africa")
+                .semicolonEmail("d.coutinho@native.semicolon.africa")
                 .semicolonID("SCV14020")
                 .build();
     }
@@ -333,7 +333,7 @@ public class TestVariables {
                 .firstName("Kinzy")
                 .lastName("Kinzy")
                 .cohort("15")
-                .nativeSemicolonEmail("s.lawal@native.semicolon.africa")
+                .semicolonEmail("s.lawal@native.semicolon.africa")
                 .semicolonID("SCV15010")
                 .build();
     }
@@ -342,7 +342,7 @@ public class TestVariables {
                 .firstName("Favour")
                 .lastName("White")
                 .cohort("15")
-                .nativeSemicolonEmail("f.nwadike@native.semicolon.africa")
+                .semicolonEmail("f.nwadike@native.semicolon.africa")
                 .semicolonID("SCV15011")
                 .build();
     }
@@ -351,7 +351,7 @@ public class TestVariables {
                 .firstName("Favour")
                 .lastName("Black")
                 .cohort("15")
-                .nativeSemicolonEmail("f.chiemela@native.semicolon.africa")
+                .semicolonEmail("f.chiemela@native.semicolon.africa")
                 .semicolonID("SCV15012")
                 .build();
     }
@@ -360,7 +360,7 @@ public class TestVariables {
                 .firstName("Inemesit")
                 .lastName("Udousoro")
                 .cohort("15")
-                .nativeSemicolonEmail("i.udousoro@native.semicolon.africa")
+                .semicolonEmail("i.udousoro@native.semicolon.africa")
                 .semicolonID("SCV15013")
                 .build();
     }
@@ -369,7 +369,7 @@ public class TestVariables {
                 .firstName("Benjamin")
                 .lastName("Osisiogu")
                 .cohort("15")
-                .nativeSemicolonEmail("b.osisiogu@native.semicolon.africa")
+                .semicolonEmail("b.osisiogu@native.semicolon.africa")
                 .semicolonID("SCV15014")
                 .build();
     }
@@ -378,7 +378,7 @@ public class TestVariables {
                 .firstName("Oluchi")
                 .lastName("Duru")
                 .cohort("15")
-                .nativeSemicolonEmail("o.duru@native.semicolon.africa")
+                .semicolonEmail("o.duru@native.semicolon.africa")
                 .semicolonID("SCV15015")
                 .build();
     }
@@ -387,7 +387,7 @@ public class TestVariables {
                 .firstName("Babajide")
                 .lastName("Farinde")
                 .cohort("15")
-                .nativeSemicolonEmail("b.farinde@native.semicolon.africa")
+                .semicolonEmail("b.farinde@native.semicolon.africa")
                 .semicolonID("SCV15016")
                 .build();
     }
@@ -396,7 +396,7 @@ public class TestVariables {
                 .firstName("Boy")
                 .lastName("Boy")
                 .cohort("14")
-                .nativeSemicolonEmail("b.boy@native.semicolon.africa")
+                .semicolonEmail("b.boy@native.semicolon.africa")
                 .semicolonID("SCV14001")
                 .build();
     }
@@ -405,7 +405,7 @@ public class TestVariables {
                 .firstName("SecondBoy")
                 .lastName("Boy")
                 .cohort("14")
-                .nativeSemicolonEmail("s.boy@native.semicolon.africa")
+                .semicolonEmail("s.boy@native.semicolon.africa")
                 .semicolonID("SCV14003")
                 .build();
     }
@@ -414,7 +414,7 @@ public class TestVariables {
                 .firstName("Girl")
                 .lastName("Girl")
                 .cohort("14")
-                .nativeSemicolonEmail("g.girl@native.semicolon.africa")
+                .semicolonEmail("g.girl@native.semicolon.africa")
                 .semicolonID("SCV14002")
                 .build();
     }

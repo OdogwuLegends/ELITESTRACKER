@@ -71,7 +71,7 @@ public class MockEliteAdminServiceTest {
         return AddAdminRequest.builder()
                 .firstName("Patience")
                 .lastName("Pat")
-                .adminSemicolonEmail("patience@semicolon.africa")
+                .semicolonEmail("patience@semicolon.africa")
                 .build();
     }
 }

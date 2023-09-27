@@ -103,8 +103,8 @@ public class ElitesNativesService implements NativesService {
     private void checkIfNativeExists(AddNativeRequest request) {
         List<Natives> nativesList = nativesRepository.findAll();
         for (Natives natives : nativesList) {
-            if (natives.getSemicolonEmail().equalsIgnoreCase(request.getNativeSemicolonEmail())) {
-                throw new UserExistsException(userAlreadyExistsMessage(request.getNativeSemicolonEmail()));
+            if (natives.getSemicolonEmail().equalsIgnoreCase(request.getSemicolonEmail())) {
+                throw new UserExistsException(userAlreadyExistsMessage(request.getSemicolonEmail()));
             }
         }
     }

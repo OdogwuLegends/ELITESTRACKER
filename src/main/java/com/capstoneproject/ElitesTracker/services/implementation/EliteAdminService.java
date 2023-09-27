@@ -62,8 +62,8 @@ public class EliteAdminService implements AdminsService {
     private void checkIfAdminExists(AddAdminRequest request){
         List<Admins> adminsList = adminsRepository.findAll();
         for (Admins admin : adminsList){
-            if (admin.getSemicolonEmail().equalsIgnoreCase(request.getAdminSemicolonEmail())){
-                throw new UserExistsException(userAlreadyExistsMessage(request.getAdminSemicolonEmail()));
+            if (admin.getSemicolonEmail().equalsIgnoreCase(request.getSemicolonEmail())){
+                throw new UserExistsException(userAlreadyExistsMessage(request.getSemicolonEmail()));
             }
         }
     }

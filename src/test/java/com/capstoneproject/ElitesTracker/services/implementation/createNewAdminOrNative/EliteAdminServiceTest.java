@@ -51,7 +51,7 @@ class EliteAdminServiceTest {
         return AddAdminRequest.builder()
                 .firstName("Patience")
                 .lastName("Pat")
-                .adminSemicolonEmail("patience@semicolon.africa")
+                .semicolonEmail("patience@semicolon.africa")
                 .build();
     }
 
@@ -59,7 +59,7 @@ class EliteAdminServiceTest {
         return AddAdminRequest.builder()
                 .firstName("Gabriel")
                 .lastName("Gab")
-                .adminSemicolonEmail("gabriel@semicolon.africa")
+                .semicolonEmail("gabriel@semicolon.africa")
                 .build();
     }
 
@@ -67,14 +67,14 @@ class EliteAdminServiceTest {
         return AddAdminRequest.builder()
                 .firstName("NewGuy")
                 .lastName("Guy")
-                .adminSemicolonEmail("newguy@semicolon.africa")
+                .semicolonEmail("newguy@semicolon.africa")
                 .build();
     }
     private AddAdminRequest buildAnotherGuy(){
         return AddAdminRequest.builder()
                 .firstName("AnotherGuy")
                 .lastName("Another")
-                .adminSemicolonEmail("anotherguy@semicolon.africa")
+                .semicolonEmail("anotherguy@semicolon.africa")
                 .build();
     }
 }
