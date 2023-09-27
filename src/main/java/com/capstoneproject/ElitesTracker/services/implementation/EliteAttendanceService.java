@@ -27,8 +27,7 @@ import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.ABSENT;
 import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.PRESENT;
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
-import static com.capstoneproject.ElitesTracker.utils.HardCoded.BASE_IP_ADDRESS;
-import static com.capstoneproject.ElitesTracker.utils.HardCoded.EDIT_STATUS_MESSAGE;
+import static com.capstoneproject.ElitesTracker.utils.HardCoded.*;
 
 @Service
 @AllArgsConstructor
@@ -150,12 +149,12 @@ public class EliteAttendanceService implements AttendanceService {
         return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) || !eliteUser.getScreenHeight().equals(request.getScreenHeight());
     }
     private AttendanceStatus convertToEnum(String value){
-        if(value.equals("PRESENT")){
+        if(value.equals(STRING_PRESENT)){
             return PRESENT;
-        } else if ((value.equals("ABSENT"))) {
+        } else if ((value.equals(STRING_ABSENT))) {
             return ABSENT;
         }
-        throw new IncorrectDetailsException("Invalid value");
+        throw new IncorrectDetailsException(INVALID_VALUE_EXCEPTION.getMessage());
     }
 
     public static void main(String[] args) {

@@ -49,4 +49,7 @@ public class HardCoded {
     public static final String AFTER_ATTENDANCE_TIME_MESSAGE = "Past %s . Please see an Admin to take attendance, or try again tomorrow by %s ";
     public static final String DEVICE_RESET_MESSAGE = "Device reset successful!";
     public static final String PROFILE_UPDATE_SUCCESSFUL = "Profile update successful!";
+    public static final String STRING_PRESENT = "PRESENT";
+    public static final String STRING_ABSENT = "ABSENT";
+    public static final String INVALID_VALUE = "Invalid value";
 }
