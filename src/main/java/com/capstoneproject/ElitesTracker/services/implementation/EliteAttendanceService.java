@@ -3,6 +3,7 @@ package com.capstoneproject.ElitesTracker.services.implementation;
 import com.capstoneproject.ElitesTracker.dtos.requests.AttendanceRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.EditAttendanceRequest;
 import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceResponse;
+import com.capstoneproject.ElitesTracker.enums.AttendanceStatus;
 import com.capstoneproject.ElitesTracker.exceptions.*;
 import com.capstoneproject.ElitesTracker.models.Attendance;
 import com.capstoneproject.ElitesTracker.models.EliteUser;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.DISABLED;
+import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.ABSENT;
 import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.PRESENT;
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
@@ -55,7 +57,7 @@ public class EliteAttendanceService implements AttendanceService {
         } else if (eliteUser.getPermission().equals(DISABLED)) {
             throw new NotPermittedForAttendanceException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
         } else{
-            checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress);
+            checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress, request);
         }
         return response;
     }
@@ -79,7 +81,7 @@ public class EliteAttendanceService implements AttendanceService {
         } else if (eliteUser.getPermission().equals(DISABLED)) {
             throw new NotPermittedForAttendanceException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
         } else{
-            checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress);
+            checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress, request);
         }
         return response;
     }
@@ -109,7 +111,7 @@ public class EliteAttendanceService implements AttendanceService {
         return attendanceRepository.findAll();
     }
 
-    private void checkTimeFrameAndBuildAttendance(EliteUser eliteUser, AttendanceResponse response, String IpAddress){
+    private void checkTimeFrameAndBuildAttendance(EliteUser eliteUser, AttendanceResponse response, String IpAddress, AttendanceRequest request){
         List<TimeEligibility> timeFrames = timeEligibilityService.findAllTimeFrames();
 
         if(timeFrames.isEmpty()){
@@ -131,13 +133,13 @@ public class EliteAttendanceService implements AttendanceService {
             throw new TimeLimitException(afterAttendanceMessage(end,start));
         }
         if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)){
-            buildNewAttendance(eliteUser, response, IpAddress);
+            buildNewAttendance(eliteUser, response, IpAddress, request);
         }
     }
 
-    private void buildNewAttendance(EliteUser eliteUser, AttendanceResponse response, String IpAddress) {
+    private void buildNewAttendance(EliteUser eliteUser, AttendanceResponse response, String IpAddress, AttendanceRequest request) {
         Attendance newAttendance = new Attendance();
-        newAttendance.setStatus(PRESENT);
+        newAttendance.setStatus(convertToEnum(request.getAttendanceStatus()));
         newAttendance.setIpAddress(IpAddress);
         newAttendance.setUser(eliteUser);
         newAttendance.setCohort(eliteUser.getCohort());
@@ -146,6 +148,14 @@ public class EliteAttendanceService implements AttendanceService {
     }
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
         return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) || !eliteUser.getScreenHeight().equals(request.getScreenHeight());
+    }
+    private AttendanceStatus convertToEnum(String value){
+        if(value.equals("PRESENT")){
+            return PRESENT;
+        } else if ((value.equals("ABSENT"))) {
+            return ABSENT;
+        }
+        throw new RuntimeException("Invalid value");
     }
 
     public static void main(String[] args) {

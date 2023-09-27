@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Builder
 public class AttendanceRequest {
-    private AttendanceStatus attendanceStatus;
+    private String attendanceStatus;
     private String semicolonEmail;
     private String screenWidth;
     private String screenHeight;
