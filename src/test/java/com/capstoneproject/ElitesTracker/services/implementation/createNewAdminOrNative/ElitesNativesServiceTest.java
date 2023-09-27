@@ -72,7 +72,7 @@ class ElitesNativesServiceTest {
                 .firstName("Goodness")
                 .lastName("Obinali")
                 .cohort("15")
-                .semicolonEmail("g.obinali@native.semicolon.africa")
+                .nativeSemicolonEmail("g.obinali@native.semicolon.africa")
                 .semicolonID("SCV15005")
                 .build();
     }
@@ -81,7 +81,7 @@ class ElitesNativesServiceTest {
                 .firstName("Cephas")
                 .lastName("Hemba")
                 .cohort("15")
-                .semicolonEmail("h.cephas@native.semicolon.africa")
+                .nativeSemicolonEmail("h.cephas@native.semicolon.africa")
                 .semicolonID("SCV15006")
                 .build();
     }
@@ -90,7 +90,7 @@ class ElitesNativesServiceTest {
                 .firstName("Benjamin")
                 .lastName("Osisiogu")
                 .cohort("15")
-                .semicolonEmail("b.osisiogu@native.semicolon.africa")
+                .nativeSemicolonEmail("b.osisiogu@native.semicolon.africa")
                 .semicolonID("SCV15007")
                 .build();
     }
@@ -99,7 +99,7 @@ class ElitesNativesServiceTest {
                 .firstName("Odogwu")
                 .lastName("Legend")
                 .cohort("15")
-                .semicolonEmail("l.odogwu@native.semicolon.africa")
+                .nativeSemicolonEmail("l.odogwu@native.semicolon.africa")
                 .semicolonID("SCV15008")
                 .build();
     }
@@ -108,7 +108,7 @@ class ElitesNativesServiceTest {
                 .firstName("Inemesit")
                 .lastName("Udousoro")
                 .cohort("15")
-                .semicolonEmail("i.udousoro@native.semicolon.africa")
+                .nativeSemicolonEmail("i.udousoro@native.semicolon.africa")
                 .semicolonID("SCV15009")
                 .build();
     }

@@ -166,7 +166,7 @@ class EliteUserServiceTest {
         assertThat(attendanceResponse).isNotNull();
 
         EditAttendanceRequest request = EditAttendanceRequest.builder()
-                .NativeSemicolonEmail("f.nwadike@native.semicolon.africa")
+                .nativeSemicolonEmail("f.nwadike@native.semicolon.africa")
                 .cohort("15")
                 .date(localDateToString(LocalDate.now()))
                 .attendanceStatus(ABSENT)

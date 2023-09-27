@@ -157,7 +157,7 @@ class EliteAttendanceServiceTest {
     }
     private EditAttendanceRequest editNedAttendance(){
         return EditAttendanceRequest.builder()
-                .NativeSemicolonEmail("b.osisiogu@native.semicolon.africa")
+                .nativeSemicolonEmail("b.osisiogu@native.semicolon.africa")
                 .cohort("15")
                 .attendanceStatus(ABSENT)
                 .date(localDateToString(LocalDate.now()))

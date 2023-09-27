@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class EditAttendanceRequest {
-    private String NativeSemicolonEmail;
+    private String nativeSemicolonEmail;
     private String cohort;
     private String date;
     private String adminSemicolonEmail;

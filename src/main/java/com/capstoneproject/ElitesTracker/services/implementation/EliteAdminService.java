@@ -1,7 +1,6 @@
 package com.capstoneproject.ElitesTracker.services.implementation;
 
 import com.capstoneproject.ElitesTracker.dtos.requests.AddAdminRequest;
-import com.capstoneproject.ElitesTracker.dtos.requests.DeleteRequest;
 import com.capstoneproject.ElitesTracker.dtos.responses.DeleteResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.UserRegistrationResponse;
 import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
@@ -63,8 +62,8 @@ public class EliteAdminService implements AdminsService {
     private void checkIfAdminExists(AddAdminRequest request){
         List<Admins> adminsList = adminsRepository.findAll();
         for (Admins admin : adminsList){
-            if (admin.getSemicolonEmail().equalsIgnoreCase(request.getSemicolonEmail())){
-                throw new UserExistsException(userAlreadyExistsMessage(request.getSemicolonEmail()));
+            if (admin.getSemicolonEmail().equalsIgnoreCase(request.getAdminSemicolonEmail())){
+                throw new UserExistsException(userAlreadyExistsMessage(request.getAdminSemicolonEmail()));
             }
         }
     }

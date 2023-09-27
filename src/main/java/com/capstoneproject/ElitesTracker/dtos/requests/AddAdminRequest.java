@@ -10,5 +10,5 @@ import lombok.Setter;
 public class AddAdminRequest {
     private String firstName;
     private String lastName;
-    private String semicolonEmail;
+    private String adminSemicolonEmail;
 }

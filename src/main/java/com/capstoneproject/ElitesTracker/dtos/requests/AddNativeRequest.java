@@ -10,7 +10,7 @@ import lombok.Setter;
 public class AddNativeRequest {
     private String firstName;
     private String lastName;
-    private String semicolonEmail;
+    private String nativeSemicolonEmail;
     private String cohort;
     private String semicolonID;
 }
