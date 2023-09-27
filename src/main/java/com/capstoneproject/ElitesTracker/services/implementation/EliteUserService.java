@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
+import java.time.LocalTime;
 import java.util.*;
 
 import static com.capstoneproject.ElitesTracker.enums.AdminPrivileges.*;
@@ -74,6 +75,7 @@ public class EliteUserService implements UserService {
         return LoginResponse.builder()
                 .message(LOGIN_MESSAGE)
                 .semicolonEmail(foundUser.get().getSemicolonEmail())
+                .firstName(foundUser.get().getFirstName())
                 .isLoggedIn(true)
                 .build();
     }
@@ -233,8 +235,8 @@ public class EliteUserService implements UserService {
 //        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
 //        checkForSuperAdminPrivilege(foundAdmin);
 
-        EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
-        Admins adminToRemove = adminsService.findAdminByEmail(request.getNativeSemicolonEmail());
+        EliteUser foundUser = findUserByEmail(request.getAdminSemicolonEmail());
+        Admins adminToRemove = adminsService.findAdminByEmail(request.getAdminSemicolonEmail());
         eliteUserRepository.delete(foundUser);
         adminsService.removeAdmin(adminToRemove);
         return DeleteResponse.builder()
@@ -308,6 +310,7 @@ public class EliteUserService implements UserService {
                 .semicolonID(request.getScv().toUpperCase())
                 .role(NATIVE)
                 .permission(ENABLED)
+                .timeStamp(LocalTime.now())
                 .screenWidth(request.getScreenWidth())
                 .screenHeight(request.getScreenHeight())
                 .build();

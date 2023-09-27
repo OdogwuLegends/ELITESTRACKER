@@ -15,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -143,5 +146,71 @@ public class EliteAttendanceService implements AttendanceService {
     }
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
         return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) || !eliteUser.getScreenHeight().equals(request.getScreenHeight());
+    }
+
+    public static void main(String[] args) {
+
+//        String myTime = "07:06";
+//        int hour = 0;
+//        int minute = 0;
+//
+//        String[] timeParts = myTime.split(":");
+//
+//        if (timeParts.length == 2) {
+//            String hourStr = timeParts[0];
+//            String minuteStr = timeParts[1];
+//
+//            hour = Integer.parseInt(hourStr);
+//            minute = Integer.parseInt(minuteStr);
+//
+//            if (hourStr.length() > 0 && hourStr.charAt(0) == '0') {
+//                hour = Integer.parseInt(hourStr.substring(1));
+//            }
+//            if (minuteStr.length() > 1 && minuteStr.charAt(0) == '0' && minuteStr.charAt(1) > '8') {
+//                minute = Character.getNumericValue(minuteStr.charAt(1));
+//            }
+//        }
+//
+//        System.out.println("Hour: " + hour);
+//        System.out.println("Minute: " + minute);
+
+//        ZonedDateTime customDateTime = ZonedDateTime.of(2023, 9, 26, 14, 30, 0, 0, ZoneId.of("Africa/Lagos"));
+//
+//        // Define a DateTimeFormatter to format the output (date and time)
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+//
+//        // Format the ZonedDateTime and print it
+//        String formattedDateTime = customDateTime.format(formatter);
+////        System.out.println("Custom Date and Time in West Africa (Lagos): " + formattedDateTime);
+//        System.out.println(formattedDateTime);
+
+//        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
+//
+//        // Extract the LocalTime component (hour, minute, second, and nanosecond)
+//        int hour = currentDateTime.getHour();
+//        int minute = currentDateTime.getMinute();
+//        int second = currentDateTime.getSecond();
+//
+//
+//        System.out.println("Current Time in West Africa (Lagos): " +
+//                String.format("%02d:%02d:%02d", hour, minute, second));
+
+        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
+
+        // Define a specific time (e.g., 14:30) for comparison
+        int specificHour = 14;
+        int specificMinute = 30;
+
+        // Create a ZonedDateTime for the specific time in the same time zone
+        ZonedDateTime specificDateTime = currentDateTime.withHour(specificHour).withMinute(specificMinute).withSecond(0).withNano(0);
+
+        // Compare the specific time to the current time
+        if (specificDateTime.isBefore(currentDateTime)) {
+            System.out.println("The specific time is before the current time.");
+        } else if (specificDateTime.isEqual(currentDateTime)) {
+            System.out.println("The specific time is equal to the current time.");
+        } else {
+            System.out.println("The specific time is after the current time.");
+        }
     }
 }

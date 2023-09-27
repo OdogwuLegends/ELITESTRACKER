@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -50,6 +51,8 @@ public class EliteUser {
 
     private String semicolonID;
     private String createdAt;
+
+    private LocalTime timeStamp;
 
     @Enumerated(value = EnumType.STRING)
     private AttendancePermission permission;

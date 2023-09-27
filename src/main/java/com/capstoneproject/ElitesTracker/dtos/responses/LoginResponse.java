@@ -9,6 +9,7 @@ import lombok.Setter;
 @Builder
 public class LoginResponse {
     private String semicolonEmail;
+    private String firstName;
     private String message;
     private boolean isLoggedIn;
 }
