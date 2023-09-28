@@ -36,8 +36,8 @@ public class HardCoded {
     public static final String LOGIN_MESSAGE = "Log in successful";
     public static final String DIFFERENT_DEVICE = "Please use the device you registered with to complete this process";
     public static final String NO_RECORD_FOUND = "No attendance record found";
-//    public static final String BASE_IP_ADDRESS = "172.16.0.";
-    public static final String BASE_IP_ADDRESS = "62.173.";
+    public static final String TEST_BASE_IP_ADDRESS = "172.16.0.";
+    public static final String REAL_BASE_IP_ADDRESS = "62.173.";
     public static final String CONNECT_TO_SEMICOLON_WIFI = "Please connect to Semicolon WiFi network to take attendance";
     public static final String EDIT_STATUS_MESSAGE = "Attendance status updated successfully!";
     public static final String DELETE_USER_MESSAGE = "User deleted successfully!";

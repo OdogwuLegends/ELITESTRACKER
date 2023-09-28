@@ -23,7 +23,6 @@ import com.github.fge.jsonpatch.ReplaceOperation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +50,7 @@ public class EliteUserService implements UserService {
     private final AttendanceService attendanceService;
     private final SearchService searchService;
     private final TimeEligibilityService timeEligibilityService;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -71,8 +70,8 @@ public class EliteUserService implements UserService {
         if(foundUser.isEmpty()){
             throw new IncorrectDetailsException(USERNAME_NOT_CORRECT_EXCEPTION.getMessage());
         }
-        if(passwordEncoder.matches(request.getPassword(),foundUser.get().getPassword())){
-            //!foundUser.get().getPassword().equals(request.getPassword())
+        if(!foundUser.get().getPassword().equals(request.getPassword())){
+            //passwordEncoder.matches(request.getPassword(),foundUser.get().getPassword()
             throw new IncorrectDetailsException(PASSWORD_NOT_CORRECT_EXCEPTION.getMessage());
         }
 
@@ -111,16 +110,17 @@ public class EliteUserService implements UserService {
     }
 
     @Override
-    public AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest) {
+    public AttendanceResponse takeAttendance(AttendanceRequest request) {
 //        checkForAdmin(request);
         String email = extractEmailFromToken(request.getJwtToken());
+        EliteUser foundUser = findUserByEmail(email);
 
         log.info("IP Address {}",request.getIpAddress());
+        log.info("JWT token {}",request.getJwtToken());
         log.info("Entire object from FE {}",request);
-        EliteUser foundUser = findUserByEmail(email);
         log.info("Found user {}",foundUser);
-//        return attendanceService.saveAttendance(request,httpServletRequest,foundUser);
-        return attendanceService.saveAttendanceTest(request, request.getIpAddress(),foundUser);
+//
+        return attendanceService.saveAttendance(request,foundUser);
     }
     @Override
     public AttendanceResponse takeAttendanceTest(AttendanceRequest request, String IpAddress) {
@@ -282,12 +282,12 @@ public class EliteUserService implements UserService {
         EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
 //        checkForSubAdminPrivilege(foundAdmin);
 
-//        LoginRequest loginRequest = LoginRequest.builder()
-//                .semicolonEmail(request.getAdminSemicolonEmail())
-//                .password(request.getAdminPassword())
-//                .build();
-//        loginUser(loginRequest);
-        passwordEncoder.matches(foundAdmin.getPassword(),request.getAdminPassword());
+        LoginRequest loginRequest = LoginRequest.builder()
+                .semicolonEmail(request.getAdminSemicolonEmail())
+                .password(request.getAdminPassword())
+                .build();
+        loginUser(loginRequest);
+//        passwordEncoder.matches(foundAdmin.getPassword(),request.getAdminPassword());
         EliteUser foundNative = findUserByEmail(request.getNativeSemicolonEmail());
         foundNative.setScreenWidth(request.getScreenWidth());
         foundNative.setScreenHeight(request.getScreenHeight());
@@ -317,8 +317,8 @@ public class EliteUserService implements UserService {
                 .lastName(existingNative.getLastName())
                 .cohort(existingNative.getCohort())
                 .semicolonEmail(existingNative.getSemicolonEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-//                .password(request.getPassword())
+//                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .semicolonID(request.getScv().toUpperCase())
                 .role(NATIVE)
                 .permission(ENABLED)
@@ -332,8 +332,8 @@ public class EliteUserService implements UserService {
                 .firstName(existingAdmin.getFirstName())
                 .lastName(existingAdmin.getLastName())
                 .semicolonEmail(existingAdmin.getSemicolonEmail())
-                .password(passwordEncoder.encode(request.getPassword()))//Encode password after security added
-//                .password(request.getPassword())
+//                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .role(ADMIN)
                 .adminPrivilegesList(setSubAdmin())
                 .screenWidth(request.getScreenWidth())

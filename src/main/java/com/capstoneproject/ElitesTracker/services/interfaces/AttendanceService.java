@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface AttendanceService {
-    AttendanceResponse saveAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest, EliteUser eliteUser);
+    AttendanceResponse saveAttendance(AttendanceRequest request,EliteUser eliteUser);
     AttendanceResponse saveAttendanceTest(AttendanceRequest request, String Ip, EliteUser eliteUser);
     AttendanceResponse editAttendanceStatus(EditAttendanceRequest request, EliteUser foundUser);
     List<Attendance> findAllAttendances();

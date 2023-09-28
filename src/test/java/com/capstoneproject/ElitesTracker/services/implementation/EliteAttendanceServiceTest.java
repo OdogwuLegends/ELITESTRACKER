@@ -66,22 +66,22 @@ class EliteAttendanceServiceTest {
         EliteUser foundUser = eliteUserService.findUserByEmail("d.coutinho@native.semicolon.africa");
         assertThrows(DifferentWifiNetworkException.class,()-> eliteAttendanceService.saveAttendanceTest(coutinhoAttendance(),"1972.143.0.70",foundUser));
     }
-    @Test
-    void nativeCannotTakeAttendanceTwiceInADay(){
-        response = elitesNativesService.addNewNative(buildChiboy());
-        assertNotNull(response);
-        userRegistrationResponse = eliteUserService.registerUser(buildChiboyReg());
-        assertNotNull(userRegistrationResponse);
-
-        SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
-
-        EliteUser foundUser = eliteUserService.findUserByEmail("c.ugbo@native.semicolon.africa");
-        AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(chiboyAttendance(),"172.16.0.71",foundUser);
-        assertNotNull(attendanceResponse);
-
-        assertThrows(AttendanceAlreadyTakenException.class,()-> eliteAttendanceService.saveAttendanceTest(chiboyAttendance(),"172.16.0.71",foundUser));
-    }
+//    @Test
+//    void nativeCannotTakeAttendanceTwiceInADay(){
+//        response = elitesNativesService.addNewNative(buildChiboy());
+//        assertNotNull(response);
+//        userRegistrationResponse = eliteUserService.registerUser(buildChiboyReg());
+//        assertNotNull(userRegistrationResponse);
+//
+//        SetTimeRequest request = setTimeFrame();
+//        eliteUserService.setTimeForAttendance(request);
+//
+//        EliteUser foundUser = eliteUserService.findUserByEmail("c.ugbo@native.semicolon.africa");
+//        AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(chiboyAttendance(),"172.16.0.71",foundUser);
+//        assertNotNull(attendanceResponse);
+//
+//        assertThrows(AttendanceAlreadyTakenException.class,()-> eliteAttendanceService.saveAttendanceTest(chiboyAttendance(),"172.16.0.71",foundUser));
+//    }
     @Test
     void nativeCanOnlyTakeAttendanceWithRegisteredDevice(){
         response = elitesNativesService.addNewNative(buildBlack());

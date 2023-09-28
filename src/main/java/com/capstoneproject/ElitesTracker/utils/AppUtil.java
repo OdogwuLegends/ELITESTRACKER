@@ -76,12 +76,25 @@ public class AppUtil {
             return date;
         }
     }
-    public static String subStringIp(String ipAddress) {
+    public static String subStringRealIp(String ipAddress) {
         if (ipAddress != null && ipAddress.length() >= 9) {
             return ipAddress.substring(0, 7);
         } else {
             return ipAddress;
         }
+    }
+    public static String subStringTestIp(String ipAddress) {
+        if (ipAddress != null && ipAddress.length() >= 9) {
+            return ipAddress.substring(0, 9);
+        } else {
+            return ipAddress;
+        }
+    }
+
+    public static void main(String[] args) {
+//        System.out.println(subStringIp("62.173.123.12"));
+        System.out.println(subStringRealIp("172.16.0.165"));
+        System.out.println(subStringTestIp("172.16.0.165"));
     }
 
     public static String welcomeMessage(String name) {

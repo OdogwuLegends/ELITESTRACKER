@@ -10,7 +10,6 @@ import com.capstoneproject.ElitesTracker.models.EliteUser;
 import com.capstoneproject.ElitesTracker.models.TimeEligibility;
 import com.capstoneproject.ElitesTracker.services.interfaces.AttendanceService;
 import com.capstoneproject.ElitesTracker.services.interfaces.TimeEligibilityService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,17 +34,17 @@ public class EliteAttendanceService implements AttendanceService {
     private final TimeEligibilityService timeEligibilityService;
 
     @Override
-    public AttendanceResponse saveAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest, EliteUser eliteUser) {
+    public AttendanceResponse saveAttendance(AttendanceRequest request, EliteUser eliteUser) {
         noAttendanceOnWeekendsCheck();
 
         AttendanceResponse response = new AttendanceResponse();
-        String IpAddress = retrieveActualIP(httpServletRequest);
+//        String IpAddress = retrieveActualIP(httpServletRequest);
 
-        if(!subStringIp(IpAddress).equals(BASE_IP_ADDRESS)){
+        if(!subStringRealIp(request.getIpAddress()).equals(REAL_BASE_IP_ADDRESS)){
             throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
         }
 
-        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(IpAddress);
+        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(request.getIpAddress());
 
         if((foundAttendance.isPresent()) && (subStringDate(foundAttendance.get().getDate()).equals(localDateTodayToString()))){
             throw new AttendanceAlreadyTakenException(ATTENDANCE_ALREADY_TAKEN_EXCEPTION.getMessage());
@@ -54,7 +53,7 @@ public class EliteAttendanceService implements AttendanceService {
         } else if (eliteUser.getPermission().equals(DISABLED)) {
             throw new NotPermittedForAttendanceException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
         } else{
-            checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress, request);
+            checkTimeFrameAndBuildAttendance(eliteUser, response, request);
         }
         return response;
     }
@@ -63,7 +62,7 @@ public class EliteAttendanceService implements AttendanceService {
     public AttendanceResponse saveAttendanceTest(AttendanceRequest request, String IpAddress, EliteUser eliteUser) {
 //        noAttendanceOnWeekendsCheck();
 
-        if(!subStringIp(IpAddress).equals(BASE_IP_ADDRESS)){
+        if(!subStringTestIp(IpAddress).equals(TEST_BASE_IP_ADDRESS)){
             throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
         }
 
@@ -78,7 +77,7 @@ public class EliteAttendanceService implements AttendanceService {
         } else if (eliteUser.getPermission().equals(DISABLED)) {
             throw new NotPermittedForAttendanceException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
         } else{
-            checkTimeFrameAndBuildAttendance(eliteUser, response, IpAddress, request);
+            checkTimeFrameAndBuildAttendance(eliteUser, response, request);
         }
         return response;
     }
@@ -108,7 +107,7 @@ public class EliteAttendanceService implements AttendanceService {
         return attendanceRepository.findAll();
     }
 
-    private void checkTimeFrameAndBuildAttendance(EliteUser eliteUser, AttendanceResponse response, String IpAddress, AttendanceRequest request){
+    private void checkTimeFrameAndBuildAttendance(EliteUser eliteUser, AttendanceResponse response,AttendanceRequest request){
         List<TimeEligibility> timeFrames = timeEligibilityService.findAllTimeFrames();
 
         if(timeFrames.isEmpty()){
@@ -137,14 +136,14 @@ public class EliteAttendanceService implements AttendanceService {
             throw new TimeLimitException(afterAttendanceMessage(end,start));
         }
         if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)){
-            buildNewAttendance(eliteUser, response, IpAddress, request);
+            buildNewAttendance(eliteUser, response, request);
         }
     }
 
-    private void buildNewAttendance(EliteUser eliteUser, AttendanceResponse response, String IpAddress, AttendanceRequest request) {
+    private void buildNewAttendance(EliteUser eliteUser, AttendanceResponse response,AttendanceRequest request) {
         Attendance newAttendance = new Attendance();
         newAttendance.setStatus(PRESENT);
-        newAttendance.setIpAddress(IpAddress);
+        newAttendance.setIpAddress(request.getIpAddress());
         newAttendance.setUser(eliteUser);
         newAttendance.setCohort(eliteUser.getCohort());
         attendanceRepository.save(newAttendance);
