@@ -439,7 +439,6 @@ public class TestVariables {
 
     public static AttendanceRequest chiboyAttendanceDetails(){
         return AttendanceRequest.builder()
-                .attendanceStatus("PRESENT")
                 .semicolonEmail("c.ugbo@native.semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
@@ -447,7 +446,6 @@ public class TestVariables {
     }
     public static AttendanceRequest whiteAttendanceDetails(){
         return AttendanceRequest.builder()
-                .attendanceStatus("PRESENT")
                 .semicolonEmail("f.nwadike@native.semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
@@ -455,7 +453,6 @@ public class TestVariables {
     }
     public static AttendanceRequest kinzyAttendanceDetails(){
         return AttendanceRequest.builder()
-                .attendanceStatus("PRESENT")
                 .semicolonEmail("s.lawal@native.semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
@@ -463,7 +460,6 @@ public class TestVariables {
     }
     public static AttendanceRequest blackAttendanceDetails(){
         return AttendanceRequest.builder()
-                .attendanceStatus("PRESENT")
                 .semicolonEmail("f.chiemela@native.semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
@@ -472,7 +468,6 @@ public class TestVariables {
 
     public static AttendanceRequest chibuzoAttendanceDetails(){
         return AttendanceRequest.builder()
-                .attendanceStatus("PRESENT")
                 .semicolonEmail("chibuzo@semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
@@ -560,7 +555,6 @@ public class TestVariables {
     public static AttendanceRequest legendAttendance(){
         return AttendanceRequest.builder()
                 .semicolonEmail("l.odogwu@native.semicolon.africa")
-                .attendanceStatus("PRESENT")
                 .screenWidth("550")
                 .screenHeight("100")
                 .build();
@@ -568,7 +562,6 @@ public class TestVariables {
     public static AttendanceRequest coutinhoAttendance(){
         return AttendanceRequest.builder()
                 .semicolonEmail("d.coutinho@native.semicolon.africa")
-                .attendanceStatus("PRESENT")
                 .screenWidth("550")
                 .screenHeight("100")
                 .build();
@@ -576,7 +569,6 @@ public class TestVariables {
     public static AttendanceRequest chiboyAttendance(){
         return AttendanceRequest.builder()
                 .semicolonEmail("c.ugbo@native.semicolon.africa")
-                .attendanceStatus("PRESENT")
                 .screenWidth("550")
                 .screenHeight("100")
                 .build();
@@ -584,7 +576,6 @@ public class TestVariables {
     public static AttendanceRequest blackAttendance(){
         return AttendanceRequest.builder()
                 .semicolonEmail("f.chiemela@native.semicolon.africa")
-                .attendanceStatus("PRESENT")
                 .screenWidth("1250")
                 .screenHeight("147")
                 .build();
@@ -592,7 +583,6 @@ public class TestVariables {
     public static AttendanceRequest inemAttendance(){
         return AttendanceRequest.builder()
                 .semicolonEmail("i.udousoro@native.semicolon.africa")
-                .attendanceStatus("PRESENT")
                 .screenWidth("550")
                 .screenHeight("100")
                 .build();
@@ -600,7 +590,6 @@ public class TestVariables {
     public static AttendanceRequest whiteAttendance(){
         return AttendanceRequest.builder()
                 .semicolonEmail("f.nwadike@native.semicolon.africa")
-                .attendanceStatus("PRESENT")
                 .screenWidth("550")
                 .screenHeight("100")
                 .build();
@@ -608,7 +597,6 @@ public class TestVariables {
     public static AttendanceRequest nedAttendance(){
         return AttendanceRequest.builder()
                 .semicolonEmail("b.osisiogu@native.semicolon.africa")
-                .attendanceStatus("PRESENT")
                 .screenWidth("550")
                 .screenHeight("100")
                 .build();

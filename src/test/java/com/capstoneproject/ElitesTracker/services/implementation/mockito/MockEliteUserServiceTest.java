@@ -312,7 +312,6 @@ public class MockEliteUserServiceTest {
     private AttendanceRequest buildAttendanceRequest(){
         return AttendanceRequest.builder()
                 .semicolonEmail(JOHN_EMAIL)
-                .attendanceStatus("PRESENT")
                 .screenHeight("850")
                 .screenWidth("525")
                 .build();
