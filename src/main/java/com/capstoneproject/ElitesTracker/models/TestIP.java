@@ -17,5 +17,6 @@ public class TestIP {
     private Long id;
 
     @Column(unique = true)
-    private String IpAddress;
+    private String firstIpAddress;
+    private String secondIpAddress;
 }

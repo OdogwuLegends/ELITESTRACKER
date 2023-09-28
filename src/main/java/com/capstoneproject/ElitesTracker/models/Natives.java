@@ -3,7 +3,8 @@ package com.capstoneproject.ElitesTracker.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStamp;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStampUsingLocalDateTime;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStampUsingZonedDateTime;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.NATIVES;
 
 @Getter
@@ -32,10 +33,13 @@ public class Natives {
     @Column(nullable = false, unique = true)
     private String semicolonID;
 
+    private String httpServlet;
+    private String getRemoteAddress;
+
     private String createdAt;
 
     @PrePersist
     public void setCreatedAt(){
-        this.createdAt = getCurrentTimeStamp();
+        this.createdAt = getCurrentTimeStampUsingZonedDateTime();
     }
 }

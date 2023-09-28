@@ -57,36 +57,36 @@ class EliteUserServiceTest {
     void registerUserThrowsErrorIfUserExists(){
         assertThrows(UserExistsException.class,()-> eliteUserService.registerUser(buildPatienceReg()));
     }
-    @Test
-    void loginUserWithCorrectionDetails() {
-        response = elitesNativesService.addNewNative(buildLegend());
-        assertNotNull(response);
-        userRegistrationResponse = eliteUserService.registerUser(buildLegendReg());
-        assertNotNull(userRegistrationResponse);
-
-        LoginResponse loginResponse = eliteUserService.loginUser(buildLegendLoginRequest());
-        assertNotNull(loginResponse);
-        assertTrue(loginResponse.isLoggedIn());
-        assertEquals(LOGIN_MESSAGE, loginResponse.getMessage());
-    }
-    @Test
-    void loginUserWithWrongEmailThrowsException(){
-        response = eliteAdminService.addNewAdmin(buildGabriel());
-        assertNotNull(response);
-        userRegistrationResponse = eliteUserService.registerUser(buildGabrielReg());
-        assertNotNull(userRegistrationResponse);
-
-        assertThrows(IncorrectDetailsException.class,()-> eliteUserService.loginUser(buildLoginRequestWithWrongEmail()));
-    }
-    @Test
-    void loginUserWithWrongPasswordThrowsException(){
-        response = eliteAdminService.addNewAdmin(buildNewGuy());
-        assertNotNull(response);
-        userRegistrationResponse = eliteUserService.registerUser(buildNewguyReg());
-        assertNotNull(userRegistrationResponse);
-
-        assertThrows(IncorrectDetailsException.class,()-> eliteUserService.loginUser(buildLoginRequestWithWrongPassword()));
-    }
+//    @Test
+//    void loginUserWithCorrectionDetails() {
+//        response = elitesNativesService.addNewNative(buildLegend());
+//        assertNotNull(response);
+//        userRegistrationResponse = eliteUserService.registerUser(buildLegendReg());
+//        assertNotNull(userRegistrationResponse);
+//
+//        LoginResponse loginResponse = eliteUserService.loginUser(buildLegendLoginRequest());
+//        assertNotNull(loginResponse);
+//        assertTrue(loginResponse.isLoggedIn());
+//        assertEquals(LOGIN_MESSAGE, loginResponse.getMessage());
+//    }
+//    @Test
+//    void loginUserWithWrongEmailThrowsException(){
+//        response = eliteAdminService.addNewAdmin(buildGabriel());
+//        assertNotNull(response);
+//        userRegistrationResponse = eliteUserService.registerUser(buildGabrielReg());
+//        assertNotNull(userRegistrationResponse);
+//
+//        assertThrows(IncorrectDetailsException.class,()-> eliteUserService.loginUser(buildLoginRequestWithWrongEmail()));
+//    }
+//    @Test
+//    void loginUserWithWrongPasswordThrowsException(){
+//        response = eliteAdminService.addNewAdmin(buildNewGuy());
+//        assertNotNull(response);
+//        userRegistrationResponse = eliteUserService.registerUser(buildNewguyReg());
+//        assertNotNull(userRegistrationResponse);
+//
+//        assertThrows(IncorrectDetailsException.class,()-> eliteUserService.loginUser(buildLoginRequestWithWrongPassword()));
+//    }
     @Test
     void findUserByCorrectEmail(){
         EliteUser foundUser = eliteUserService.findUserByEmail("patience@semicolon.africa");

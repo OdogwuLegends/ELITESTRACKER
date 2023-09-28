@@ -3,7 +3,7 @@ package com.capstoneproject.ElitesTracker.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStamp;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStampUsingZonedDateTime;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ADMINS;
 
 @Getter
@@ -30,6 +30,6 @@ public class Admins {
 
     @PrePersist
     public void setCreatedAt(){
-        this.createdAt = getCurrentTimeStamp();
+        this.createdAt = getCurrentTimeStampUsingZonedDateTime();
     }
 }

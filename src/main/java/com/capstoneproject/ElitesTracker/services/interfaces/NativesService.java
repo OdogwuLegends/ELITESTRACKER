@@ -5,6 +5,7 @@ import com.capstoneproject.ElitesTracker.dtos.responses.DeleteResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.UpdateUserResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.UserRegistrationResponse;
 import com.capstoneproject.ElitesTracker.models.Natives;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 

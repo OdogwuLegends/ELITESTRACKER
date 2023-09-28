@@ -23,13 +23,11 @@ import com.github.fge.jsonpatch.ReplaceOperation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.capstoneproject.ElitesTracker.enums.AdminPrivileges.*;
@@ -51,6 +49,7 @@ public class EliteUserService implements UserService {
     private final AttendanceService attendanceService;
     private final SearchService searchService;
     private final TimeEligibilityService timeEligibilityService;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -110,7 +109,8 @@ public class EliteUserService implements UserService {
     @Override
     public AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest) {
 //        checkForAdmin(request);
-        String email = request.getSemicolonEmail().trim();
+        String email = (String)request.getSemicolonEmail().trim();
+
         log.info("Email coming from FE {}",request.getSemicolonEmail().equals("g.obianli@native.semicolon.africa"));
         log.info("Trimmed Email {}",email.equals("g.obianli@native.semicolon.africa"));
         log.info("Entire object from FE {}",request);
@@ -275,14 +275,15 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
 //        checkForSubAdminPrivilege(foundAdmin);
 
-        LoginRequest loginRequest = LoginRequest.builder()
-                .semicolonEmail(request.getAdminSemicolonEmail())
-                .password(request.getAdminPassword())
-                .build();
-        loginUser(loginRequest);
+//        LoginRequest loginRequest = LoginRequest.builder()
+//                .semicolonEmail(request.getAdminSemicolonEmail())
+//                .password(request.getAdminPassword())
+//                .build();
+//        loginUser(loginRequest);
+        passwordEncoder.matches(foundAdmin.getPassword(),request.getAdminPassword());
         EliteUser foundNative = findUserByEmail(request.getNativeSemicolonEmail());
         foundNative.setScreenWidth(request.getScreenWidth());
         foundNative.setScreenHeight(request.getScreenHeight());
@@ -312,12 +313,11 @@ public class EliteUserService implements UserService {
                 .lastName(existingNative.getLastName())
                 .cohort(existingNative.getCohort())
                 .semicolonEmail(existingNative.getSemicolonEmail())
-                .password(request.getPassword()) //Encode password after security added
+                .password(passwordEncoder.encode(request.getPassword()))
+//                .password(request.getPassword())
                 .semicolonID(request.getScv().toUpperCase())
                 .role(NATIVE)
                 .permission(ENABLED)
-                .localTime(LocalTime.now())
-                .zonedDateTime(ZonedDateTime.now(ZoneId.of("Africa/Lagos")))
                 .screenWidth(request.getScreenWidth())
                 .screenHeight(request.getScreenHeight())
                 .build();
@@ -328,7 +328,8 @@ public class EliteUserService implements UserService {
                 .firstName(existingAdmin.getFirstName())
                 .lastName(existingAdmin.getLastName())
                 .semicolonEmail(existingAdmin.getSemicolonEmail())
-                .password(request.getPassword()) //Encode password after security added
+                .password(passwordEncoder.encode(request.getPassword()))//Encode password after security added
+//                .password(request.getPassword())
                 .role(ADMIN)
                 .adminPrivilegesList(setSubAdmin())
                 .screenWidth(request.getScreenWidth())

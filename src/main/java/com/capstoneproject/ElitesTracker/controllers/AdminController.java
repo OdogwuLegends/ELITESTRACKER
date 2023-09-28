@@ -7,6 +7,7 @@ import com.capstoneproject.ElitesTracker.services.interfaces.NativesService;
 import com.capstoneproject.ElitesTracker.services.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

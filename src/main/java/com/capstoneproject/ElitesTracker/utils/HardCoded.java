@@ -30,6 +30,8 @@ public class HardCoded {
     public static final String FORMAT_MAC_ADDRESS = "%02X:";
     public static final String JSON_PATCH_PATH_PREFIX = "/";
     public static final String USER_NAME_NOT_CORRECT = "Email not correct";
+    public static final String INVALID_CREDENTIALS = "Invalid Credentials";
+    public static final String AUTHENTICATION_NOT_SUPPORTED = "Authentication not supported";
     public static final String PASSWORD_NOT_CORRECT = "Password not correct";
     public static final String LOGIN_MESSAGE = "Log in successful";
     public static final String DIFFERENT_DEVICE = "Please use the device you registered with to complete this process";
@@ -52,4 +54,9 @@ public class HardCoded {
     public static final String STRING_PRESENT = "PRESENT";
     public static final String STRING_ABSENT = "ABSENT";
     public static final String INVALID_VALUE = "Invalid value";
+    public static final String ELITES_TRACKER = "ElitesTracker";
+    public static final String SECRET_KEY = "cohortFifteen";
+    public static final String USER_ROLE = "roles";
+    public static final String USER_EMAIL = "email";
+    public static final String BEARER = "Bearer ";
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentDayOfWeek;
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStamp;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStampUsingLocalDateTime;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ATTENDANCE;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ELITE_USER_ID;
 
@@ -35,7 +35,7 @@ public class Attendance {
 
     @PrePersist
     public void beforePersist(){
-        this.date = getCurrentTimeStamp();
+        this.date = getCurrentTimeStampUsingLocalDateTime();
         this.dayOfWeek = getCurrentDayOfWeek();
     }
 }

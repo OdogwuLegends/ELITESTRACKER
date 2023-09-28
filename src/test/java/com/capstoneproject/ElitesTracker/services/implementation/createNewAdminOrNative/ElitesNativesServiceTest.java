@@ -18,6 +18,7 @@ class ElitesNativesServiceTest {
     private UserRegistrationResponse response;
 
 
+
     @Test
     void addNewNative() {
         response = elitesNativesService.addNewNative(buildCephas());

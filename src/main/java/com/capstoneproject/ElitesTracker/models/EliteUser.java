@@ -6,12 +6,10 @@ import com.capstoneproject.ElitesTracker.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStamp;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStampUsingZonedDateTime;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ELITE_USER;
 
 @Getter
@@ -51,10 +49,6 @@ public class EliteUser {
     private String semicolonID;
     private String createdAt;
 
-    private LocalTime localTime;
-
-    private ZonedDateTime zonedDateTime;
-
     @Enumerated(value = EnumType.STRING)
     private AttendancePermission permission;
 
@@ -63,7 +57,7 @@ public class EliteUser {
 
     @PrePersist
     public void setCreatedAt(){
-        this.createdAt = getCurrentTimeStamp();
+        this.createdAt = getCurrentTimeStampUsingZonedDateTime();
     }
 
     public EliteUser(){

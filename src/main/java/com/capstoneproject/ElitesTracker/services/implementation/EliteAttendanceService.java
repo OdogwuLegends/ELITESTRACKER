@@ -15,10 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -118,17 +116,24 @@ public class EliteAttendanceService implements AttendanceService {
         }
 
         TimeEligibility timeEligibility = timeFrames.get(0);
-        LocalTime startTime = LocalTime.of(timeEligibility.getStartHour(),timeEligibility.getStartMinute());
-        LocalTime endTime = LocalTime.of(timeEligibility.getEndHour(),timeEligibility.getEndMinute());
-        LocalTime currentTime = LocalTime.now();
-        LocalTime baseTime = LocalTime.of(23,59);
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
+//        LocalTime startTime = LocalTime.of(timeEligibility.getStartHour(),timeEligibility.getStartMinute());
+        ZonedDateTime startTime = currentTime.withHour(timeEligibility.getStartHour()).withMinute(timeEligibility.getStartMinute()).withSecond(0).withNano(0);
+//        LocalTime endTime = LocalTime.of(timeEligibility.getEndHour(),timeEligibility.getEndMinute());
+        ZonedDateTime endTime = currentTime.withHour(timeEligibility.getEndHour()).withMinute(timeEligibility.getEndMinute()).withSecond(0).withNano(0);
+
+//        LocalTime currentTime = LocalTime.now();
+
+
+//        LocalTime baseTime = LocalTime.of(23,59);
+        ZonedDateTime baseTime = currentTime.withHour(23).withMinute(59).withSecond(0).withNano(0);
 
         if(currentTime.isBefore(startTime) && currentTime.isBefore(endTime)){
-            throw new TimeLimitException(beforeAttendanceMessage(localTimeToString(startTime)));
+            throw new TimeLimitException(beforeAttendanceMessage(zonedTimeToString(startTime)));
         }
         if(currentTime.isAfter(endTime) && currentTime.isBefore(baseTime)){
-            String end = localTimeToString(endTime);
-            String start = localTimeToString(startTime);
+            String end = zonedTimeToString(endTime);
+            String start = zonedTimeToString(startTime);
             throw new TimeLimitException(afterAttendanceMessage(end,start));
         }
         if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)){
@@ -157,7 +162,7 @@ public class EliteAttendanceService implements AttendanceService {
         throw new IncorrectDetailsException(INVALID_VALUE_EXCEPTION.getMessage());
     }
 
-    public static void main(String[] args) {
+    private void timeTrial() {
 
 //        String myTime = "07:06";
 //        int hour = 0;

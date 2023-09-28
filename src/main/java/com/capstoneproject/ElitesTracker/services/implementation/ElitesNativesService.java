@@ -9,6 +9,7 @@ import com.capstoneproject.ElitesTracker.exceptions.UserExistsException;
 import com.capstoneproject.ElitesTracker.models.Natives;
 import com.capstoneproject.ElitesTracker.repositories.NativesRepository;
 import com.capstoneproject.ElitesTracker.services.interfaces.NativesService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
