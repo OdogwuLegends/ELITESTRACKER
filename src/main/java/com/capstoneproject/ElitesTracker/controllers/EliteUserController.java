@@ -1,7 +1,9 @@
 package com.capstoneproject.ElitesTracker.controllers;
 
+import com.capstoneproject.ElitesTracker.dtos.requests.LoginRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.TestIPRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.UserRegistrationRequest;
+import com.capstoneproject.ElitesTracker.dtos.responses.LoginResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.UserRegistrationResponse;
 import com.capstoneproject.ElitesTracker.models.TestIP;
 import com.capstoneproject.ElitesTracker.repositories.TestIPRepository;
@@ -31,11 +33,11 @@ public class EliteUserController {
         return ResponseEntity.ok().body(response);
     }
 
-//    @PostMapping(LOGIN_USER)
-//    public ResponseEntity<?> login(@RequestBody LoginRequest request){
-//        LoginResponse response = eliteUserService.loginUser(request);
-//        return ResponseEntity.ok().body(response);
-//    }
+    @PostMapping(LOGIN_USER)
+    public ResponseEntity<?> login(@RequestBody LoginRequest request){
+        LoginResponse response = eliteUserService.loginUser(request);
+        return ResponseEntity.ok().body(response);
+    }
 
     @PostMapping("/address")
     public String hello(TestIPRequest testIPRequest, HttpServletRequest request) {

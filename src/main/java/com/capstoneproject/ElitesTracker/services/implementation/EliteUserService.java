@@ -69,7 +69,8 @@ public class EliteUserService implements UserService {
         if(foundUser.isEmpty()){
             throw new IncorrectDetailsException(USERNAME_NOT_CORRECT_EXCEPTION.getMessage());
         }
-        if(!foundUser.get().getPassword().equals(request.getPassword())){
+        if(passwordEncoder.matches(request.getPassword(),foundUser.get().getPassword())){
+            //!foundUser.get().getPassword().equals(request.getPassword())
             throw new IncorrectDetailsException(PASSWORD_NOT_CORRECT_EXCEPTION.getMessage());
         }
 
