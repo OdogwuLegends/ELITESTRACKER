@@ -13,7 +13,6 @@ import lombok.ToString;
 public class AttendanceRequest {
     private String jwtToken;
     private String ipAddress;
-    private String attendanceStatus;
     private String semicolonEmail;
     private String screenWidth;
     private String screenHeight;

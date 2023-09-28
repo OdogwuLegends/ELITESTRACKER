@@ -143,7 +143,7 @@ public class EliteAttendanceService implements AttendanceService {
 
     private void buildNewAttendance(EliteUser eliteUser, AttendanceResponse response, String IpAddress, AttendanceRequest request) {
         Attendance newAttendance = new Attendance();
-        newAttendance.setStatus(convertToEnum(request.getAttendanceStatus()));
+        newAttendance.setStatus(PRESENT);
         newAttendance.setIpAddress(IpAddress);
         newAttendance.setUser(eliteUser);
         newAttendance.setCohort(eliteUser.getCohort());
