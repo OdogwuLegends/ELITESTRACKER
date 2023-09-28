@@ -11,6 +11,8 @@ import lombok.ToString;
 @Builder
 @ToString
 public class AttendanceRequest {
+    private String jwtToken;
+    private String ipAddress;
     private String attendanceStatus;
     private String semicolonEmail;
     private String screenWidth;

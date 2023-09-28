@@ -11,6 +11,6 @@ public class LoginResponse {
     private String semicolonEmail;
     private String firstName;
     private String message;
-    private String token;
+    private String jwtToken;
     private boolean isLoggedIn;
 }

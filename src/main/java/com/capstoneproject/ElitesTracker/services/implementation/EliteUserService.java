@@ -35,6 +35,7 @@ import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.ENABL
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.enums.Role.ADMIN;
 import static com.capstoneproject.ElitesTracker.enums.Role.NATIVE;
+import static com.capstoneproject.ElitesTracker.security.jwt.JwtUtil.extractEmailFromToken;
 import static com.capstoneproject.ElitesTracker.security.jwt.JwtUtil.generateAccessTokenWithOutSecurity;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.*;
@@ -79,7 +80,7 @@ public class EliteUserService implements UserService {
                 .message(LOGIN_MESSAGE)
                 .semicolonEmail(foundUser.get().getSemicolonEmail())
                 .firstName(foundUser.get().getFirstName())
-                .token(generateAccessTokenWithOutSecurity(foundUser.get().getSemicolonEmail()))
+                .jwtToken(generateAccessTokenWithOutSecurity(foundUser.get().getSemicolonEmail()))
                 .isLoggedIn(true)
                 .build();
     }
@@ -112,14 +113,14 @@ public class EliteUserService implements UserService {
     @Override
     public AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest) {
 //        checkForAdmin(request);
-        String email = (String)request.getSemicolonEmail().trim();
+        String email = extractEmailFromToken(request.getJwtToken());
 
-        log.info("Email coming from FE {}",request.getSemicolonEmail().equals("g.obianli@native.semicolon.africa"));
-        log.info("Trimmed Email {}",email.equals("g.obianli@native.semicolon.africa"));
+        log.info("IP Address {}",request.getIpAddress());
         log.info("Entire object from FE {}",request);
-        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+        EliteUser foundUser = findUserByEmail(email);
         log.info("Found user {}",foundUser);
-        return attendanceService.saveAttendance(request,httpServletRequest,foundUser);
+//        return attendanceService.saveAttendance(request,httpServletRequest,foundUser);
+        return attendanceService.saveAttendanceTest(request, request.getIpAddress(),foundUser);
     }
     @Override
     public AttendanceResponse takeAttendanceTest(AttendanceRequest request, String IpAddress) {

@@ -63,7 +63,7 @@ public class EliteAttendanceService implements AttendanceService {
     public AttendanceResponse saveAttendanceTest(AttendanceRequest request, String IpAddress, EliteUser eliteUser) {
 //        noAttendanceOnWeekendsCheck();
 
-        if(!subStringIp(IpAddress).equals("172.16.0.")){
+        if(!subStringIp(IpAddress).equals(BASE_IP_ADDRESS)){
             throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
         }
 

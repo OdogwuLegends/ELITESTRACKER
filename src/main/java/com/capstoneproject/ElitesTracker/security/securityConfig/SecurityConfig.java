@@ -1,4 +1,4 @@
-package com.capstoneproject.ElitesTracker.security;
+package com.capstoneproject.ElitesTracker.security.securityConfig;
 
 import com.capstoneproject.ElitesTracker.security.filters.ElitesAuthenticationFilter;
 import com.capstoneproject.ElitesTracker.security.filters.ElitesAuthorizationFilter;

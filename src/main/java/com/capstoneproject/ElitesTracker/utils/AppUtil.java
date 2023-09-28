@@ -78,7 +78,7 @@ public class AppUtil {
     }
     public static String subStringIp(String ipAddress) {
         if (ipAddress != null && ipAddress.length() >= 9) {
-            return ipAddress.substring(0, 9);
+            return ipAddress.substring(0, 7);
         } else {
             return ipAddress;
         }
