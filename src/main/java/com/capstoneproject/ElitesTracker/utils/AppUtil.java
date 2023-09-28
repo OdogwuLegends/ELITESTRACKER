@@ -119,7 +119,7 @@ public class AppUtil {
         }
     }
     public static List<String> getPublicPaths(){
-        return List.of("/api/v1/user/register", "/login", "/api/v1/admin/addNative", "/swagger-ui.html", "api/v1/natives/takeAttendance" );
+        return List.of("/api/v1/user/register", "/login", "/api/v1/admin/addNative", "/swagger-ui.html", "api/v1/natives/takeAttendance", "api/v1/user/address");
     }
 
     public static String retrieveActualIP(HttpServletRequest request){
