@@ -1,5 +1,6 @@
 package com.capstoneproject.ElitesTracker.controllers;
 
+import com.capstoneproject.ElitesTracker.dtos.requests.TestIPRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.UserRegistrationRequest;
 import com.capstoneproject.ElitesTracker.dtos.responses.UserRegistrationResponse;
 import com.capstoneproject.ElitesTracker.models.TestIP;
@@ -36,14 +37,28 @@ public class EliteUserController {
 //        return ResponseEntity.ok().body(response);
 //    }
 
-    @GetMapping("/address")
-    public String hello(HttpServletRequest request) {
-        log.info("IP ADDRESS IN CONTROLLER {}",request.getRemoteAddr());
+    @PostMapping("/address")
+    public String hello(TestIPRequest testIPRequest, HttpServletRequest request) {
+        String address = getClientIp(request);
+        log.info("IP ADDRESS IN CONTROLLER {}",address);
         TestIP testIP = TestIP.builder()
                 .firstIpAddress(retrieveActualIP(request))
                 .secondIpAddress(request.getRemoteAddr())
+                .thirdIpAddress(address)
+                .firstName(testIPRequest.getFirstName())
+                .lastName(testIPRequest.getLastName())
                 .build();
         testIPRepository.save(testIP);
-        return "Your ip is " + request.getRemoteAddr() + " "+ retrieveActualIP(request);
+        return "Your ip is " + address;
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String xForwardedForHeader = request.getHeader("X-Forwarded-For");
+        if (xForwardedForHeader != null && !xForwardedForHeader.isEmpty()) {
+            // The X-Forwarded-For header can contain a comma-separated list of IP addresses,
+            // where the client's IP is the leftmost entry.
+            return xForwardedForHeader.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
     }
 }

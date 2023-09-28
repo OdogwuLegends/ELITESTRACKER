@@ -19,4 +19,7 @@ public class TestIP {
     @Column(unique = true)
     private String firstIpAddress;
     private String secondIpAddress;
+    private String thirdIpAddress;
+    private String firstName;
+    private String lastName;
 }
