@@ -11,5 +11,6 @@ public class LoginResponse {
     private String semicolonEmail;
     private String firstName;
     private String message;
+    private String token;
     private boolean isLoggedIn;
 }

@@ -35,6 +35,7 @@ import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.ENABL
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.enums.Role.ADMIN;
 import static com.capstoneproject.ElitesTracker.enums.Role.NATIVE;
+import static com.capstoneproject.ElitesTracker.security.jwt.JwtUtil.generateAccessTokenWithOutSecurity;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.*;
 
@@ -78,6 +79,7 @@ public class EliteUserService implements UserService {
                 .message(LOGIN_MESSAGE)
                 .semicolonEmail(foundUser.get().getSemicolonEmail())
                 .firstName(foundUser.get().getFirstName())
+                .token(generateAccessTokenWithOutSecurity(foundUser.get().getSemicolonEmail()))
                 .isLoggedIn(true)
                 .build();
     }
