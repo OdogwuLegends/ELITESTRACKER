@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        final String[] publicEndPoints = {"/api/v1/user/register", "/api/v1/user/loginUser", "/api/v1/admin/addNative", "/swagger-ui.html", "api/v1/natives/takeAttendance"};
+        final String[] publicEndPoints = {"/api/v1/user/register", "/api/v1/user/loginUser", "/api/v1/admin/addNative", "/swagger-ui.html", "/api/v1/natives/takeAttendance"};
 
         return httpSecurity
                 .addFilterAt(new ElitesAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
