@@ -20,7 +20,7 @@ import static com.capstoneproject.ElitesTracker.utils.ApiValues.*;
 @RestController
 @RequestMapping(NATIVES_BASE_URL)
 @AllArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @Slf4j
 public class NativesController {
     private final UserService userService;

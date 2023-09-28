@@ -19,7 +19,7 @@ import static com.capstoneproject.ElitesTracker.utils.ApiValues.*;
 
 @RestController
 @RequestMapping(BASE_ADMIN_URL)
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 @Slf4j
 public class AdminController {

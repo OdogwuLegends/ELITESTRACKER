@@ -18,7 +18,7 @@ import static com.capstoneproject.ElitesTracker.utils.AppUtil.retrieveActualIP;
 @RestController
 @AllArgsConstructor
 @RequestMapping(BASE_USER_URL)
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @Slf4j
 public class EliteUserController {
     private final EliteUserService eliteUserService;
