@@ -1,5 +1,6 @@
 package com.capstoneproject.ElitesTracker.dtos.requests;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
+@AllArgsConstructor
 public class SetTimeRequest {
     private int startHour;
     private int startMinute;
