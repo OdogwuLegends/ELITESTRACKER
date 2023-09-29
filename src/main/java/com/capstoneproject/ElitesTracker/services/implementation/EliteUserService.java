@@ -113,8 +113,11 @@ public class EliteUserService implements UserService {
     @Override
     public AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest) {
 //        checkForAdmin(request);
+        log.info("request{} length{}", request.getSemicolonEmail(), request.getSemicolonEmail().length());
         String verifiedToken = retrieveAndVerifyJwtToken(httpServletRequest);
         String userEmail = extractEmailFromToken(verifiedToken);
+
+
         EliteUser foundUser = findUserByEmail(userEmail);
 
         return attendanceService.saveAttendance(request,foundUser);
