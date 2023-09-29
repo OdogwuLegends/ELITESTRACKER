@@ -118,6 +118,11 @@ public class EliteUserService implements UserService {
 //        String userEmail = extractEmailFromToken(verifiedToken);
 
         String userEmail = request.getSemicolonEmail().replaceAll("\"", "");
+        String newHeight = request.getScreenHeight().replaceAll("\"", "");
+        String newWidth = request.getScreenWidth().replaceAll("\"", "");
+
+        request.setScreenHeight(newHeight);
+        request.setScreenWidth(newWidth);
 
         EliteUser foundUser = findUserByEmail(userEmail);
 
