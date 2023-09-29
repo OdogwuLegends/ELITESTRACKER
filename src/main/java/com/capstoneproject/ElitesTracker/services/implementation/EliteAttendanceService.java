@@ -152,7 +152,10 @@ public class EliteAttendanceService implements AttendanceService {
         response.setMessage(attendanceMessage(eliteUser.getFirstName()));
     }
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
-        return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) || !eliteUser.getScreenHeight().equals(request.getScreenHeight());
+        System.out.println(eliteUser.getScreenWidth().equals(request.getScreenWidth()));
+        System.out.println(eliteUser.getScreenHeight().equals(request.getScreenHeight()));
+        return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) ||
+                !eliteUser.getScreenHeight().equals(request.getScreenHeight());
     }
     private AttendanceStatus convertToEnum(String value){
         if(value.equals(STRING_PRESENT)){
