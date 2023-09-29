@@ -32,10 +32,6 @@ public class Natives {
 
     @Column(nullable = false, unique = true)
     private String semicolonID;
-
-    private String httpServlet;
-    private String getRemoteAddress;
-
     private String createdAt;
 
     @PrePersist
