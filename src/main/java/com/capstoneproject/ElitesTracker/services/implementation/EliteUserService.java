@@ -114,9 +114,10 @@ public class EliteUserService implements UserService {
     public AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest) {
 //        checkForAdmin(request);
         log.info("request{} length{}", request.getSemicolonEmail(), request.getSemicolonEmail().length());
-        String verifiedToken = retrieveAndVerifyJwtToken(httpServletRequest);
-        String userEmail = extractEmailFromToken(verifiedToken);
+//        String verifiedToken = retrieveAndVerifyJwtToken(httpServletRequest);
+//        String userEmail = extractEmailFromToken(verifiedToken);
 
+        String userEmail = request.getSemicolonEmail();
 
         EliteUser foundUser = findUserByEmail(userEmail);
 
