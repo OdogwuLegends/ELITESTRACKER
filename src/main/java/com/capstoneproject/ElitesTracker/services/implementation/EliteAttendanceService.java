@@ -152,6 +152,8 @@ public class EliteAttendanceService implements AttendanceService {
         response.setMessage(attendanceMessage(eliteUser.getFirstName()));
     }
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
+        System.out.println(eliteUser.getScreenHeight() + " " + request.getScreenHeight());
+        System.out.println(eliteUser.getScreenWidth() + " " + request.getScreenWidth());
         System.out.println(eliteUser.getScreenWidth().equals(request.getScreenWidth()));
         System.out.println(eliteUser.getScreenHeight().equals(request.getScreenHeight()));
         return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) ||
