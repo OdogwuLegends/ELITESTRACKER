@@ -13,7 +13,7 @@ public interface UserService {
     LoginResponse loginUser(LoginRequest request);
     EliteUser findUserByEmail(String email);
     UpdateUserResponse updateUserProfile(UpdateUserRequest request);
-    AttendanceResponse takeAttendance(AttendanceRequest request);
+    AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest);
     AttendanceResponse takeAttendanceTest(AttendanceRequest request, String IpAddress);
     List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request);
     AttendanceResponse editAttendanceStatus(EditAttendanceRequest request);

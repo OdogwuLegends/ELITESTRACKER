@@ -37,13 +37,15 @@ public class EliteAttendanceService implements AttendanceService {
     public AttendanceResponse saveAttendance(AttendanceRequest request, EliteUser eliteUser) {
         noAttendanceOnWeekendsCheck();
 
-        AttendanceResponse response = new AttendanceResponse();
-//        String IpAddress = retrieveActualIP(httpServletRequest);
+        if(request.getIpAddress() == null || request.getIpAddress().equals("")){
+            throw new NoInternetException(NETWORK_ERROR_EXCEPTION.getMessage());
+        }
 
         if(!subStringRealIp(request.getIpAddress()).equals(REAL_BASE_IP_ADDRESS)){
             throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
         }
 
+        AttendanceResponse response = new AttendanceResponse();
         Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(request.getIpAddress());
 
         if((foundAttendance.isPresent()) && (subStringDate(foundAttendance.get().getDate()).equals(localDateTodayToString()))){

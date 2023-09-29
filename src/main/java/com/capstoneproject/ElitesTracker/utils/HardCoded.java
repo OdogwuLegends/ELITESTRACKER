@@ -60,4 +60,7 @@ public class HardCoded {
     public static final String USER_ROLE = "roles";
     public static final String USER_EMAIL = "email";
     public static final String BEARER = "Bearer ";
+    public static final String INVALID_AUTHORIZATION_HEADER = "Invalid or missing Authorization header";
+    public static final String VERIFICATION_FAILED = "JWT verification failed";
+    public static final String NETWORK_ERROR = "Network Error";
 }

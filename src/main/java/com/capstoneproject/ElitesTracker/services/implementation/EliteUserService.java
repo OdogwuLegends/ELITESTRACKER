@@ -22,6 +22,7 @@ import com.github.fge.jsonpatch.JsonPatchOperation;
 import com.github.fge.jsonpatch.ReplaceOperation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +35,7 @@ import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.ENABL
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.enums.Role.ADMIN;
 import static com.capstoneproject.ElitesTracker.enums.Role.NATIVE;
-import static com.capstoneproject.ElitesTracker.security.jwt.JwtUtil.extractEmailFromToken;
-import static com.capstoneproject.ElitesTracker.security.jwt.JwtUtil.generateAccessTokenWithOutSecurity;
+import static com.capstoneproject.ElitesTracker.security.jwt.JwtUtil.*;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.*;
 
@@ -43,6 +43,7 @@ import static com.capstoneproject.ElitesTracker.utils.HardCoded.*;
 @AllArgsConstructor
 @Slf4j
 @Transactional
+@ToString
 public class EliteUserService implements UserService {
     private final EliteUserRepository eliteUserRepository;
     private final AdminsService adminsService;
@@ -110,16 +111,12 @@ public class EliteUserService implements UserService {
     }
 
     @Override
-    public AttendanceResponse takeAttendance(AttendanceRequest request) {
+    public AttendanceResponse takeAttendance(AttendanceRequest request, HttpServletRequest httpServletRequest) {
 //        checkForAdmin(request);
-        String email = extractEmailFromToken(request.getJwtToken());
-        EliteUser foundUser = findUserByEmail(email);
+        String verifiedToken = retrieveAndVerifyJwtToken(httpServletRequest);
+        String userEmail = extractEmailFromToken(verifiedToken);
+        EliteUser foundUser = findUserByEmail(userEmail);
 
-        log.info("IP Address {}",request.getIpAddress());
-        log.info("JWT token {}",request.getJwtToken());
-        log.info("Entire object from FE {}",request);
-        log.info("Found user {}",foundUser);
-//
         return attendanceService.saveAttendance(request,foundUser);
     }
     @Override

@@ -26,8 +26,8 @@ public class NativesController {
     private final UserService userService;
 
     @PostMapping(TAKE_ATTENDANCE)
-    public ResponseEntity<AttendanceResponse> takeAttendance(@RequestBody AttendanceRequest request){
-        AttendanceResponse response = userService.takeAttendance(request);
+    public ResponseEntity<AttendanceResponse> takeAttendance(@RequestBody AttendanceRequest request, HttpServletRequest httpServletRequest){
+        AttendanceResponse response = userService.takeAttendance(request, httpServletRequest);
         return ResponseEntity.ok().body(response);
     }
     @GetMapping(GENERATE_REPORT_FOR_SELF)
