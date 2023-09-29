@@ -156,8 +156,8 @@ public class EliteAttendanceService implements AttendanceService {
         System.out.println(eliteUser.getScreenWidth() + " " + request.getScreenWidth());
         System.out.println(eliteUser.getScreenWidth().equals(request.getScreenWidth()));
         System.out.println(eliteUser.getScreenHeight().equals(request.getScreenHeight()));
-        return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) ||
-                !eliteUser.getScreenHeight().equals(request.getScreenHeight());
+        return !eliteUser.getScreenWidth().equals(request.getScreenHeight()) ||
+                !eliteUser.getScreenHeight().equals(request.getScreenWidth());
     }
     private AttendanceStatus convertToEnum(String value){
         if(value.equals(STRING_PRESENT)){
