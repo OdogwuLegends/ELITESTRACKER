@@ -36,6 +36,16 @@ public class AppUtil {
         DayOfWeek dayOfWeek = currentDayOfWeek.getDayOfWeek();
         return dayOfWeek.toString();
     }
+    public static String getCurrentTimeForAttendance() {
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT_FOR_ATTENDANCE);
+        return currentTime.format(formatter);
+    }
+    public static String getCurrentDateForAttendance() {
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_FOR_ATTENDANCE);
+        return currentTime.format(formatter);
+    }
     public static String stringDateToString(String userInput) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         LocalDate dateToFormat = LocalDate.parse(userInput, dateFormatter);

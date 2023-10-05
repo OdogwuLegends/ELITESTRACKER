@@ -4,8 +4,7 @@ import com.capstoneproject.ElitesTracker.enums.AttendanceStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentDayOfWeek;
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStampUsingZonedDateTime;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ATTENDANCE;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.ELITE_USER_ID;
 
@@ -26,7 +25,8 @@ public class Attendance {
 
     @Enumerated(EnumType.STRING)
     private AttendanceStatus status;
-    private String date;
+    private String dateTaken;
+    private String timeTaken;
     private String dayOfWeek;
 
     private String cohort;
@@ -35,7 +35,8 @@ public class Attendance {
 
     @PrePersist
     public void beforePersist(){
-        this.date = getCurrentTimeStampUsingZonedDateTime();
+        this.dateTaken = getCurrentDateForAttendance();
         this.dayOfWeek = getCurrentDayOfWeek();
+        this.timeTaken = getCurrentTimeForAttendance();
     }
 }

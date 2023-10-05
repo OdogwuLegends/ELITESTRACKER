@@ -3,7 +3,6 @@ package com.capstoneproject.ElitesTracker.services.implementation;
 import com.capstoneproject.ElitesTracker.dtos.requests.AttendanceRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.EditAttendanceRequest;
 import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceResponse;
-import com.capstoneproject.ElitesTracker.enums.AttendanceStatus;
 import com.capstoneproject.ElitesTracker.exceptions.*;
 import com.capstoneproject.ElitesTracker.models.Attendance;
 import com.capstoneproject.ElitesTracker.models.EliteUser;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.DISABLED;
-import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.ABSENT;
 import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.PRESENT;
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.*;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
@@ -51,7 +49,7 @@ public class EliteAttendanceService implements AttendanceService {
 
         AttendanceResponse response = new AttendanceResponse();
 //        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(request.getIpAddress());
-        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddressAndDate(request.getIpAddress(),localDateTodayToString());
+        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddressAndDate(request.getIpAddress(),getCurrentDateForAttendance());
 
         if((foundAttendance.isPresent())){
             throw new AttendanceAlreadyTakenException(ATTENDANCE_ALREADY_TAKEN_EXCEPTION.getMessage());
@@ -77,7 +75,7 @@ public class EliteAttendanceService implements AttendanceService {
 
         Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(IpAddress);
 
-        if((foundAttendance.isPresent()) && (subStringDate(foundAttendance.get().getDate()).equals(localDateTodayToString()))){
+        if((foundAttendance.isPresent()) && (subStringDate(foundAttendance.get().getDateTaken()).equals(localDateTodayToString()))){
             throw new AttendanceAlreadyTakenException(ATTENDANCE_ALREADY_TAKEN_EXCEPTION.getMessage());
         } else if (isAnotherDevice(request,eliteUser)) {
             throw new NotSameDeviceException(DIFFERENT_DEVICE_EXCEPTION.getMessage());
@@ -94,7 +92,7 @@ public class EliteAttendanceService implements AttendanceService {
 
         Optional<Attendance> foundAttendance = attendanceRepository.findByUser(foundUser);
 
-        if(foundAttendance.isEmpty() || !stringDateToString(request.getDate()).equals(subStringDate(foundAttendance.get().getDate()))){
+        if(foundAttendance.isEmpty() || !stringDateToString(request.getDate()).equals(subStringDate(foundAttendance.get().getDateTaken()))){
             throw new RecordNotFoundException(RECORD_NOT_FOUND_EXCEPTION.getMessage());
         }
         if(!foundAttendance.get().getCohort().equals(request.getCohort())){

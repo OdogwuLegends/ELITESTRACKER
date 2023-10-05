@@ -46,8 +46,8 @@ public class EliteSearchService implements SearchService {
         List<AttendanceSheetResponse> attendanceSheet = new ArrayList<>();
 
         for (int i = 0; i < attendanceList.size(); i++) {
-            boolean isMatch = (startDate.equals(subStringDate(attendanceList.get(i).getDate())))
-                                || (endDate.equals(subStringDate(attendanceList.get(i).getDate())))
+            boolean isMatch = (startDate.equals(subStringDate(attendanceList.get(i).getDateTaken())))
+                                || (endDate.equals(subStringDate(attendanceList.get(i).getDateTaken())))
                                 &&(request.getCohort().equals(attendanceList.get(i).getCohort()));
             if(isMatch){
                 AttendanceSheetResponse foundReport = AttendanceSheetResponse.builder()
@@ -56,7 +56,7 @@ public class EliteSearchService implements SearchService {
                         .lastName(attendanceList.get(i).getUser().getLastName())
                         .cohort(attendanceList.get(i).getCohort())
                         .attendanceStatus(attendanceList.get(i).getStatus().toString())
-                        .date(attendanceList.get(i).getDate())
+                        .date(attendanceList.get(i).getDateTaken())
                         .build();
                 attendanceSheet.add(foundReport);
             }
@@ -91,14 +91,14 @@ public class EliteSearchService implements SearchService {
 
         for (int i = 0; i < attendanceList.size(); i++) {
             if ((foundUser.getCohort().equals(attendanceList.get(i).getUser().getCohort()))) {
-                if((startDate.equals(subStringDate(attendanceList.get(i).getDate()))) || (endDate.equals(subStringDate(attendanceList.get(i).getDate())))){
+                if((startDate.equals(subStringDate(attendanceList.get(i).getDateTaken()))) || (endDate.equals(subStringDate(attendanceList.get(i).getDateTaken())))){
                     AttendanceSheetResponse foundReport = AttendanceSheetResponse.builder()
                             .serialNumber(String.valueOf(i + 1))
                             .firstName(attendanceList.get(i).getUser().getFirstName())
                             .lastName(attendanceList.get(i).getUser().getLastName())
                             .cohort(attendanceList.get(i).getCohort())
                             .attendanceStatus(attendanceList.get(i).getStatus().toString())
-                            .date(attendanceList.get(i).getDate())
+                            .date(attendanceList.get(i).getDateTaken())
                             .build();
                     attendanceSheet.add(foundReport);
                 }
