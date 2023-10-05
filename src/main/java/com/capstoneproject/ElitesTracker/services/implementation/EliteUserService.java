@@ -154,6 +154,7 @@ public class EliteUserService implements UserService {
 
         log.info("Screen Width {}", request.getScreenWidth());
         log.info("Screen Height {}", request.getScreenHeight());
+        log.info("IP Address {}", request.getIpAddress());
 
         String userEmail = request.getSemicolonEmail().replaceAll("\"", "");
         String newHeight = request.getScreenHeight().replaceAll("\"", "");
