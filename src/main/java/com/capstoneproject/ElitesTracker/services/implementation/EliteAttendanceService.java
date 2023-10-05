@@ -49,7 +49,7 @@ public class EliteAttendanceService implements AttendanceService {
 
         AttendanceResponse response = new AttendanceResponse();
 //        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(request.getIpAddress());
-        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddressAndDate(request.getIpAddress(),getCurrentDateForAttendance());
+        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddressAndDateTaken(request.getIpAddress(),getCurrentDateForAttendance());
 
         if((foundAttendance.isPresent())){
             throw new AttendanceAlreadyTakenException(ATTENDANCE_ALREADY_TAKEN_EXCEPTION.getMessage());

@@ -302,7 +302,7 @@ public class MockEliteUserServiceTest {
         return Attendance.builder()
                 .user(buildMockNative())
                 .status(PRESENT)
-                .date("22/09/2023 16:23:50")
+                .dateTaken("22/09/2023")
                 .dayOfWeek("THURSDAY")
                 .cohort("15")
                 .ipAddress("172.16.0.70")
