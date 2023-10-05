@@ -155,9 +155,13 @@ public class EliteAttendanceService implements AttendanceService {
         attendanceRepository.save(newAttendance);
         response.setMessage(attendanceMessage(eliteUser.getFirstName()));
     }
+//    private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
+//        return !eliteUser.getScreenWidth().equals(request.getScreenHeight()) ||
+//                !eliteUser.getScreenHeight().equals(request.getScreenWidth());
+//    }
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
-        return !eliteUser.getScreenWidth().equals(request.getScreenHeight()) ||
-                !eliteUser.getScreenHeight().equals(request.getScreenWidth());
+        return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) ||
+                !eliteUser.getScreenHeight().equals(request.getScreenHeight());
     }
 
     private void timeTrial() {
