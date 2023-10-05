@@ -41,6 +41,7 @@ public class EliteTimeEligibilityService implements TimeEligibilityService {
                 .startMinute(request.getStartMinute())
                 .endHour(request.getEndHour())
                 .endMinute(request.getEndMinute())
+                .setBy(request.getAdminSemicolonEmail())
                 .build();
 
         timeEligibilityRepository.save(time);

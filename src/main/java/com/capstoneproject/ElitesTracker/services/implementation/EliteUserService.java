@@ -2,6 +2,7 @@ package com.capstoneproject.ElitesTracker.services.implementation;
 
 import com.capstoneproject.ElitesTracker.dtos.requests.*;
 import com.capstoneproject.ElitesTracker.dtos.responses.*;
+import com.capstoneproject.ElitesTracker.emailConfig.EmailService;
 import com.capstoneproject.ElitesTracker.enums.AdminPrivileges;
 import com.capstoneproject.ElitesTracker.exceptions.AdminsNotPermittedException;
 import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
@@ -20,13 +21,14 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.github.fge.jsonpatch.JsonPatchOperation;
 import com.github.fge.jsonpatch.ReplaceOperation;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -51,6 +53,7 @@ public class EliteUserService implements UserService {
     private final AttendanceService attendanceService;
     private final SearchService searchService;
     private final TimeEligibilityService timeEligibilityService;
+    private EmailService emailService;
 //    private final PasswordEncoder passwordEncoder;
 
 
@@ -111,11 +114,40 @@ public class EliteUserService implements UserService {
     }
 
     @Override
+    public ResetPasswordResponse sendEmailForPasswordReset(ResetPasswordRequest request) {
+        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+        String token = generateRandomToken();
+
+        try {
+            emailService.sendResetPasswordEmail(token,foundUser);
+            foundUser.setResetPasswordToken(token);
+            eliteUserRepository.save(foundUser);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return ResetPasswordResponse.builder()
+                .message(EMAIL_SENT_SUCCESSFULLY)
+                .build();
+    }
+
+    @Override
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
+        EliteUser foundUser = eliteUserRepository.findByResetPasswordToken(request.getToken()).orElseThrow(
+                ()-> new EntityDoesNotExistException(INVALID_TOKEN_EXCEPTION.getMessage()));
+
+        foundUser.setPassword(request.getNewPassword()); //encrypt if security
+        foundUser.setResetPasswordToken(null);
+        eliteUserRepository.save(foundUser);
+
+        return ResetPasswordResponse.builder()
+                .message(PASSWORD_RESET_SUCCESSFUL)
+                .build();
+    }
+
+    @Override
     public AttendanceResponse takeAttendance(AttendanceRequest request) {
 //        checkForAdmin(request);
-        log.info("request{} length{}", request.getSemicolonEmail(), request.getSemicolonEmail().length());
-        log.info("request{} width length{}", request.getScreenHeight(), request.getScreenHeight().length());
-        log.info("request{} height length{}", request.getScreenWidth(), request.getScreenWidth().length());
 //        String verifiedToken = retrieveAndVerifyJwtToken(httpServletRequest);
 //        String userEmail = extractEmailFromToken(verifiedToken);
 
@@ -461,5 +493,15 @@ public class EliteUserService implements UserService {
         if(!foundAdmin.getAdminPrivilegesList().contains(SUPER_ADMIN)){
             throw new AdminsNotPermittedException(PRIVILEGE_NOT_GRANTED_EXCEPTION.getMessage());
         }
+    }
+    private static String generateRandomToken(){
+        String token = "";
+        Random random = new Random();
+
+        while (token.length() < 4){
+            int number = random.nextInt(9999);
+            token = String.valueOf(number);
+        }
+        return token;
     }
 }

@@ -12,6 +12,8 @@ public class ApiValues {
     public static final String GENERATE_REPORT_FOR_SELF = "/generateReportForSelf";
     public static final String RESET_DEVICE = "/resetDevice";
     public static final String UPDATE_USER_PROFILE = "/updateUserProfile";
+    public static final String EMAIL_FOR_PASSWORD_RESET = "/emailForPasswordReset";
+    public static final String RESET_PASSWORD = "/resetPassword";
     public static final String REMOVE_ADMIN = "/removeAdmin";
     public static final String REMOVE_NATIVE = "/removeNative";
     public static final String REMOVE_COHORT = "/removeCohort";
@@ -21,6 +23,5 @@ public class ApiValues {
     public static final String SET_ATTENDANCE_PERMISSION_FOR_COHORT = "/setAttendancePermitForCohort";
     public static final String GENERATE_ATTENDANCE_REPORT_FOR_NATIVE = "/generateAttendanceForNative";
     public static final String GENERATE_ATTENDANCE_REPORT_FOR_COHORT = "/generateAttendanceForCohort";
-
 
 }

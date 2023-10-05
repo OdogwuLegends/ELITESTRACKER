@@ -7,7 +7,6 @@ import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceSheetResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.ResetDeviceResponse;
 import com.capstoneproject.ElitesTracker.services.interfaces.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

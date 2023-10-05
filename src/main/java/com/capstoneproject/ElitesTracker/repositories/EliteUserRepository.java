@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface EliteUserRepository extends JpaRepository<EliteUser,Long> {
     Optional<EliteUser> findBySemicolonEmail(String email);
+    Optional<EliteUser> findByResetPasswordToken(String token);
 }

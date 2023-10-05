@@ -45,6 +45,10 @@ public class EliteAttendanceService implements AttendanceService {
             throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
         }
 
+//        if(!subStringRealIp(request.getIpAddress()).equals(PERSONAL_BASE_IP_ADDRESS)){
+//            throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
+//        }
+
         AttendanceResponse response = new AttendanceResponse();
         Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(request.getIpAddress());
 
@@ -117,13 +121,13 @@ public class EliteAttendanceService implements AttendanceService {
         }
 
         TimeEligibility timeEligibility = timeFrames.get(0);
+//        LocalTime currentTime = LocalTime.now();
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
 //        LocalTime startTime = LocalTime.of(timeEligibility.getStartHour(),timeEligibility.getStartMinute());
         ZonedDateTime startTime = currentTime.withHour(timeEligibility.getStartHour()).withMinute(timeEligibility.getStartMinute()).withSecond(0).withNano(0);
 //        LocalTime endTime = LocalTime.of(timeEligibility.getEndHour(),timeEligibility.getEndMinute());
         ZonedDateTime endTime = currentTime.withHour(timeEligibility.getEndHour()).withMinute(timeEligibility.getEndMinute()).withSecond(0).withNano(0);
 
-//        LocalTime currentTime = LocalTime.now();
 
 
 //        LocalTime baseTime = LocalTime.of(23,59);
@@ -152,20 +156,8 @@ public class EliteAttendanceService implements AttendanceService {
         response.setMessage(attendanceMessage(eliteUser.getFirstName()));
     }
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
-        System.out.println(eliteUser.getScreenHeight() + " " + request.getScreenHeight());
-        System.out.println(eliteUser.getScreenWidth() + " " + request.getScreenWidth());
-        System.out.println(eliteUser.getScreenWidth().equals(request.getScreenWidth()));
-        System.out.println(eliteUser.getScreenHeight().equals(request.getScreenHeight()));
         return !eliteUser.getScreenWidth().equals(request.getScreenHeight()) ||
                 !eliteUser.getScreenHeight().equals(request.getScreenWidth());
-    }
-    private AttendanceStatus convertToEnum(String value){
-        if(value.equals(STRING_PRESENT)){
-            return PRESENT;
-        } else if ((value.equals(STRING_ABSENT))) {
-            return ABSENT;
-        }
-        throw new IncorrectDetailsException(INVALID_VALUE_EXCEPTION.getMessage());
     }
 
     private void timeTrial() {
@@ -193,44 +185,5 @@ public class EliteAttendanceService implements AttendanceService {
 //
 //        System.out.println("Hour: " + hour);
 //        System.out.println("Minute: " + minute);
-
-//        ZonedDateTime customDateTime = ZonedDateTime.of(2023, 9, 26, 14, 30, 0, 0, ZoneId.of("Africa/Lagos"));
-//
-//        // Define a DateTimeFormatter to format the output (date and time)
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-//
-//        // Format the ZonedDateTime and print it
-//        String formattedDateTime = customDateTime.format(formatter);
-////        System.out.println("Custom Date and Time in West Africa (Lagos): " + formattedDateTime);
-//        System.out.println(formattedDateTime);
-
-//        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
-//
-//        // Extract the LocalTime component (hour, minute, second, and nanosecond)
-//        int hour = currentDateTime.getHour();
-//        int minute = currentDateTime.getMinute();
-//        int second = currentDateTime.getSecond();
-//
-//
-//        System.out.println("Current Time in West Africa (Lagos): " +
-//                String.format("%02d:%02d:%02d", hour, minute, second));
-
-        ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
-
-        // Define a specific time (e.g., 14:30) for comparison
-        int specificHour = 14;
-        int specificMinute = 30;
-
-        // Create a ZonedDateTime for the specific time in the same time zone
-        ZonedDateTime specificDateTime = currentDateTime.withHour(specificHour).withMinute(specificMinute).withSecond(0).withNano(0);
-
-        // Compare the specific time to the current time
-        if (specificDateTime.isBefore(currentDateTime)) {
-            System.out.println("The specific time is before the current time.");
-        } else if (specificDateTime.isEqual(currentDateTime)) {
-            System.out.println("The specific time is equal to the current time.");
-        } else {
-            System.out.println("The specific time is after the current time.");
-        }
     }
 }

@@ -37,6 +37,8 @@ public class EliteUser {
     @Column(nullable = false)
     private String password;
 
+    private String resetPasswordToken;
+
     @Enumerated(value = EnumType.STRING)
     private Role role;
 

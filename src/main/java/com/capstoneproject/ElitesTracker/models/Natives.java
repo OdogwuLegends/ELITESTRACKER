@@ -3,7 +3,6 @@ package com.capstoneproject.ElitesTracker.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStampUsingLocalDateTime;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStampUsingZonedDateTime;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.NATIVES;
 

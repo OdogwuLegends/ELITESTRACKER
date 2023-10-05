@@ -56,15 +56,15 @@ public class AppUtil {
         return currentTime.format(formatter);
     }
     public static LocalTime stringToLocalTime(String timeFormat){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return LocalTime.parse(timeFormat, formatter);
     }
     public static String localTimeToString(LocalTime timeFormat){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return timeFormat.format(formatter);
     }
     public static String zonedTimeToString(ZonedDateTime zonedDateTime){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return zonedDateTime.format(formatter);
     }
     public static String subStringDate(String date) {
@@ -91,12 +91,6 @@ public class AppUtil {
         }
     }
 
-    public static void main(String[] args) {
-//        System.out.println(subStringIp("62.173.123.12"));
-        System.out.println(subStringRealIp("172.16.0.165"));
-        System.out.println(subStringTestIp("172.16.0.165"));
-    }
-
     public static String welcomeMessage(String name) {
         return String.format(WELCOME_MESSAGE,name);
     }
@@ -109,6 +103,7 @@ public class AppUtil {
     public static String userAlreadyExistsMessage(String email) {
         return String.format(USER_EXIST_MESSAGE,email);
     }
+
     public static String beforeAttendanceMessage(String time) {
         return String.format(BEFORE_ATTENDANCE_TIME_MESSAGE,time);
     }

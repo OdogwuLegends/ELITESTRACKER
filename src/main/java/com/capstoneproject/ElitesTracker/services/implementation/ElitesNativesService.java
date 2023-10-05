@@ -85,9 +85,9 @@ public class ElitesNativesService implements NativesService {
         List<Natives> foundNatives = nativesRepository.findAll();
 
         List<Natives> cohortList = new ArrayList<>();
-        for (int i = 0; i < foundNatives.size(); i++) {
-            if(foundNatives.get(i).getCohort().equals(cohort)){
-                cohortList.add(foundNatives.get(i));
+        for (Natives foundNative : foundNatives) {
+            if (foundNative.getCohort().equals(cohort)) {
+                cohortList.add(foundNative);
             }
         }
         return cohortList;
