@@ -50,9 +50,10 @@ public class EliteAttendanceService implements AttendanceService {
 //        }
 
         AttendanceResponse response = new AttendanceResponse();
-        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(request.getIpAddress());
+//        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(request.getIpAddress());
+        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddressAndDate(request.getIpAddress(),localDateTodayToString());
 
-        if((foundAttendance.isPresent()) && (subStringDate(foundAttendance.get().getDate()).equals(localDateTodayToString()))){
+        if((foundAttendance.isPresent())){
             throw new AttendanceAlreadyTakenException(ATTENDANCE_ALREADY_TAKEN_EXCEPTION.getMessage());
         } else if (isAnotherDevice(request,eliteUser)) {
             throw new NotSameDeviceException(DIFFERENT_DEVICE_EXCEPTION.getMessage());

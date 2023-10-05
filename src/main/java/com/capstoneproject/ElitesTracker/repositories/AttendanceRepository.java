@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface AttendanceRepository extends JpaRepository<Attendance,Long> {
     Optional<Attendance> findByIpAddress(String ipAddress);
+    Optional<Attendance> findByIpAddressAndDate(String ipAddress,String date);
     Optional<Attendance> findByCohort(String cohort);
     Optional<Attendance> findByUser(EliteUser eliteUser);
 
