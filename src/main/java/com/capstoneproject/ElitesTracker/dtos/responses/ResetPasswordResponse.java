@@ -9,4 +9,5 @@ import lombok.Setter;
 @Builder
 public class ResetPasswordResponse {
     private String message;
+    private boolean isValidEmail;
 }

@@ -128,6 +128,7 @@ public class EliteUserService implements UserService {
 
         return ResetPasswordResponse.builder()
                 .message(EMAIL_SENT_SUCCESSFULLY)
+                .isValidEmail(true)
                 .build();
     }
 
