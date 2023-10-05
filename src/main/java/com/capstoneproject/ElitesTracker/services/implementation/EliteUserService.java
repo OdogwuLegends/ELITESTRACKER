@@ -152,6 +152,9 @@ public class EliteUserService implements UserService {
 //        String verifiedToken = retrieveAndVerifyJwtToken(httpServletRequest);
 //        String userEmail = extractEmailFromToken(verifiedToken);
 
+        log.info("Screen Width {}", request.getScreenWidth());
+        log.info("Screen Height {}", request.getScreenHeight());
+
         String userEmail = request.getSemicolonEmail().replaceAll("\"", "");
         String newHeight = request.getScreenHeight().replaceAll("\"", "");
         String newWidth = request.getScreenWidth().replaceAll("\"", "");
