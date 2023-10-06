@@ -11,6 +11,7 @@ import lombok.*;
 public class AttendanceRequest {
     private String jwtToken;
     private String ipAddress;
+    private String ipAddressConcat;
     private String semicolonEmail;
     private String screenWidth;
     private String screenHeight;

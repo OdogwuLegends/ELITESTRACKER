@@ -25,4 +25,10 @@ public interface AttendanceRepository extends JpaRepository<Attendance,Long> {
     Optional<Attendance> findByCohort(String cohort);
     Optional<Attendance> findByUser(EliteUser eliteUser);
 
+    @Query("SELECT a FROM attendance a WHERE a.ipAddressConcat = :ipAddress AND a.dateTaken = :dateTaken")
+    Optional<Attendance> findByIpAddressConcatAndDateTaken(
+            @Param("ipAddress") String ipAddressConcat,
+            @Param("dateTaken") String dateTaken
+    );
+
 }

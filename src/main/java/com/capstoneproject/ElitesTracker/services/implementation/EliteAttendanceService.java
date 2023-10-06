@@ -49,7 +49,8 @@ public class EliteAttendanceService implements AttendanceService {
 
         AttendanceResponse response = new AttendanceResponse();
 //        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(request.getIpAddress());
-        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddressAndDateTaken(request.getIpAddress(),getCurrentDateForAttendance());
+//        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddressAndDateTaken(request.getIpAddress(),getCurrentDateForAttendance());
+        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddressConcatAndDateTaken(request.getIpAddressConcat(),getCurrentDateForAttendance());
 
         if((foundAttendance.isPresent())){
             throw new AttendanceAlreadyTakenException(ATTENDANCE_ALREADY_TAKEN_EXCEPTION.getMessage());
@@ -149,6 +150,7 @@ public class EliteAttendanceService implements AttendanceService {
         Attendance newAttendance = new Attendance();
         newAttendance.setStatus(PRESENT);
         newAttendance.setIpAddress(request.getIpAddress());
+        newAttendance.setIpAddressConcat(request.getIpAddressConcat());
         newAttendance.setUser(eliteUser);
         newAttendance.setCohort(eliteUser.getCohort());
         attendanceRepository.save(newAttendance);
