@@ -39,13 +39,13 @@ public class EliteAttendanceService implements AttendanceService {
             throw new NoInternetException(NETWORK_ERROR_EXCEPTION.getMessage());
         }
 
-        if(!subStringRealIp(request.getIpAddress()).equals(REAL_BASE_IP_ADDRESS)){
-            throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
-        }
-
-//        if(!subStringRealIp(request.getIpAddress()).equals(PERSONAL_BASE_IP_ADDRESS)){
+//        if(!subStringRealIp(request.getIpAddress()).equals(REAL_BASE_IP_ADDRESS)){
 //            throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
 //        }
+
+        if(!subStringRealIp(request.getIpAddress()).equals(PERSONAL_BASE_IP_ADDRESS)){
+            throw new DifferentWifiNetworkException(DIFFERENT_NETWORK_EXCEPTION.getMessage());
+        }
 
         AttendanceResponse response = new AttendanceResponse();
 //        Optional<Attendance> foundAttendance =  attendanceRepository.findByIpAddress(request.getIpAddress());
