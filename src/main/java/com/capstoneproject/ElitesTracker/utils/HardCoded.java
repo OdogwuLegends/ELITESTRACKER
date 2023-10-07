@@ -11,6 +11,7 @@ public class HardCoded {
     public static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
     public static final String TIME_FORMAT_FOR_ATTENDANCE = "HH:mm:ss";
     public static final String DATE_FORMAT_FOR_ATTENDANCE = "dd/MM/yyyy";
+    public static final String DATE_FORMAT_TO_COMPARE_ATTENDANCE = "MM/dd/yyyy";
     public static final String DATE_FORMAT = "dd/MM/yyyy";
     public static final String TIME_FORMAT = "HH:mm";
     public static final String EMPTY_STRING = "";
@@ -65,6 +66,7 @@ public class HardCoded {
     public static final String INVALID_AUTHORIZATION_HEADER = "Invalid or missing Authorization header";
     public static final String VERIFICATION_FAILED = "JWT verification failed";
     public static final String NETWORK_ERROR = "Network Error";
+    public static final String WRONG_DATE_ERROR = "If you try this again, you will submit your laptop!";
     public static final String EMAIL_SENT_SUCCESSFULLY = "Email sent successfully";
     public static final String PASSWORD_RESET_SUCCESSFUL = "Password reset successful";
 }

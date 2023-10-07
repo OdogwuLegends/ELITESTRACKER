@@ -107,7 +107,7 @@ class EliteAttendanceServiceTest {
         eliteUserService.setAttendancePermissionForNative(disableInemPermission());
 
         EliteUser foundUser = eliteUserService.findUserByEmail("i.udousoro@native.semicolon.africa");
-        assertThrows(NotPermittedForAttendanceException.class,()-> eliteAttendanceService.saveAttendanceTest(inemAttendance(),"172.16.0.73",foundUser));
+        assertThrows(NotPermittedException.class,()-> eliteAttendanceService.saveAttendanceTest(inemAttendance(),"172.16.0.73",foundUser));
     }
     @Test
     void nativeCannotTakeAttendanceIfTimeLimitNotSetByAdmin(){

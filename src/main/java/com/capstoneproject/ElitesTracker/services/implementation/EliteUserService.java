@@ -151,10 +151,19 @@ public class EliteUserService implements UserService {
 //        checkForAdmin(request);
 //        String verifiedToken = retrieveAndVerifyJwtToken(httpServletRequest);
 //        String userEmail = extractEmailFromToken(verifiedToken);
+        String deviceId = "";
+        try {
+            deviceId = getDeviceId(request.getFiftyOneDegrees());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        log.info("Screen Width {}", request.getScreenWidth());
-        log.info("Screen Height {}", request.getScreenHeight());
-        log.info("IP Address {}", request.getIpAddress());
+        log.info("Device ID {}", deviceId);
+        log.info("Date {}", request.getAttendanceDate());
+
+//        log.info("Screen Width {}", request.getScreenWidth());
+//        log.info("Screen Height {}", request.getScreenHeight());
+//        log.info("IP Address {}", request.getIpAddress());
 
         String userEmail = request.getSemicolonEmail().replaceAll("\"", "");
         String newHeight = request.getScreenHeight().replaceAll("\"", "");

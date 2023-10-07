@@ -2,6 +2,10 @@ package com.capstoneproject.ElitesTracker.utils;
 
 import com.capstoneproject.ElitesTracker.exceptions.EntityDoesNotExistException;
 import com.capstoneproject.ElitesTracker.exceptions.NoAttendanceOnWeekendsException;
+import fiftyone.devicedetection.DeviceDetectionPipelineBuilder;
+import fiftyone.devicedetection.shared.DeviceData;
+import fiftyone.pipeline.core.data.FlowData;
+import fiftyone.pipeline.core.flowelements.Pipeline;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
@@ -44,6 +48,11 @@ public class AppUtil {
     public static String getCurrentDateForAttendance() {
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_FOR_ATTENDANCE);
+        return currentTime.format(formatter);
+    }
+    public static String getCurrentDateToCompareAttendanceObject() {
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_TO_COMPARE_ATTENDANCE);
         return currentTime.format(formatter);
     }
     public static String stringDateToString(String userInput) {
@@ -317,4 +326,39 @@ public class AppUtil {
 //        in.close();
 //        return macAddress;
 //    }
+
+    public static String getDeviceId(String resource) throws Exception {
+        // create a minimal pipeline to access the cloud engine
+        // you only need one pipeline for multiple requests
+        // use try-with-resources to free the pipeline when done
+
+        String deviceId = "";
+        try (Pipeline pipeline = new DeviceDetectionPipelineBuilder()
+                .useCloud(resource)
+                .build()) {
+            /* get a flow data from the singleton pipeline for each detection */
+            // it's important to free the flowData when done
+            try (FlowData data = pipeline.createFlowData()) {
+                // add user-agent and client hint headers (if any) from the HTTP request
+                data.addEvidence("header.user-agent",
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+                                "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                                "Chrome/98.0.4758.102 Safari/537.36");
+                data.addEvidence("header.sec-ch-ua-mobile", "?0");
+                data.addEvidence("header.sec-ch-ua",
+                        "\" Not A; Brand\";v=\"99\", \"Chromium\";v=\"98\", " +
+                                "\"Google Chrome\";v=\"98\"");
+                data.addEvidence("header.sec-ch-ua-platform", "\"Windows\"");
+                data.addEvidence("header.sec-ch-ua-platform-version", "\"14.0.0\"");
+                // process evidence
+                data.process();
+                // get the results
+                DeviceData device = data.get(DeviceData.class);
+                System.out.println("device.DeviceId: " + device.getDeviceId().getValue());
+                deviceId = device.getDeviceId().getValue();
+            }
+        }
+
+        return deviceId;
+    }
 }

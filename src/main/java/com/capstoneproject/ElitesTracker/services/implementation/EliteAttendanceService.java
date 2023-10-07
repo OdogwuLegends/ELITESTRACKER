@@ -33,10 +33,13 @@ public class EliteAttendanceService implements AttendanceService {
 
     @Override
     public AttendanceResponse saveAttendance(AttendanceRequest request, EliteUser eliteUser) {
-        noAttendanceOnWeekendsCheck();
+//        noAttendanceOnWeekendsCheck();
 
-        if(request.getIpAddress() == null || request.getIpAddress().equals("")){
+        if(request.getIpAddress() == null || request.getIpAddress().equals(EMPTY_STRING)){
             throw new NoInternetException(NETWORK_ERROR_EXCEPTION.getMessage());
+        }
+        if(!request.getAttendanceDate().equals(getCurrentDateToCompareAttendanceObject())){
+            throw new NotPermittedException(WRONG_DATE_FOR_ATTENDANCE_EXCEPTION.getMessage());
         }
 
 //        if(!subStringRealIp(request.getIpAddress()).equals(REAL_BASE_IP_ADDRESS)){
@@ -57,7 +60,7 @@ public class EliteAttendanceService implements AttendanceService {
         } else if (isAnotherDevice(request,eliteUser)) {
             throw new NotSameDeviceException(DIFFERENT_DEVICE_EXCEPTION.getMessage());
         } else if (eliteUser.getPermission().equals(DISABLED)) {
-            throw new NotPermittedForAttendanceException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
+            throw new NotPermittedException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
         } else{
             checkTimeFrameAndBuildAttendance(eliteUser, response, request);
         }
@@ -81,7 +84,7 @@ public class EliteAttendanceService implements AttendanceService {
         } else if (isAnotherDevice(request,eliteUser)) {
             throw new NotSameDeviceException(DIFFERENT_DEVICE_EXCEPTION.getMessage());
         } else if (eliteUser.getPermission().equals(DISABLED)) {
-            throw new NotPermittedForAttendanceException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
+            throw new NotPermittedException(NATIVE_NOT_PERMITTED_FOR_ATTENDANCE_EXCEPTION.getMessage());
         } else{
             checkTimeFrameAndBuildAttendance(eliteUser, response, request);
         }

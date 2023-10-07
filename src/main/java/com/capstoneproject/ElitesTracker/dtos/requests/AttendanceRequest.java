@@ -15,4 +15,6 @@ public class AttendanceRequest {
     private String semicolonEmail;
     private String screenWidth;
     private String screenHeight;
+    private String attendanceDate;
+    private String fiftyOneDegrees;
 }
