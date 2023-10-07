@@ -159,7 +159,8 @@ public class EliteUserService implements UserService {
         }
 
         log.info("Device ID {}", deviceId);
-        log.info("Date {}", request.getAttendanceDate());
+        log.info("Object Date {} length{}", request.getAttendanceDate(), request.getAttendanceDate().length());
+        log.info("Current Date {} length{}", getCurrentDateToCompareAttendanceObject(), getCurrentDateToCompareAttendanceObject().length());
 
 //        log.info("Screen Width {}", request.getScreenWidth());
 //        log.info("Screen Height {}", request.getScreenHeight());

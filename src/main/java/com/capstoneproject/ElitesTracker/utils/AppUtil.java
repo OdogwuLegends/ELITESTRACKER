@@ -354,7 +354,7 @@ public class AppUtil {
                 data.process();
                 // get the results
                 DeviceData device = data.get(DeviceData.class);
-                System.out.println("device.DeviceId: " + device.getDeviceId().getValue());
+//                System.out.println("device.DeviceId: " + device.getDeviceId().getValue());
                 deviceId = device.getDeviceId().getValue();
             }
         }
