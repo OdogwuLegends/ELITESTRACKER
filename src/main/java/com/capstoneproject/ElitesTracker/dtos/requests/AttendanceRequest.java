@@ -3,11 +3,13 @@ package com.capstoneproject.ElitesTracker.dtos.requests;
 import com.capstoneproject.ElitesTracker.enums.AttendanceStatus;
 import lombok.*;
 
-@Setter
 @Getter
+@Setter
 @Builder
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class AttendanceRequest {
     private String jwtToken;
     private String ipAddress;
