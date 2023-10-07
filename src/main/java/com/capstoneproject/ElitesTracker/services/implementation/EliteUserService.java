@@ -188,6 +188,8 @@ public class EliteUserService implements UserService {
 
     @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request) {
+        log.info("Start Date {}",request.getStartDate());
+        log.info("End Date {}",request.getEndDate());
         EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
         return searchService.searchAttendanceReportForSelf(request, foundUser);
     }
