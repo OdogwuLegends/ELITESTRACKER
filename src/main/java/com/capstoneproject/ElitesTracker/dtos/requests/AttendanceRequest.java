@@ -9,7 +9,6 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class AttendanceRequest {
     private String jwtToken;
     private String ipAddress;
