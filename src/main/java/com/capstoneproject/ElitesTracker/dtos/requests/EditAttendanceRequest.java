@@ -1,14 +1,13 @@
 package com.capstoneproject.ElitesTracker.dtos.requests;
 
 import com.capstoneproject.ElitesTracker.enums.AttendanceStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@ToString
+@NoArgsConstructor
 @AllArgsConstructor
 public class EditAttendanceRequest {
     private String nativeSemicolonEmail;

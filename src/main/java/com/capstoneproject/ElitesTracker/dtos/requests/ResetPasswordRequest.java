@@ -4,9 +4,10 @@ import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
+@Builder
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResetPasswordRequest {
     private String semicolonEmail;
     private String newPassword;
