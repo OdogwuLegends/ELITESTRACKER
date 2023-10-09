@@ -349,7 +349,7 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request) {
-        log.info("Admin Email {}, length {}", request.getAdminSemicolonEmail(), request.getAdminSemicolonEmail().length());
+        log.info("Native Email {} length {}", request.getNativeSemicolonEmail(), request.getNativeSemicolonEmail().length());
         EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
 //        checkForSubAdminPrivilege(foundAdmin);
 
@@ -359,12 +359,15 @@ public class EliteUserService implements UserService {
                 .build();
         loginUser(loginRequest);
 //        passwordEncoder.matches(foundAdmin.getPassword(),request.getAdminPassword());
-        EliteUser foundNative = findUserByEmail(request.getNativeSemicolonEmail());
+        String userEmail = request.getNativeSemicolonEmail().replaceAll("\"", "");
+
+        EliteUser foundNative = findUserByEmail(userEmail);
         foundNative.setScreenWidth(request.getScreenWidth());
         foundNative.setScreenHeight(request.getScreenHeight());
         eliteUserRepository.save(foundNative);
         return ResetDeviceResponse.builder().message(DEVICE_RESET_MESSAGE).build();
     }
+
 
     @Override
 //    @Scheduled(cron = "0 0 18 ? * MON-FRI")
