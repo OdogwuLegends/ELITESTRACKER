@@ -91,7 +91,13 @@ public class EliteSearchService implements SearchService {
 
         for (int i = 0; i < attendanceList.size(); i++) {
             if ((foundUser.getCohort().equals(attendanceList.get(i).getUser().getCohort()))) {
-                if((startDate.equals(subStringDate(attendanceList.get(i).getDateTaken()))) || (endDate.equals(subStringDate(attendanceList.get(i).getDateTaken())))){
+                boolean isValidRange = (stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).equals(stringToLocalDate(startDate))
+                        || stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).isAfter(stringToLocalDate(startDate)))
+                        && (stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).equals(stringToLocalDate(endDate))
+                        || stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).isBefore(stringToLocalDate(endDate)));
+
+
+                if(isValidRange){
                     AttendanceSheetResponse foundReport = AttendanceSheetResponse.builder()
                             .serialNumber(String.valueOf(i + 1))
                             .firstName(attendanceList.get(i).getUser().getFirstName())
