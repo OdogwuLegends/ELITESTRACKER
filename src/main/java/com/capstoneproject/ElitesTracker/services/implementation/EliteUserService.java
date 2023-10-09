@@ -163,16 +163,12 @@ public class EliteUserService implements UserService {
         log.info("Object Date {} length{}", request.getAttendanceDate(), request.getAttendanceDate().length());
         log.info("Current Date {} length{}", getCurrentDateToCompareAttendanceObject(), getCurrentDateToCompareAttendanceObject().length());
 
-//        log.info("Screen Width {}", request.getScreenWidth());
-//        log.info("Screen Height {}", request.getScreenHeight());
-//        log.info("IP Address {}", request.getIpAddress());
-
         String userEmail = request.getSemicolonEmail().replaceAll("\"", "");
-        String newHeight = request.getScreenHeight().replaceAll("\"", "");
-        String newWidth = request.getScreenWidth().replaceAll("\"", "");
-
-        request.setScreenHeight(newHeight);
-        request.setScreenWidth(newWidth);
+//        String newHeight = request.getScreenHeight().replaceAll("\"", "");
+//        String newWidth = request.getScreenWidth().replaceAll("\"", "");
+//
+//        request.setScreenHeight(newHeight);
+//        request.setScreenWidth(newWidth);
 
         EliteUser foundUser = findUserByEmail(userEmail);
 
