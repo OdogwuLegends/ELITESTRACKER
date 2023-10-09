@@ -46,20 +46,8 @@ public class EliteSearchService implements SearchService {
         List<AttendanceSheetResponse> attendanceSheet = new ArrayList<>();
 
         for (int i = 0; i < attendanceList.size(); i++) {
-            boolean isMatch = (startDate.equals(subStringDate(attendanceList.get(i).getDateTaken())))
-                                || (endDate.equals(subStringDate(attendanceList.get(i).getDateTaken())))
-                                &&(request.getCohort().equals(attendanceList.get(i).getCohort()));
-            if(isMatch){
-                AttendanceSheetResponse foundReport = AttendanceSheetResponse.builder()
-                        .serialNumber(String.valueOf(i + 1))
-                        .firstName(attendanceList.get(i).getUser().getFirstName())
-                        .lastName(attendanceList.get(i).getUser().getLastName())
-                        .cohort(attendanceList.get(i).getCohort())
-                        .attendanceStatus(attendanceList.get(i).getStatus().toString())
-                        .date(attendanceList.get(i).getDateTaken())
-                        .build();
-                attendanceSheet.add(foundReport);
-            }
+            boolean isMatch = isValidRange(attendanceList, startDate, endDate, i) && (request.getCohort().equals(attendanceList.get(i).getCohort()));
+            buildAttendanceReport(attendanceList, attendanceSheet, i, isMatch);
         }
 
         if(attendanceSheet.isEmpty()){
@@ -91,26 +79,32 @@ public class EliteSearchService implements SearchService {
 
         for (int i = 0; i < attendanceList.size(); i++) {
             if ((foundUser.getCohort().equals(attendanceList.get(i).getUser().getCohort()))) {
-                boolean isValidRange = (stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).equals(stringToLocalDate(startDate))
-                        || stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).isAfter(stringToLocalDate(startDate)))
-                        && (stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).equals(stringToLocalDate(endDate))
-                        || stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).isBefore(stringToLocalDate(endDate)));
-
-
-                if(isValidRange){
-                    AttendanceSheetResponse foundReport = AttendanceSheetResponse.builder()
-                            .serialNumber(String.valueOf(i + 1))
-                            .firstName(attendanceList.get(i).getUser().getFirstName())
-                            .lastName(attendanceList.get(i).getUser().getLastName())
-                            .cohort(attendanceList.get(i).getCohort())
-                            .attendanceStatus(attendanceList.get(i).getStatus().toString())
-                            .date(attendanceList.get(i).getDateTaken())
-                            .build();
-                    attendanceSheet.add(foundReport);
-                }
+                boolean isMatch = isValidRange(attendanceList, startDate, endDate, i);
+                buildAttendanceReport(attendanceList, attendanceSheet, i, isMatch);
             }
 
         }
         return attendanceSheet;
+    }
+
+    private static void buildAttendanceReport(List<Attendance> attendanceList, List<AttendanceSheetResponse> attendanceSheet, int i, boolean isMatch) {
+        if(isMatch){
+            AttendanceSheetResponse foundReport = AttendanceSheetResponse.builder()
+                    .serialNumber(String.valueOf(i + 1))
+                    .firstName(attendanceList.get(i).getUser().getFirstName())
+                    .lastName(attendanceList.get(i).getUser().getLastName())
+                    .cohort(attendanceList.get(i).getCohort())
+                    .attendanceStatus(attendanceList.get(i).getStatus().toString())
+                    .date(attendanceList.get(i).getDateTaken())
+                    .build();
+            attendanceSheet.add(foundReport);
+        }
+    }
+
+    private static boolean isValidRange(List<Attendance> attendanceList, String startDate, String endDate, int i) {
+        return  (stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).equals(stringToLocalDate(startDate))
+                || stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).isAfter(stringToLocalDate(startDate)))
+                && (stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).equals(stringToLocalDate(endDate))
+                || stringToLocalDate(subStringDate(attendanceList.get(i).getDateTaken())).isBefore(stringToLocalDate(endDate)));
     }
 }
