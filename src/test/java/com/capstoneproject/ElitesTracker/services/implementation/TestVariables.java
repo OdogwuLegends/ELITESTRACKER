@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.DISABLED;
 import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.PRESENT;
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.localDateToString;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
 
 public class TestVariables {
 
@@ -109,6 +109,42 @@ public class TestVariables {
                 .semicolonEmail("f.chiemela@native.semicolon.africa")
                 .password("newPassword")
                 .scv("scv15012")
+                .screenWidth("550")
+                .screenHeight("100")
+                .build();
+    }
+    public static UserRegistrationRequest buildMalikReg(){
+        return UserRegistrationRequest.builder()
+                .semicolonEmail("a.alhaji@native.semicolon.africa")
+                .password("newPassword")
+                .scv("scv15017")
+                .screenWidth("550")
+                .screenHeight("100")
+                .build();
+    }
+    public static UserRegistrationRequest buildTimiReg(){
+        return UserRegistrationRequest.builder()
+                .semicolonEmail("t.leyin@native.semicolon.africa")
+                .password("newPassword")
+                .scv("scv15018")
+                .screenWidth("550")
+                .screenHeight("100")
+                .build();
+    }
+    public static UserRegistrationRequest buildOlaReg(){
+        return UserRegistrationRequest.builder()
+                .semicolonEmail("o.milekan@native.semicolon.africa")
+                .password("newPassword")
+                .scv("scv15019")
+                .screenWidth("550")
+                .screenHeight("100")
+                .build();
+    }
+    public static UserRegistrationRequest buildBolajiReg(){
+        return UserRegistrationRequest.builder()
+                .semicolonEmail("b.jibowu@native.semicolon.africa")
+                .password("newPassword")
+                .scv("scv15020")
                 .screenWidth("550")
                 .screenHeight("100")
                 .build();
@@ -391,6 +427,42 @@ public class TestVariables {
                 .semicolonID("SCV15016")
                 .build();
     }
+    public static AddNativeRequest buildMalik(){
+        return AddNativeRequest.builder()
+                .firstName("Amaleek")
+                .lastName("Alhaji")
+                .cohort("15")
+                .semicolonEmail("a.alhaji@native.semicolon.africa")
+                .semicolonID("SCV15017")
+                .build();
+    }
+    public static AddNativeRequest buildTimi(){
+        return AddNativeRequest.builder()
+                .firstName("Timi")
+                .lastName("Leyin")
+                .cohort("15")
+                .semicolonEmail("t.leyin@native.semicolon.africa")
+                .semicolonID("SCV15018")
+                .build();
+    }
+    public static AddNativeRequest buildOla(){
+        return AddNativeRequest.builder()
+                .firstName("Ola")
+                .lastName("Milekan")
+                .cohort("15")
+                .semicolonEmail("o.milekan@native.semicolon.africa")
+                .semicolonID("SCV15019")
+                .build();
+    }
+    public static AddNativeRequest buildBolaji(){
+        return AddNativeRequest.builder()
+                .firstName("Bolaji")
+                .lastName("Jibowu")
+                .cohort("15")
+                .semicolonEmail("b.jibowu@native.semicolon.africa")
+                .semicolonID("SCV15020")
+                .build();
+    }
     public static AddNativeRequest buildFirstBoy(){
         return AddNativeRequest.builder()
                 .firstName("Boy")
@@ -481,6 +553,14 @@ public class TestVariables {
                 .endMinute(59)
                 .build();
     }
+    public static SetTimeRequest setTimeFrameForTardyAttendance() {
+        return SetTimeRequest.builder()
+                .startHour(1)
+                .startMinute(0)
+                .endHour(6)
+                .endMinute(0)
+                .build();
+    }
     public static SearchRequest buildKinzySearchRequest(){
         return SearchRequest.builder()
                 .startDate(localDateToString(LocalDate.now()))
@@ -557,6 +637,7 @@ public class TestVariables {
                 .semicolonEmail("l.odogwu@native.semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
+                .attendanceDate(getCurrentDateForAttendance())
                 .build();
     }
     public static AttendanceRequest coutinhoAttendance(){
@@ -571,6 +652,62 @@ public class TestVariables {
                 .semicolonEmail("c.ugbo@native.semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
+                .ipAddressConcat("172.16.0.71av30os4683bsFg45")
+                .attendanceDate(getCurrentDateForAttendance())
+                .build();
+    }
+    public static AttendanceRequest jideAttendance(){
+        return AttendanceRequest.builder()
+                .semicolonEmail("b.farinde@native.semicolon.africa")
+                .screenWidth("550")
+                .screenHeight("100")
+                .ipAddressConcat("172.16.0.76av30os4683bsFg45")
+                .attendanceDate(getCurrentDateForAttendance())
+                .build();
+    }
+    public static AttendanceRequest oluchiAttendance(){
+        return AttendanceRequest.builder()
+                .semicolonEmail("o.duru@native.semicolon.africa")
+                .screenWidth("550")
+                .ipAddressConcat("172.16.0.76av30os4683bsFg45")
+                .attendanceDate(getCurrentDateForAttendance())
+                .screenHeight("100")
+                .build();
+    }
+    public static AttendanceRequest kinzyAttendance(){
+        return AttendanceRequest.builder()
+                .semicolonEmail("s.lawal@native.semicolon.africa")
+                .screenWidth("550")
+                .screenHeight("100")
+                .ipAddressConcat("172.16.0.77av30os4683bsFg45")
+                .attendanceDate("04/10/2023")
+                .build();
+    }
+    public static AttendanceRequest malikAttendance(){
+        return AttendanceRequest.builder()
+                .semicolonEmail("a.alhaji@native.semicolon.africa")
+                .screenWidth("550")
+                .screenHeight("100")
+                .ipAddressConcat("172.16.0.78av30os4683bsFg45")
+                .attendanceDate("15/10/2023") //this was done on 08/10/2023
+                .build();
+    }
+    public static AttendanceRequest timiAttendance(){
+        return AttendanceRequest.builder()
+                .semicolonEmail("t.leyin@native.semicolon.africa")
+                .screenWidth("550")
+                .screenHeight("100")
+                .ipAddressConcat("172.16.0.79av30os4683bsFg45")
+                .attendanceDate(getCurrentDateForAttendance())
+                .build();
+    }
+    public static AttendanceRequest bolajiAttendance(){
+        return AttendanceRequest.builder()
+                .semicolonEmail("b.jibowu@native.semicolon.africa")
+                .screenWidth("550")
+                .screenHeight("100")
+                .ipAddressConcat("172.16.0.80av30os4683bsFg45")
+                .attendanceDate(getCurrentDateForAttendance())
                 .build();
     }
     public static AttendanceRequest blackAttendance(){
@@ -578,6 +715,7 @@ public class TestVariables {
                 .semicolonEmail("f.chiemela@native.semicolon.africa")
                 .screenWidth("1250")
                 .screenHeight("147")
+                .attendanceDate(getCurrentDateForAttendance())
                 .build();
     }
     public static AttendanceRequest inemAttendance(){
@@ -585,6 +723,7 @@ public class TestVariables {
                 .semicolonEmail("i.udousoro@native.semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
+                .attendanceDate(getCurrentDateForAttendance())
                 .build();
     }
     public static AttendanceRequest whiteAttendance(){
@@ -592,6 +731,7 @@ public class TestVariables {
                 .semicolonEmail("f.nwadike@native.semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
+                .attendanceDate(getCurrentDateForAttendance())
                 .build();
     }
     public static AttendanceRequest nedAttendance(){
@@ -599,6 +739,7 @@ public class TestVariables {
                 .semicolonEmail("b.osisiogu@native.semicolon.africa")
                 .screenWidth("550")
                 .screenHeight("100")
+                .attendanceDate(getCurrentDateForAttendance())
                 .build();
     }
 }

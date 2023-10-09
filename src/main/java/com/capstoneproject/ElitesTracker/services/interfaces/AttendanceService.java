@@ -14,4 +14,5 @@ public interface AttendanceService {
     AttendanceResponse saveAttendanceTest(AttendanceRequest request, String Ip, EliteUser eliteUser);
     AttendanceResponse editAttendanceStatus(EditAttendanceRequest request, EliteUser foundUser);
     List<Attendance> findAllAttendances();
+    AttendanceResponse setToAbsent(List<EliteUser> allNatives);
 }

@@ -23,5 +23,6 @@ public class ApiValues {
     public static final String SET_ATTENDANCE_PERMISSION_FOR_COHORT = "/setAttendancePermitForCohort";
     public static final String GENERATE_ATTENDANCE_REPORT_FOR_NATIVE = "/generateAttendanceForNative";
     public static final String GENERATE_ATTENDANCE_REPORT_FOR_COHORT = "/generateAttendanceForCohort";
+    public static final String SET_TO_ABSENT = "/setToAbsent";
 
 }

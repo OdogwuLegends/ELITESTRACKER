@@ -137,7 +137,7 @@ class EliteUserServiceTest {
 
         AttendanceResponse attendanceResponse = eliteUserService.takeAttendanceTest(chiboyAttendanceDetails(),"172.16.0.70");
         assertNotNull(attendanceResponse);
-        assertEquals(attendanceMessage("CHINEDU"),attendanceResponse.getMessage());
+        assertEquals(normalAttendanceMessage("CHINEDU"),attendanceResponse.getMessage());
     }
     @Test
     void adminCannotTakeAttendance(){

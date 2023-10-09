@@ -19,7 +19,8 @@ public class HardCoded {
     public static final String WELCOME_MESSAGE = "Welcome %s, Registration successful!";
     public static final String SAVED_NATIVE_MSG = "%s %s saved to Cohort %s successfully!";
     public static final String SAVED_ADMIN_MSG = "%s %s saved successfully!";
-    public static final String ATTENDANCE_MESSAGE = "Hi %s, Attendance taken. Enjoy today's lectures!";
+    public static final String NORMAL_ATTENDANCE_MESSAGE = "Hi %s, Attendance taken. Enjoy today's lectures!";
+    public static final String TARDY_ATTENDANCE_MESSAGE = "Hi %s, Attendance taken. But your are late today!";
     public static final String SATURDAY = "SATURDAY";
     public static final String SUNDAY = "SUNDAY";
     public static final String NATIVE_DOES_NOT_EXIST = "Native does not exist";
@@ -69,4 +70,5 @@ public class HardCoded {
     public static final String WRONG_DATE_ERROR = "If you try this again, you will submit your laptop!";
     public static final String EMAIL_SENT_SUCCESSFULLY = "Email sent successfully";
     public static final String PASSWORD_RESET_SUCCESSFUL = "Password reset successful";
+    public static final String EXECUTION_COMPLETED = "Execution Completed";
 }

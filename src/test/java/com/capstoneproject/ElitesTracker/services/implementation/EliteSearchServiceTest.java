@@ -17,7 +17,7 @@ import java.util.List;
 
 import static com.capstoneproject.ElitesTracker.services.implementation.TestVariables.*;
 import static com.capstoneproject.ElitesTracker.services.implementation.TestVariables.legendAttendance;
-import static com.capstoneproject.ElitesTracker.utils.AppUtil.attendanceMessage;
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.normalAttendanceMessage;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.localDateToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,7 +49,7 @@ class EliteSearchServiceTest {
         EliteUser foundUser = eliteUserService.findUserByEmail("l.odogwu@native.semicolon.africa");
         AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(legendAttendance(),"172.16.0.70",foundUser);
         assertNotNull(attendanceResponse);
-        assertEquals(attendanceMessage(foundUser.getFirstName()),attendanceResponse.getMessage());
+        assertEquals(normalAttendanceMessage(foundUser.getFirstName()),attendanceResponse.getMessage());
 
         List<AttendanceSheetResponse> attendanceLog = eliteSearchService.searchAttendanceReportForSelf(legendAttendanceReport(),foundUser);
         assertThat(attendanceLog).isNotNull();
@@ -68,7 +68,7 @@ class EliteSearchServiceTest {
         EliteUser foundUser = eliteUserService.findUserByEmail("c.ugbo@native.semicolon.africa");
         AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(chiboyAttendance(),"172.16.0.71",foundUser);
         assertNotNull(attendanceResponse);
-        assertEquals(attendanceMessage(foundUser.getFirstName()),attendanceResponse.getMessage());
+        assertEquals(normalAttendanceMessage(foundUser.getFirstName()),attendanceResponse.getMessage());
 
         List<AttendanceSheetResponse> attendanceLog = eliteSearchService.searchAttendanceReportForSelf(chiboyAttendanceReport(),foundUser);
         assertThat(attendanceLog).isNotNull();
@@ -91,12 +91,12 @@ class EliteSearchServiceTest {
         EliteUser firstUser = eliteUserService.findUserByEmail("d.coutinho@native.semicolon.africa");
         AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(coutinhoAttendance(),"172.16.0.72",firstUser);
         assertNotNull(attendanceResponse);
-        assertEquals(attendanceMessage(firstUser.getFirstName()),attendanceResponse.getMessage());
+        assertEquals(normalAttendanceMessage(firstUser.getFirstName()),attendanceResponse.getMessage());
 
         EliteUser secondUser = eliteUserService.findUserByEmail("b.osisiogu@native.semicolon.africa");
         attendanceResponse = eliteAttendanceService.saveAttendanceTest(nedAttendance(),"172.16.0.73",secondUser);
         assertNotNull(attendanceResponse);
-        assertEquals(attendanceMessage(secondUser.getFirstName()),attendanceResponse.getMessage());
+        assertEquals(normalAttendanceMessage(secondUser.getFirstName()),attendanceResponse.getMessage());
 
         List<AttendanceSheetResponse> attendanceLog = eliteSearchService.searchAttendanceReportForCohort(cohort15AttendanceReport());
         assertThat(attendanceLog).isNotNull();

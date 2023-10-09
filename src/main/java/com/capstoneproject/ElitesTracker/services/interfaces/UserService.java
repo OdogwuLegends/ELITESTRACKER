@@ -22,10 +22,12 @@ public interface UserService {
     List<AttendanceSheetResponse> generateAttendanceReportForNative(SearchRequest request);
     List<AttendanceSheetResponse> generateAttendanceReportForCohort(SearchRequest request);
     List<EliteUser> findAllNativesInACohort(String cohort);
+    List<EliteUser> findAllNatives();
     PermissionForAttendanceResponse setAttendancePermissionForNative(PermissionForAttendanceRequest request);
     PermissionForAttendanceResponse setAttendancePermitForCohort(PermissionForAttendanceRequest request);
     DeleteResponse removeNative(DeleteRequest request);
     DeleteResponse removeAdmin(DeleteRequest request);
     DeleteResponse removeCohort(DeleteRequest request);
     ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request);
+    void setToAbsent();
 }

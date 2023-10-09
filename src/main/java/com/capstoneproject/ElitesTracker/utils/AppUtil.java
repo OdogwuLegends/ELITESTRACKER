@@ -136,8 +136,11 @@ public class AppUtil {
     public static String savedAdminMessage(String firstName, String lastName){
         return String.format(SAVED_ADMIN_MSG, firstName, lastName);
     }
-    public static String attendanceMessage(String firstName){
-        return String.format(ATTENDANCE_MESSAGE,firstName);
+    public static String normalAttendanceMessage(String firstName){
+        return String.format(NORMAL_ATTENDANCE_MESSAGE,firstName);
+    }
+    public static String tardyAttendanceMessage(String firstName){
+        return String.format(TARDY_ATTENDANCE_MESSAGE,firstName);
     }
     public static void noAttendanceOnWeekendsCheck(){
         String today = getCurrentDayOfWeek();

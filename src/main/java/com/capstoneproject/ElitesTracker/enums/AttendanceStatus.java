@@ -2,5 +2,6 @@ package com.capstoneproject.ElitesTracker.enums;
 
 public enum AttendanceStatus {
     PRESENT,
-    ABSENT
+    ABSENT,
+    TARDY
 }

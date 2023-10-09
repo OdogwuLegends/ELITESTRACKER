@@ -88,4 +88,9 @@ public class AdminController {
         List<AttendanceSheetResponse> attendanceSheet = userService.generateAttendanceReportForCohort(request);
         return ResponseEntity.ok().body(attendanceSheet);
     }
+//    @PostMapping(SET_TO_ABSENT)
+//    public ResponseEntity<?> setToAbsent(){
+//        userService.setToAbsent();
+//        return ResponseEntity.ok(?);
+//    }
 }

@@ -25,6 +25,7 @@ import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -281,6 +282,18 @@ public class EliteUserService implements UserService {
         return cohortList;
     }
     @Override
+    public List<EliteUser> findAllNatives(){
+        List<EliteUser> allUsers = eliteUserRepository.findAll();
+        List<EliteUser> allNatives = new ArrayList<>();
+
+        for(EliteUser user : allUsers){
+            if(user.getRole().equals(NATIVE)){
+                allNatives.add(user);
+            }
+        }
+        return allNatives;
+    }
+    @Override
     public DeleteResponse removeNative(DeleteRequest request) {
 //        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
 //        checkForSuperAdminPrivilege(foundAdmin);
@@ -336,6 +349,7 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request) {
+        log.info("Admin Email {}, length {}", request.getAdminSemicolonEmail(), request.getAdminSemicolonEmail().length());
         EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
 //        checkForSubAdminPrivilege(foundAdmin);
 
@@ -350,6 +364,12 @@ public class EliteUserService implements UserService {
         foundNative.setScreenHeight(request.getScreenHeight());
         eliteUserRepository.save(foundNative);
         return ResetDeviceResponse.builder().message(DEVICE_RESET_MESSAGE).build();
+    }
+
+    @Override
+//    @Scheduled(cron = "0 0 18 ? * MON-FRI")
+    public void setToAbsent() {
+        attendanceService.setToAbsent(findAllNatives());
     }
 
     private void checkIfAdminOrNative(UserRegistrationRequest request, UserRegistrationResponse response) throws EntityDoesNotExistException {
