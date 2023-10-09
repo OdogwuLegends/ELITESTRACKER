@@ -197,7 +197,9 @@ public class EliteUserService implements UserService {
         request.setStartDate(startDate);
         request.setEndDate(endDate);
 
-        EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
+        String userEmail = request.getNativeSemicolonEmail().replaceAll("\"", "");
+
+        EliteUser foundUser = findUserByEmail(userEmail);
         return searchService.searchAttendanceReportForSelf(request, foundUser);
     }
 
