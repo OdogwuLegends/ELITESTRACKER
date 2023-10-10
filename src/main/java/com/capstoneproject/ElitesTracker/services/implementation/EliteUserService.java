@@ -381,7 +381,7 @@ public class EliteUserService implements UserService {
 
 
     @Override
-//    @Scheduled(cron = "0 0 18 ? * MON-FRI")
+    @Scheduled(cron = "0 0 18 ? * MON-FRI")
     public void setToAbsent() {
         attendanceService.setToAbsent(findAllNatives());
     }

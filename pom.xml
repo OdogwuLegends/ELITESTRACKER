@@ -77,11 +77,16 @@
 			<artifactId>device-detection</artifactId>
 			<version>[4.4.46,)</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>com.51degrees</groupId>-->
-<!--			<artifactId>device-detection</artifactId>-->
-<!--			<version>4.4.55</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.51degrees</groupId>
+			<artifactId>pipeline.web</artifactId>
+			<version>4.4.23</version>
+		</dependency>
+		<dependency>
+			<groupId>com.51degrees</groupId>
+			<artifactId>device-detection</artifactId>
+			<version>4.4.55</version>
+		</dependency>
 
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.boot</groupId>-->
