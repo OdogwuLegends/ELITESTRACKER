@@ -116,7 +116,10 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetPasswordResponse sendEmailForPasswordReset(ResetPasswordRequest request) {
-        EliteUser foundUser = findUserByEmail(request.getSemicolonEmail());
+        String userEmail = request.getSemicolonEmail().replaceAll("\"", "");
+
+        EliteUser foundUser = findUserByEmail(userEmail);
+
         String token = generateRandomToken();
 
         try {
@@ -185,14 +188,9 @@ public class EliteUserService implements UserService {
 
     @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request) {
-        log.info("Frontend Start Date {}",request.getStartDate());
-        log.info("Backend End Date {}",request.getEndDate());
 
         String startDate = changeDateFormatFromFrontend(request.getStartDate());
         String endDate = changeDateFormatFromFrontend(request.getEndDate());
-
-        log.info("Formatted Start Date {}",startDate);
-        log.info("Formatted End Date {}",endDate);
 
         request.setStartDate(startDate);
         request.setEndDate(endDate);
