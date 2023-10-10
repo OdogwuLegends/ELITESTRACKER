@@ -33,7 +33,7 @@ public class EliteUserController {
         LoginResponse response = eliteUserService.loginUser(request);
         return ResponseEntity.ok().body(response);
     }
-    @GetMapping(EMAIL_FOR_PASSWORD_RESET)
+    @PostMapping(EMAIL_FOR_PASSWORD_RESET)
     public ResponseEntity<ResetPasswordResponse> sendEmailForPasswordReset(@RequestBody ResetPasswordRequest request){
         ResetPasswordResponse response = eliteUserService.sendEmailForPasswordReset(request);
         return ResponseEntity.ok().body(response);
