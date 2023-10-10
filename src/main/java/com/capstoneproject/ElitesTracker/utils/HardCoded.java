@@ -68,7 +68,7 @@ public class HardCoded {
     public static final String VERIFICATION_FAILED = "JWT verification failed";
     public static final String NETWORK_ERROR = "Network Error";
     public static final String WRONG_DATE_ERROR = "If you try this again, you will submit your laptop!";
-    public static final String EMAIL_SENT_SUCCESSFULLY = "Email sent successfully";
+    public static final String EMAIL_SENT_SUCCESSFULLY = "Please enter the code sent to your email";
     public static final String PASSWORD_RESET_SUCCESSFUL = "Password reset successful";
     public static final String EXECUTION_COMPLETED = "Execution Completed";
 }

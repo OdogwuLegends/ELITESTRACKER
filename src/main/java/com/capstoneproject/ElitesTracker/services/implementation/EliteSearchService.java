@@ -95,7 +95,7 @@ public class EliteSearchService implements SearchService {
                     .lastName(attendanceList.get(i).getUser().getLastName())
                     .cohort(attendanceList.get(i).getCohort())
                     .attendanceStatus(attendanceList.get(i).getStatus().toString())
-                    .date(attendanceList.get(i).getDateTaken())
+                    .date(attendanceList.get(i).getDateTaken()+" "+attendanceList.get(i).getTimeTaken())
                     .build();
             attendanceSheet.add(foundReport);
         }
