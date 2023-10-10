@@ -138,8 +138,8 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
-        log.info("Token {}",request.getToken());
-        log.info("New Password {}",request.getNewPassword());
+        log.info("Token {} length {}",request.getToken(), request.getToken().length());
+        log.info("New Password {} length {}",request.getNewPassword(), request.getNewPassword().length());
 
         String token = request.getToken().replaceAll("\"", "");
 
