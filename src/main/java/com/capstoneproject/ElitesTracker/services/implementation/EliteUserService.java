@@ -138,7 +138,9 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
-        EliteUser foundUser = eliteUserRepository.findByResetPasswordToken(request.getToken()).orElseThrow(
+        String token = request.getToken().replaceAll("\"", "");
+
+        EliteUser foundUser = eliteUserRepository.findByResetPasswordToken(token).orElseThrow(
                 ()-> new EntityDoesNotExistException(INVALID_TOKEN_EXCEPTION.getMessage()));
 
         foundUser.setPassword(request.getNewPassword()); //encrypt if security
