@@ -70,7 +70,8 @@ public class EliteUserService implements UserService {
 
     @Override
     public LoginResponse loginUser(LoginRequest request) {
-        Optional<EliteUser> foundUser = eliteUserRepository.findBySemicolonEmail(request.getSemicolonEmail());
+        String email = request.getSemicolonEmail().trim();
+        Optional<EliteUser> foundUser = eliteUserRepository.findBySemicolonEmail(email);
 
         if(foundUser.isEmpty()){
             throw new IncorrectDetailsException(USERNAME_NOT_CORRECT_EXCEPTION.getMessage());
@@ -138,9 +139,6 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
-        log.info("Token {} length {}",request.getToken(), request.getToken().length());
-        log.info("New Password {} length {}",request.getNewPassword(), request.getNewPassword().length());
-
         String token = request.getToken().replaceAll("\"", "");
 
         EliteUser foundUser = eliteUserRepository.findByResetPasswordToken(token).orElseThrow(
