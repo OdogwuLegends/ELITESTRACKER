@@ -38,6 +38,9 @@ public class EliteAttendanceService implements AttendanceService {
     public AttendanceResponse saveAttendance(AttendanceRequest request, EliteUser eliteUser) {
         noAttendanceOnWeekendsCheck();
 
+        log.info("Object Date  {}",request.getAttendanceDate());
+        log.info("Real Date  {}",getCurrentDateForAttendance());
+
         if(request.getIpAddress() == null || request.getIpAddress().equals(EMPTY_STRING)){
             throw new NoInternetException(NETWORK_ERROR_EXCEPTION.getMessage());
         }
