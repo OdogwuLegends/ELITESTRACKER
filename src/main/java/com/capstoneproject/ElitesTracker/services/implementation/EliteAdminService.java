@@ -32,13 +32,18 @@ public class EliteAdminService implements AdminsService {
 
         UserRegistrationResponse response = new UserRegistrationResponse();
         Admins newAdmin = new Admins();
-        BeanUtils.copyProperties(request,newAdmin);
-        newAdmin.setFirstName(request.getFirstName().toUpperCase());
-        newAdmin.setLastName(request.getLastName().toUpperCase());
+        BeanUtils.copyProperties(request, newAdmin);
+        String firstName = request.getFirstName().toUpperCase();
+        String lastName = request.getLastName().toUpperCase();
+        newAdmin.setFirstName(firstName);
+        newAdmin.setLastName(lastName);
         Admins savedAdmin = adminsRepository.save(newAdmin);
         response.setMessage(savedAdminMessage(savedAdmin.getFirstName().toUpperCase(),savedAdmin.getLastName().toUpperCase()));
         return response;
-    }
+
+
+        }
+
 
     @Override
     public DeleteResponse removeAdmin(Admins foundAdmin) {
