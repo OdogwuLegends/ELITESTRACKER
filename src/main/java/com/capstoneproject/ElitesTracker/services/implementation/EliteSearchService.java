@@ -45,9 +45,11 @@ public class EliteSearchService implements SearchService {
         String endDate = stringDateToString(request.getEndDate());
         List<AttendanceSheetResponse> attendanceSheet = new ArrayList<>();
 
+        int counter = 1;
         for (int i = 0; i < attendanceList.size(); i++) {
             boolean isMatch = isValidRange(attendanceList, startDate, endDate, i) && (request.getCohort().equals(attendanceList.get(i).getCohort()));
-            buildAttendanceReport(attendanceList, attendanceSheet, i, isMatch);
+            buildAttendanceReport(attendanceList, attendanceSheet, i, isMatch, counter);
+            counter++;
         }
 
         if(attendanceSheet.isEmpty()){
@@ -76,21 +78,22 @@ public class EliteSearchService implements SearchService {
         String endDate = stringDateToString(request.getEndDate());
 
         List<AttendanceSheetResponse> attendanceSheet = new ArrayList<>();
+        int counter = 1;
 
         for (int i = 0; i < attendanceList.size(); i++) {
             if ((foundUser.getCohort().equals(attendanceList.get(i).getUser().getCohort())) && (foundUser.getId().equals(attendanceList.get(i).getUser().getId()))){
                 boolean isMatch = isValidRange(attendanceList, startDate, endDate, i);
-                buildAttendanceReport(attendanceList, attendanceSheet, i, isMatch);
+                buildAttendanceReport(attendanceList, attendanceSheet, i, isMatch, counter);
+                counter++;
             }
-
         }
         return attendanceSheet;
     }
 
-    private static void buildAttendanceReport(List<Attendance> attendanceList, List<AttendanceSheetResponse> attendanceSheet, int i, boolean isMatch) {
+    private static void buildAttendanceReport(List<Attendance> attendanceList, List<AttendanceSheetResponse> attendanceSheet, int i, boolean isMatch, int counter) {
         if(isMatch){
             AttendanceSheetResponse foundReport = AttendanceSheetResponse.builder()
-                    .serialNumber(String.valueOf(i + 1))
+                    .serialNumber(String.valueOf(counter))
                     .firstName(attendanceList.get(i).getUser().getFirstName())
                     .lastName(attendanceList.get(i).getUser().getLastName())
                     .cohort(attendanceList.get(i).getCohort())
