@@ -167,9 +167,10 @@ public class EliteUserService implements UserService {
             throw new RuntimeException(e);
         }
 
-        log.info("Device ID {}", deviceId);
-        log.info("Object Date {} length{}", request.getAttendanceDate(), request.getAttendanceDate().length());
-        log.info("Current Date {} length{}", getCurrentDateToCompareAttendanceObject(), getCurrentDateToCompareAttendanceObject().length());
+        String changedFormat =  changeDateFormatFromFrontend(request.getAttendanceDate());
+        request.setAttendanceDate(changedFormat);
+
+//        log.info("Device ID {}", deviceId);
 
         String userEmail = request.getSemicolonEmail().replaceAll("\"", "");
 //        String newHeight = request.getScreenHeight().replaceAll("\"", "");
