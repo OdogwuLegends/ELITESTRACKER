@@ -78,7 +78,7 @@ public class EliteSearchService implements SearchService {
         List<AttendanceSheetResponse> attendanceSheet = new ArrayList<>();
 
         for (int i = 0; i < attendanceList.size(); i++) {
-            if ((foundUser.getCohort().equals(attendanceList.get(i).getUser().getCohort()))) {
+            if ((foundUser.getCohort().equals(attendanceList.get(i).getUser().getCohort())) && (foundUser.getId().equals(attendanceList.get(i).getUser().getId()))){
                 boolean isMatch = isValidRange(attendanceList, startDate, endDate, i);
                 buildAttendanceReport(attendanceList, attendanceSheet, i, isMatch);
             }
