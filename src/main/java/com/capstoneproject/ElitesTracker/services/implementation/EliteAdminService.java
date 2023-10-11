@@ -54,19 +54,17 @@ public class EliteAdminService implements AdminsService {
 
 
         }
-
-
     @Override
     public Admins findAdminByEmail(String email) {
         Optional<Admins> foundAdmin = adminsRepository.findBySemicolonEmail(email);
         return foundAdmin.orElseThrow(()-> new EntityDoesNotExistException(ADMIN_DOES_NOT_EXIST_EXCEPTION.getMessage()));
+
     }
 
     @Override
     public boolean isExistingAdmin(String email) {
         return adminsRepository.existsBySemicolonEmail(email);
     }
-
     private void checkIfAdminExists(AddAdminRequest request){
         List<Admins> adminsList = adminsRepository.findAll();
         for (Admins admin : adminsList){
