@@ -86,8 +86,15 @@ public class AppUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return zonedDateTime.format(formatter);
     }
-    public static String changeDateFormatFromFrontend(String frontendDate){
+    public static String changeDateFormatFromFrontendForReports(String frontendDate){
         DateTimeFormatter frontendFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter desiredFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate formattedDate = LocalDate.parse(frontendDate, frontendFormat);
+        return formattedDate.format(desiredFormat);
+    }
+    public static String changeDateFormatFromFrontendForAttendance(String frontendDate){
+        DateTimeFormatter frontendFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         DateTimeFormatter desiredFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         LocalDate formattedDate = LocalDate.parse(frontendDate, frontendFormat);

@@ -167,10 +167,15 @@ public class EliteUserService implements UserService {
             throw new RuntimeException(e);
         }
 
-        String changedFormat =  changeDateFormatFromFrontend(request.getAttendanceDate());
-        request.setAttendanceDate(changedFormat);
 
 //        log.info("Device ID {}", deviceId);
+        log.info("Object Date {} length{}", request.getAttendanceDate(), request.getAttendanceDate().length());
+        log.info("Current Date {} length{}", getCurrentDateToCompareAttendanceObject(), getCurrentDateToCompareAttendanceObject().length());
+
+        String changedFormat =  changeDateFormatFromFrontendForAttendance(request.getAttendanceDate());
+        request.setAttendanceDate(changedFormat);
+
+        log.info("Formatted Date {} length{}", request.getAttendanceDate(), request.getAttendanceDate().length());
 
         String userEmail = request.getSemicolonEmail().replaceAll("\"", "");
 //        String newHeight = request.getScreenHeight().replaceAll("\"", "");
@@ -195,8 +200,8 @@ public class EliteUserService implements UserService {
     @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request) {
 
-        String startDate = changeDateFormatFromFrontend(request.getStartDate());
-        String endDate = changeDateFormatFromFrontend(request.getEndDate());
+        String startDate = changeDateFormatFromFrontendForReports(request.getStartDate());
+        String endDate = changeDateFormatFromFrontendForReports(request.getEndDate());
 
         request.setStartDate(startDate);
         request.setEndDate(endDate);
