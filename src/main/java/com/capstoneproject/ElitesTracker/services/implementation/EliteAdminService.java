@@ -62,7 +62,7 @@ public class EliteAdminService implements AdminsService {
     }
 
     @Override
-    public boolean isExistingAdmin(String email) {
+    public boolean isExistAdmin(String email) {
         return adminsRepository.existsBySemicolonEmail(email);
     }
     private void checkIfAdminExists(AddAdminRequest request){

@@ -57,7 +57,7 @@ public class MockEliteAdminServiceTest {
     void testForExistingAdmin(){
         when(adminsRepository.existsBySemicolonEmail("patience@semicolon.africa")).thenReturn(true);
 
-        boolean isExistingAdmin = eliteAdminService.isExistingAdmin("patience@semicolon.africa");
+        boolean isExistingAdmin = eliteAdminService.isExistAdmin("patience@semicolon.africa");
         assertTrue(isExistingAdmin);
     }
 
