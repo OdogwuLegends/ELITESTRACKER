@@ -7,9 +7,10 @@ import com.capstoneproject.ElitesTracker.dtos.responses.UserRegistrationResponse
 import com.capstoneproject.ElitesTracker.models.Admins;
 
 public interface AdminsService {
+
     UserRegistrationResponse addNewAdmin(AddAdminRequest request);
     DeleteResponse removeAdmin(Admins foundAdmin);
     Admins findAdminByEmail(String email);
-    boolean isExistingAdmin(String email);
+    boolean isExistAdmin(String email);
 
 }

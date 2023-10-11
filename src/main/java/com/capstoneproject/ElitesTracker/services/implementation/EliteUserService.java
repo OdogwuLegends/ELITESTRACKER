@@ -268,11 +268,10 @@ public class EliteUserService implements UserService {
             throw new EntityDoesNotExistException(cohortNotFoundMessage(request.getCohort()));
         }
 
-        for (int i = 0; i < foundNatives.size(); i++) {
-            EliteUser nativeToEdit = foundNatives.get(i);
-            if(nativeToEdit.getCohort().equals(request.getCohort())){
-                foundNatives.get(i).setPermission(request.getPermission());
-                eliteUserRepository.save(foundNatives.get(i));
+        for (EliteUser nativeToEdit : foundNatives) {
+            if (nativeToEdit.getCohort().equals(request.getCohort())) {
+                nativeToEdit.setPermission(request.getPermission());
+                eliteUserRepository.save(nativeToEdit);
             }
         }
 
@@ -387,6 +386,7 @@ public class EliteUserService implements UserService {
         attendanceService.setToAbsent(findAllNatives());
     }
 
+
     private void checkIfAdminOrNative(UserRegistrationRequest request, UserRegistrationResponse response) throws EntityDoesNotExistException {
         if(request.getSemicolonEmail().contains(NATIVE_CHECK) && isNative(request)){
             Natives existingNative = getExistingNativeByEmail(request.getSemicolonEmail());
@@ -446,7 +446,7 @@ public class EliteUserService implements UserService {
         return adminsService.findAdminByEmail(email);
     }
     private boolean isAdmin(String email){
-        return adminsService.isExistingAdmin(email);
+        return adminsService.isExistAdmin(email);
     }
 
     private Natives getExistingNativeByEmail(String email) throws EntityDoesNotExistException {
@@ -529,6 +529,7 @@ public class EliteUserService implements UserService {
         if(!request.getSemicolonEmail().contains(NATIVE_CHECK)){
             throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_OPERATION_EXCEPTION.getMessage());
         }
+
     }
     private static Set<AdminPrivileges> setSubAdmin(){
         Set<AdminPrivileges> privilege = new TreeSet<>();
@@ -540,11 +541,13 @@ public class EliteUserService implements UserService {
         if(!foundAdmin.getAdminPrivilegesList().contains(SUB_ADMIN)){
             throw new AdminsNotPermittedException(PRIVILEGE_NOT_GRANTED_EXCEPTION.getMessage());
         }
+
     }
     private void checkForSuperAdminPrivilege(EliteUser foundAdmin) {
         if(!foundAdmin.getAdminPrivilegesList().contains(SUPER_ADMIN)){
             throw new AdminsNotPermittedException(PRIVILEGE_NOT_GRANTED_EXCEPTION.getMessage());
         }
+
     }
     private static String generateRandomToken(){
         String token = "";
@@ -555,5 +558,7 @@ public class EliteUserService implements UserService {
             token = String.valueOf(number);
         }
         return token;
+
     }
+
 }
