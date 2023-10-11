@@ -28,10 +28,14 @@ public class AdminController {
 
     @PostMapping(ADD_NATIVE)
     @Operation(description = "Endpoint to add native")
-    public ResponseEntity<UserRegistrationResponse> addNative(@RequestBody @Parameter(name = "Add native request", description = "details to add native") AddNativeRequest request){
+    public ResponseEntity<UserRegistrationResponse> addNative(
+            @RequestBody @Parameter(description = "Details to add a new native") AddNativeRequest request) {
         UserRegistrationResponse response = nativesService.addNewNative(request);
-        return ResponseEntity.ok().body(response);
-    }
+        return ResponseEntity.ok(response);
+
+
+        }
+
     @PostMapping(ADD_ADMIN)
     public ResponseEntity<UserRegistrationResponse> addAdmin(@RequestBody AddAdminRequest request){
         UserRegistrationResponse response = adminsService.addNewAdmin(request);
