@@ -115,6 +115,7 @@ public class EliteAttendanceService implements AttendanceService {
         }
 
         Attendance attendanceToEdit = foundAttendance.get();
+        attendanceToEdit.setEditedBy(request.getAdminSemicolonEmail()+SPACE+getCurrentTimeStampUsingZonedDateTime());
         attendanceToEdit.setStatus(request.getAttendanceStatus());
         attendanceRepository.save(attendanceToEdit);
         AttendanceResponse response = new AttendanceResponse();

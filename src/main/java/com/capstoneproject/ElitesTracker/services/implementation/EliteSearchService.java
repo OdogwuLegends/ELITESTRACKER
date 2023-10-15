@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.capstoneproject.ElitesTracker.enums.ExceptionMessages.RECORD_NOT_FOUND_EXCEPTION;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
+import static com.capstoneproject.ElitesTracker.utils.HardCoded.SPACE;
 
 @Service
 @AllArgsConstructor
@@ -98,7 +99,7 @@ public class EliteSearchService implements SearchService {
                     .lastName(attendanceList.get(i).getUser().getLastName())
                     .cohort(attendanceList.get(i).getCohort())
                     .attendanceStatus(attendanceList.get(i).getStatus().toString())
-                    .date(attendanceList.get(i).getDateTaken()+" "+attendanceList.get(i).getTimeTaken())
+                    .date(attendanceList.get(i).getDateTaken()+SPACE+attendanceList.get(i).getTimeTaken())
                     .build();
             attendanceSheet.add(foundReport);
         }

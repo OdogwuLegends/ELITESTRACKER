@@ -32,7 +32,11 @@ public class Attendance {
     private String cohort;
 
     private String ipAddress;
+
     private String ipAddressConcat;
+
+    private String editedBy;
+
 
     @PrePersist
     public void beforePersist(){

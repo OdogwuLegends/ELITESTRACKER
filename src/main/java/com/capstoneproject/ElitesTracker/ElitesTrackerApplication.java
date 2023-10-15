@@ -24,10 +24,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 				)
 		),
 		servers = {
-//				@Server(
-//						url = "http://localhost:8092",
-//						description = "DEV Server"
-//				),
+				@Server(
+						url = "http://localhost:8092",
+						description = "DEV Server"
+				),
 				@Server(
 						url = "https://elitestracker-production.up.railway.app",
 						description = "PROD server"

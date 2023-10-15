@@ -54,6 +54,7 @@ public class EliteUser {
     @Enumerated(value = EnumType.STRING)
     private AttendancePermission permission;
 
+    private String attendancePermissionSetBy;
     @ElementCollection
     private Set<AdminPrivileges> adminPrivilegesList;
 

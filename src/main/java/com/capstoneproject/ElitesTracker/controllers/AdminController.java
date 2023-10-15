@@ -2,6 +2,7 @@ package com.capstoneproject.ElitesTracker.controllers;
 
 import com.capstoneproject.ElitesTracker.dtos.requests.*;
 import com.capstoneproject.ElitesTracker.dtos.responses.*;
+import com.capstoneproject.ElitesTracker.models.EliteUser;
 import com.capstoneproject.ElitesTracker.services.interfaces.AdminsService;
 import com.capstoneproject.ElitesTracker.services.interfaces.NativesService;
 import com.capstoneproject.ElitesTracker.services.interfaces.UserService;
@@ -88,9 +89,9 @@ public class AdminController {
         List<AttendanceSheetResponse> attendanceSheet = userService.generateAttendanceReportForCohort(request);
         return ResponseEntity.ok().body(attendanceSheet);
     }
-//    @PostMapping(SET_TO_ABSENT)
-//    public ResponseEntity<?> setToAbsent(){
-//        userService.setToAbsent();
-//        return ResponseEntity.ok(?);
-//    }
+    @GetMapping(ALL_NATIVES_IN_A_COHORT)
+    public ResponseEntity<List<EliteUser>> findAllNativesInACohort(@RequestBody SearchRequest request){
+        List<EliteUser> natives = userService.findAllNativesInACohort(request.getCohort());
+        return ResponseEntity.ok().body(natives);
+    }
 }

@@ -25,7 +25,6 @@ public class Admins {
 
     @Column(nullable = false, unique = true)
     private String semicolonEmail;
-
     private String createdAt;
 
     @PrePersist

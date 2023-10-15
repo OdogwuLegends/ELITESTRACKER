@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.capstoneproject.ElitesTracker.utils.AppUtil.getCurrentTimeStampUsingZonedDateTime;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.TIME_SET_MESSAGE;
 
 @Service
@@ -55,6 +56,8 @@ public class EliteTimeEligibilityService implements TimeEligibilityService {
         timeEligibility.setStartMinute(request.getStartMinute());
         timeEligibility.setEndHour(request.getEndHour());
         timeEligibility.setEndMinute(request.getEndMinute());
+        timeEligibility.setSetBy(request.getAdminSemicolonEmail());
+        timeEligibility.setCreatedAt(getCurrentTimeStampUsingZonedDateTime());
 
         timeEligibilityRepository.save(timeEligibility);
     }

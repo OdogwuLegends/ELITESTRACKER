@@ -249,6 +249,7 @@ public class EliteUserService implements UserService {
             throw new EntityDoesNotExistException(nativeNotFoundMessage(request.getCohort()));
         }
         foundUser.setPermission(request.getPermission());
+        foundUser.setAttendancePermissionSetBy(request.getAdminSemicolonEmail() +SPACE+ getCurrentTimeStampUsingZonedDateTime());
         eliteUserRepository.save(foundUser);
 
         return PermissionForAttendanceResponse.builder()
@@ -271,6 +272,7 @@ public class EliteUserService implements UserService {
             EliteUser nativeToEdit = foundNatives.get(i);
             if(nativeToEdit.getCohort().equals(request.getCohort())){
                 foundNatives.get(i).setPermission(request.getPermission());
+                foundNatives.get(i).setAttendancePermissionSetBy(request.getAdminSemicolonEmail() +SPACE+ getCurrentTimeStampUsingZonedDateTime());
                 eliteUserRepository.save(foundNatives.get(i));
             }
         }
@@ -360,7 +362,6 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request) {
-        log.info("Native Email {} length {}", request.getNativeSemicolonEmail(), request.getNativeSemicolonEmail().length());
         EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
 //        checkForSubAdminPrivilege(foundAdmin);
 
@@ -381,7 +382,7 @@ public class EliteUserService implements UserService {
 
 
     @Override
-    @Scheduled(cron = "0 0 18 ? * MON-FRI")
+    @Scheduled(cron = "0 0 18 ? * MON-FRI", zone = "Africa/Lagos")
     public void setToAbsent() {
         attendanceService.setToAbsent(findAllNatives());
     }
@@ -426,7 +427,7 @@ public class EliteUserService implements UserService {
 //                .password(passwordEncoder.encode(request.getPassword()))
                 .password(request.getPassword())
                 .role(ADMIN)
-                .adminPrivilegesList(setSubAdmin())
+                .adminPrivilegesList(setSubAdmin()) //change this to class parent by default
                 .screenWidth(request.getScreenWidth())
                 .screenHeight(request.getScreenHeight())
                 .build();
