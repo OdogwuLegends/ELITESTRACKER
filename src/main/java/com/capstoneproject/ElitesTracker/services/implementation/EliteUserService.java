@@ -194,11 +194,7 @@ public class EliteUserService implements UserService {
     @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request) {
 
-        String startDate = changeDateFormatFromFrontendForReports(request.getStartDate());
-        String endDate = changeDateFormatFromFrontendForReports(request.getEndDate());
-
-        request.setStartDate(startDate);
-        request.setEndDate(endDate);
+        changeDateFormat(request);
 
         String userEmail = request.getNativeSemicolonEmail().replaceAll("\"", "");
 
@@ -227,7 +223,11 @@ public class EliteUserService implements UserService {
 //        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
 //        checkForSubAdminPrivilege(foundAdmin);
 
-        EliteUser foundNative = findUserByEmail(request.getNativeSemicolonEmail());
+        changeDateFormat(request);
+
+        String userEmail = request.getNativeSemicolonEmail().replaceAll("\"", "");
+
+        EliteUser foundNative = findUserByEmail(userEmail);
         return searchService.searchAttendanceReportForNative(request,foundNative);
     }
 
@@ -236,7 +236,18 @@ public class EliteUserService implements UserService {
     public List<AttendanceSheetResponse> generateAttendanceReportForCohort(SearchRequest request) {
 //        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
 //        checkForSubAdminPrivilege(foundAdmin);
+
+        changeDateFormat(request);
+
         return searchService.searchAttendanceReportForCohort(request);
+    }
+
+    private static void changeDateFormat(SearchRequest request) {
+        String startDate = changeDateFormatFromFrontendForReports(request.getStartDate());
+        String endDate = changeDateFormatFromFrontendForReports(request.getEndDate());
+
+        request.setStartDate(startDate);
+        request.setEndDate(endDate);
     }
 
     @Override
