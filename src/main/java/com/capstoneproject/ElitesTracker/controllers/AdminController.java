@@ -94,4 +94,9 @@ public class AdminController {
         List<EliteUser> natives = userService.findAllNativesInACohort(request.getCohort());
         return ResponseEntity.ok().body(natives);
     }
+    @PatchMapping(UPDATE_ADMIN_PRIVILEGE)
+    public ResponseEntity<UpdateUserResponse> updateAdminPrivilege(@RequestBody EditAdminPrivilegeRequest request){
+        UpdateUserResponse response = userService.editAdminPrivilege(request);
+        return ResponseEntity.ok().body(response);
+    }
 }

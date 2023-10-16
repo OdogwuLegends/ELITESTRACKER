@@ -15,4 +15,5 @@ public interface AttendanceService {
     AttendanceResponse editAttendanceStatus(EditAttendanceRequest request, EliteUser foundUser);
     List<Attendance> findAllAttendances();
     AttendanceResponse setToAbsent(List<EliteUser> allNatives);
+    void checkAndNotifyAbsentStudents(List<EliteUser> allNatives);
 }

@@ -55,7 +55,7 @@ public class HardCoded {
     public static final String COHORT_NOT_FOUND_MESSAGE = "Cohort %s not found";
     public static final String TIME_SET_MESSAGE = "Time range set successfully!";
     public static final String TIME_LIMITS_SET_MESSAGE = "No time limits set. Please see an Admin";
-    public static final String BEFORE_ATTENDANCE_TIME_MESSAGE = "Not yet time for attendance, please wait until %s ";
+    public static final String BEFORE_ATTENDANCE_TIME_MESSAGE = "Not yet time for attendance, please wait until after %s ";
     public static final String AFTER_ATTENDANCE_TIME_MESSAGE = "Past %s . Please see an Admin to take attendance, or try again tomorrow by %s ";
     public static final String DEVICE_RESET_MESSAGE = "Device reset successful!";
     public static final String PROFILE_UPDATE_SUCCESSFUL = "Profile update successful!";

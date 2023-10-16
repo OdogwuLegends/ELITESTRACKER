@@ -24,38 +24,6 @@ public class ApiValues {
     public static final String GENERATE_ATTENDANCE_REPORT_FOR_NATIVE = "/generateAttendanceForNative";
     public static final String GENERATE_ATTENDANCE_REPORT_FOR_COHORT = "/generateAttendanceForCohort";
     public static final String ALL_NATIVES_IN_A_COHORT = "/allNativesInACohort";
-
-
-//    @Scheduled(cron = "0 0 18 ? * MON-FRI", zone = "Africa/Lagos")
-//    public void checkAndNotifyAbsentStudents() {
-//        List<Student> students = findAllStudents();
-//
-//        for (Student student : students) {
-//            int currentStreak = calculateCurrentAbsenceStreak(student);
-//            if (currentStreak > 0 && currentStreak % 5 == 0) {
-//                sendAbsentNotificationEmail(student);
-//            }
-//        }
-//    }
-
-
-
-//    public int calculateCurrentAbsenceStreak(Student student) {
-//        List<AttendanceRecord> attendanceRecords = getAttendanceRecordsForStudent(student);
-//
-//        int currentStreak = 0;
-//        int maxStreak = 0;
-//
-//        for (AttendanceRecord record : attendanceRecords) {
-//            if (record.getStatus() == AttendanceStatus.ABSENT) {
-//                currentStreak++;
-//            } else {
-//                maxStreak = Math.max(maxStreak, currentStreak);
-//                currentStreak = 0; // Reset streak when the student is present
-//            }
-//        }
-//
-//        return Math.max(maxStreak, currentStreak);
-//    }
+    public static final String UPDATE_ADMIN_PRIVILEGE = "/updateAdminPrivilege";
 
 }

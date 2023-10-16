@@ -106,8 +106,9 @@ public class EliteUserService implements UserService {
 //    }
     @Override
     public UpdateUserResponse updateUserProfile(UpdateUserRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSubAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForSubAdminPrivilege(foundAdmin);
 
         editToUpperCase(request);
         return UpdateUserResponse.builder()
@@ -158,15 +159,7 @@ public class EliteUserService implements UserService {
 //        checkForAdmin(request);
 //        String verifiedToken = retrieveAndVerifyJwtToken(httpServletRequest);
 //        String userEmail = extractEmailFromToken(verifiedToken);
-        String deviceId = "";
-        try {
-            deviceId = getDeviceId(request.getFiftyOneDegrees());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
-
-//        log.info("Device ID {}", deviceId);
 
         String changedFormat =  changeDateFormatFromFrontendForAttendance(request.getAttendanceDate());
         request.setAttendanceDate(changedFormat);
@@ -179,7 +172,6 @@ public class EliteUserService implements UserService {
 //        request.setScreenWidth(newWidth);
 
         EliteUser foundUser = findUserByEmail(userEmail);
-
         return attendanceService.saveAttendance(request,foundUser);
     }
     @Override
@@ -204,8 +196,9 @@ public class EliteUserService implements UserService {
 
     @Override
     public AttendanceResponse editAttendanceStatus(EditAttendanceRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSubAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForSubAdminPrivilege(foundAdmin);
 
         EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
         return attendanceService.editAttendanceStatus(request, foundUser);
@@ -213,15 +206,33 @@ public class EliteUserService implements UserService {
 
     @Override
     public TimeResponse setTimeForAttendance(SetTimeRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSubAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForSubAdminPrivilege(foundAdmin);
+
         return timeEligibilityService.setTimeForAttendance(request);
     }
 
     @Override
+    public UpdateUserResponse editAdminPrivilege(EditAdminPrivilegeRequest request) {
+        String userEmail = request.getSetBy().replaceAll("\"", "");
+        EliteUser foundSuperAdmin = findUserByEmail(userEmail);
+        checkForSuperAdminPrivilege(foundSuperAdmin);
+
+        userEmail = request.getSetFor().replaceAll("\"", "");
+        EliteUser foundAdmin = findUserByEmail(userEmail);
+
+        setNewAdminPrivilege(request,foundAdmin);
+        return UpdateUserResponse.builder()
+                .message(PROFILE_UPDATE_SUCCESSFUL)
+                .build();
+    }
+
+    @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForNative(SearchRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSubAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForClassParentPrivilege(foundAdmin);
 
         changeDateFormat(request);
 
@@ -234,26 +245,20 @@ public class EliteUserService implements UserService {
 
     @Override
     public List<AttendanceSheetResponse> generateAttendanceReportForCohort(SearchRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSubAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForClassParentPrivilege(foundAdmin);
 
         changeDateFormat(request);
 
         return searchService.searchAttendanceReportForCohort(request);
     }
 
-    private static void changeDateFormat(SearchRequest request) {
-        String startDate = changeDateFormatFromFrontendForReports(request.getStartDate());
-        String endDate = changeDateFormatFromFrontendForReports(request.getEndDate());
-
-        request.setStartDate(startDate);
-        request.setEndDate(endDate);
-    }
-
     @Override
     public PermissionForAttendanceResponse setAttendancePermissionForNative(PermissionForAttendanceRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSubAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForSubAdminPrivilege(foundAdmin);
 
         EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
         if(!foundUser.getCohort().equals(request.getCohort())){
@@ -270,8 +275,9 @@ public class EliteUserService implements UserService {
 
     @Override
     public PermissionForAttendanceResponse setAttendancePermitForCohort(PermissionForAttendanceRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSubAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForSubAdminPrivilege(foundAdmin);
 
         List<EliteUser> foundNatives = findAllNativesInACohort(request.getCohort());
 
@@ -295,6 +301,10 @@ public class EliteUserService implements UserService {
 
     @Override
     public List<EliteUser> findAllNativesInACohort(String cohort) {
+//        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+//        EliteUser foundAdmin = findUserByEmail(adminEmail);
+//        checkForSubAdminPrivilege(foundAdmin);
+
         List<EliteUser> foundNatives = eliteUserRepository.findAll();
 
         List<EliteUser> cohortList = new ArrayList<>();
@@ -319,8 +329,9 @@ public class EliteUserService implements UserService {
     }
     @Override
     public DeleteResponse removeNative(DeleteRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSuperAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForSuperAdminPrivilege(foundAdmin);
 
         EliteUser foundUser = findUserByEmail(request.getNativeSemicolonEmail());
         if(!foundUser.getCohort().equals(request.getCohort())){
@@ -336,8 +347,9 @@ public class EliteUserService implements UserService {
 
     @Override
     public DeleteResponse removeAdmin(DeleteRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSuperAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForSuperAdminPrivilege(foundAdmin);
 
         EliteUser foundUser = findUserByEmail(request.getAdminSemicolonEmail());
         Admins adminToRemove = adminsService.findAdminByEmail(request.getAdminSemicolonEmail());
@@ -350,8 +362,9 @@ public class EliteUserService implements UserService {
 
     @Override
     public DeleteResponse removeCohort(DeleteRequest request) {
-//        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSuperAdminPrivilege(foundAdmin);
+        String adminEmail = request.getAdminSemicolonEmail().replaceAll("\"","");
+        EliteUser foundAdmin = findUserByEmail(adminEmail);
+        checkForSuperAdminPrivilege(foundAdmin);
 
         List<EliteUser> foundUserList = findAllNativesInACohort(request.getCohort());
         List<Natives> foundNativesList = nativesService.findAllNativesInACohort(request.getCohort());
@@ -373,8 +386,6 @@ public class EliteUserService implements UserService {
 
     @Override
     public ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request) {
-        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
-//        checkForSubAdminPrivilege(foundAdmin);
 
         LoginRequest loginRequest = LoginRequest.builder()
                 .semicolonEmail(request.getAdminSemicolonEmail())
@@ -382,6 +393,9 @@ public class EliteUserService implements UserService {
                 .build();
         loginUser(loginRequest);
 //        passwordEncoder.matches(foundAdmin.getPassword(),request.getAdminPassword());
+        EliteUser foundAdmin = findUserByEmail(request.getAdminSemicolonEmail());
+        checkForSubAdminPrivilege(foundAdmin);
+
         String userEmail = request.getNativeSemicolonEmail().replaceAll("\"", "");
 
         EliteUser foundNative = findUserByEmail(userEmail);
@@ -391,11 +405,15 @@ public class EliteUserService implements UserService {
         return ResetDeviceResponse.builder().message(DEVICE_RESET_MESSAGE).build();
     }
 
-
     @Override
     @Scheduled(cron = "0 0 18 ? * MON-FRI", zone = "Africa/Lagos")
     public void setToAbsent() {
         attendanceService.setToAbsent(findAllNatives());
+    }
+    @Override
+    @Scheduled(cron = "0 0 18 ? * MON-FRI", zone = "Africa/Lagos")
+    public void sendNotificationWhenAbsent() {
+        attendanceService.checkAndNotifyAbsentStudents(findAllNatives());
     }
 
     private void checkIfAdminOrNative(UserRegistrationRequest request, UserRegistrationResponse response) throws EntityDoesNotExistException {
@@ -438,7 +456,7 @@ public class EliteUserService implements UserService {
 //                .password(passwordEncoder.encode(request.getPassword()))
                 .password(request.getPassword())
                 .role(ADMIN)
-                .adminPrivilegesList(setSubAdmin()) //change this to class parent by default
+                .adminPrivilegesList(classParent()) //change this to class parent by default
                 .screenWidth(request.getScreenWidth())
                 .screenHeight(request.getScreenHeight())
                 .build();
@@ -541,10 +559,16 @@ public class EliteUserService implements UserService {
             throw new AdminsNotPermittedException(ADMIN_NOT_PERMITTED_FOR_OPERATION_EXCEPTION.getMessage());
         }
     }
-    private static Set<AdminPrivileges> setSubAdmin(){
+    private static Set<AdminPrivileges> classParent(){
         Set<AdminPrivileges> privilege = new TreeSet<>();
         privilege.add(CLASS_PARENT);
         return privilege;
+    }
+
+    private void checkForClassParentPrivilege(EliteUser foundAdmin) {
+        if(!foundAdmin.getAdminPrivilegesList().contains(CLASS_PARENT)){
+            throw new AdminsNotPermittedException(PRIVILEGE_NOT_GRANTED_EXCEPTION.getMessage());
+        }
     }
 
     private void checkForSubAdminPrivilege(EliteUser foundAdmin) {
@@ -556,6 +580,22 @@ public class EliteUserService implements UserService {
         if(!foundAdmin.getAdminPrivilegesList().contains(SUPER_ADMIN)){
             throw new AdminsNotPermittedException(PRIVILEGE_NOT_GRANTED_EXCEPTION.getMessage());
         }
+    }
+    private void setNewAdminPrivilege(EditAdminPrivilegeRequest request,EliteUser foundAdmin){
+        if(request.getPrivilege().equalsIgnoreCase("SUB")){
+            foundAdmin.getAdminPrivilegesList().add(SUB_ADMIN);
+            eliteUserRepository.save(foundAdmin);
+        } else if (request.getPrivilege().equalsIgnoreCase("SUPER")) {
+            foundAdmin.getAdminPrivilegesList().add(SUPER_ADMIN);
+            eliteUserRepository.save(foundAdmin);
+        }
+    }
+    private static void changeDateFormat(SearchRequest request) {
+        String startDate = changeDateFormatFromFrontendForReports(request.getStartDate());
+        String endDate = changeDateFormatFromFrontendForReports(request.getEndDate());
+
+        request.setStartDate(startDate);
+        request.setEndDate(endDate);
     }
     private static String generateRandomToken(){
         String token = "";

@@ -3,17 +3,20 @@ package com.capstoneproject.ElitesTracker.services.implementation;
 import com.capstoneproject.ElitesTracker.dtos.requests.AttendanceRequest;
 import com.capstoneproject.ElitesTracker.dtos.requests.EditAttendanceRequest;
 import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceResponse;
+import com.capstoneproject.ElitesTracker.emailConfig.EmailService;
 import com.capstoneproject.ElitesTracker.exceptions.*;
 import com.capstoneproject.ElitesTracker.models.Attendance;
 import com.capstoneproject.ElitesTracker.models.EliteUser;
 import com.capstoneproject.ElitesTracker.models.TimeEligibility;
 import com.capstoneproject.ElitesTracker.services.interfaces.AttendanceService;
 import com.capstoneproject.ElitesTracker.services.interfaces.TimeEligibilityService;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ import static com.capstoneproject.ElitesTracker.utils.HardCoded.*;
 public class EliteAttendanceService implements AttendanceService {
     private final com.capstoneproject.ElitesTracker.repositories.AttendanceRepository attendanceRepository;
     private final TimeEligibilityService timeEligibilityService;
+    private final EmailService emailService;
 
 
     @Override
@@ -153,6 +157,19 @@ public class EliteAttendanceService implements AttendanceService {
         response.setMessage(EXECUTION_COMPLETED);
         return response;
     }
+    @Override
+    public void checkAndNotifyAbsentStudents(List<EliteUser> allNatives) {
+        for (EliteUser foundNative : allNatives) {
+            int currentStreak = calculateCurrentAbsenceStreak(foundNative);
+            if (currentStreak > 0 && currentStreak % 5 == 0) {
+                try {
+                    emailService.sendAbsenteeismEmail(foundNative,currentStreak);
+                } catch (MessagingException | UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
 
     private void checkTimeFrameAndBuildAttendance(EliteUser eliteUser, AttendanceResponse response,AttendanceRequest request){
         List<TimeEligibility> timeFrames = timeEligibilityService.findAllTimeFrames();
@@ -216,6 +233,23 @@ public class EliteAttendanceService implements AttendanceService {
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
         return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) ||
                 !eliteUser.getScreenHeight().equals(request.getScreenHeight());
+    }
+    private int calculateCurrentAbsenceStreak(EliteUser foundNative) {
+        List<Attendance> attendanceRecords = findAllAttendances();
+
+        int currentStreak = 0;
+        int maxStreak = 0;
+
+        for (Attendance record : attendanceRecords) {
+            if (foundNative.getId().equals(record.getUser().getId()) && record.getStatus().equals(ABSENT)) {
+                currentStreak++;
+            } else {
+                maxStreak = Math.max(maxStreak, currentStreak);
+                currentStreak = 0; // Reset streak when the student is present
+            }
+        }
+
+        return Math.max(maxStreak, currentStreak);
     }
 
     private void timeTrial() {

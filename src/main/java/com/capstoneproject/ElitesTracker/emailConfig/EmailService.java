@@ -23,9 +23,25 @@ public class EmailService {
                 token+
                 "<p> Thank you. <br> ElitesTracker";
 
+        buildEmailBody(eliteUser, subject, senderName, mailContent);
+    }
+
+    public void sendAbsenteeismEmail(EliteUser eliteUser, int streak) throws MessagingException, UnsupportedEncodingException {
+        String subject = "We Haven't seen you lately!";
+        String senderName = "ElitesTracker";
+        String mailContent = "<p> Hello "+eliteUser.getFirstName()+", </p>"+
+                "We haven't seen you in "+streak+" days.<br>></p>"+
+                "Hope you're fine? Please get in touch with an Admin.<br></p>"+
+                "Expecting to see and hear from you soon.<br><br></p>"+
+                "<p> Stay Safe. <br> ElitesTracker";
+
+        buildEmailBody(eliteUser, subject, senderName, mailContent);
+    }
+
+    private void buildEmailBody(EliteUser eliteUser, String subject, String senderName, String mailContent) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
         var messageHelper = new MimeMessageHelper(message);
-        messageHelper.setFrom("emeralds161996@gmail.com",senderName);
+        messageHelper.setFrom("emeralds161996@gmail.com", senderName);
         messageHelper.setTo(eliteUser.getSemicolonEmail());
         messageHelper.setSubject(subject);
         messageHelper.setText(mailContent,true);
