@@ -410,11 +410,11 @@ public class EliteUserService implements UserService {
     public void setToAbsent() {
         attendanceService.setToAbsent(findAllNatives());
     }
-    @Override
-    @Scheduled(cron = "0 0 18 ? * MON-FRI")
-    public void sendNotificationWhenAbsent() {
-        attendanceService.checkAndNotifyAbsentStudents(findAllNatives());
-    }
+//    @Override
+//    @Scheduled(cron = "0 0 18 ? * MON-FRI")
+//    public void sendNotificationWhenAbsent() {
+//        attendanceService.checkAndNotifyAbsentStudents(findAllNatives());
+//    }
 
     private void checkIfAdminOrNative(UserRegistrationRequest request, UserRegistrationResponse response) throws EntityDoesNotExistException {
         if(request.getSemicolonEmail().contains(NATIVE_CHECK) && isNative(request)){
