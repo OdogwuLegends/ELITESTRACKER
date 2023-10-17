@@ -19,7 +19,7 @@ public interface UserService {
     List<AttendanceSheetResponse> generateAttendanceReportForSelf(SearchRequest request);
     AttendanceResponse editAttendanceStatus(EditAttendanceRequest request);
     TimeResponse setTimeForAttendance(SetTimeRequest request);
-    UpdateUserResponse editAdminPrivilege(EditAdminPrivilegeRequest request);
+    UpdateUserResponse updateAdminPrivilege(EditAdminPrivilegeRequest request);
     List<AttendanceSheetResponse> generateAttendanceReportForNative(SearchRequest request);
     List<AttendanceSheetResponse> generateAttendanceReportForCohort(SearchRequest request);
     List<EliteUser> findAllNativesInACohort(String cohort);

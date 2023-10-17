@@ -214,7 +214,7 @@ public class EliteUserService implements UserService {
     }
 
     @Override
-    public UpdateUserResponse editAdminPrivilege(EditAdminPrivilegeRequest request) {
+    public UpdateUserResponse updateAdminPrivilege(EditAdminPrivilegeRequest request) {
         String userEmail = request.getSetBy().replaceAll("\"", "");
         EliteUser foundSuperAdmin = findUserByEmail(userEmail);
         checkForSuperAdminPrivilege(foundSuperAdmin);
@@ -406,12 +406,12 @@ public class EliteUserService implements UserService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 18 ? * MON-FRI", zone = "Africa/Lagos")
+    @Scheduled(cron = "0 0 18 ? * MON-FRI")
     public void setToAbsent() {
         attendanceService.setToAbsent(findAllNatives());
     }
     @Override
-    @Scheduled(cron = "0 0 18 ? * MON-FRI", zone = "Africa/Lagos")
+    @Scheduled(cron = "0 0 18 ? * MON-FRI")
     public void sendNotificationWhenAbsent() {
         attendanceService.checkAndNotifyAbsentStudents(findAllNatives());
     }

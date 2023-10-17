@@ -96,7 +96,7 @@ public class AdminController {
     }
     @PatchMapping(UPDATE_ADMIN_PRIVILEGE)
     public ResponseEntity<UpdateUserResponse> updateAdminPrivilege(@RequestBody EditAdminPrivilegeRequest request){
-        UpdateUserResponse response = userService.editAdminPrivilege(request);
+        UpdateUserResponse response = userService.updateAdminPrivilege(request);
         return ResponseEntity.ok().body(response);
     }
 }
