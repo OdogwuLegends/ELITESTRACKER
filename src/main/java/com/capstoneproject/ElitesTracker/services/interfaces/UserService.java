@@ -31,5 +31,5 @@ public interface UserService {
     DeleteResponse removeCohort(DeleteRequest request);
     ResetDeviceResponse resetNativeDevice(ResetDeviceRequest request);
     void setToAbsent();
-//    void sendNotificationWhenAbsent();
+    void sendNotificationWhenAbsent();
 }

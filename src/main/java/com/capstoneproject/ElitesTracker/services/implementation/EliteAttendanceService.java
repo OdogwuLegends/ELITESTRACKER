@@ -22,6 +22,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.DISABLED;
 import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.*;
@@ -135,15 +137,15 @@ public class EliteAttendanceService implements AttendanceService {
     @Override
     public AttendanceResponse setToAbsent(List<EliteUser> allNatives) {
         List<Attendance> allAttendances = findAllAttendances();
-        List<Long> listOfAttendanceIds = new ArrayList<>();
+        List<Attendance> attendanceListForToday = new ArrayList<>();
 
-        for (Attendance takenAttendance : allAttendances) {
-            Long id = takenAttendance.getUser().getId();
-            listOfAttendanceIds.add(id);
+        for (Attendance foundAttendance : allAttendances) {
+            if(foundAttendance.getDateTaken().equals(getCurrentDateForAttendance())){
+                attendanceListForToday.add(foundAttendance);
+            }
         }
-
-        for (EliteUser allNative : allNatives) {
-            if (!listOfAttendanceIds.contains(allNative.getId())) {
+        if (attendanceListForToday.isEmpty()) {
+            for (EliteUser allNative : allNatives) {
                 Attendance newAttendance = new Attendance();
                 newAttendance.setStatus(ABSENT);
                 newAttendance.setIpAddress(EMPTY_STRING);
@@ -152,11 +154,67 @@ public class EliteAttendanceService implements AttendanceService {
                 newAttendance.setCohort(allNative.getCohort());
                 attendanceRepository.save(newAttendance);
             }
+        } else {
+            Set<Long> existingUserIds = attendanceListForToday.stream()
+                    .map(attendance -> attendance.getUser().getId())
+                    .collect(Collectors.toSet());
+
+            for (EliteUser allNative : allNatives) {
+                if (!existingUserIds.contains(allNative.getId())) {
+                    Attendance newAttendance = new Attendance();
+                    newAttendance.setStatus(ABSENT);
+                    newAttendance.setIpAddress(EMPTY_STRING);
+                    newAttendance.setIpAddressConcat(EMPTY_STRING);
+                    newAttendance.setUser(allNative);
+                    newAttendance.setCohort(allNative.getCohort());
+                    attendanceRepository.save(newAttendance);
+                }
+            }
         }
+
         AttendanceResponse response = new AttendanceResponse();
         response.setMessage(EXECUTION_COMPLETED);
         return response;
     }
+
+//    @Override
+//    public AttendanceResponse setToAbsent(List<EliteUser> allNatives) {
+//        List<Attendance> allAttendances = findAllAttendances();
+//        List<Attendance> attendanceListForToday = new ArrayList<>();
+//
+//        for (Attendance foundAttendance : allAttendances) {
+//            if(foundAttendance.getDateTaken().equals(getCurrentDateForAttendance())){
+//                attendanceListForToday.add(foundAttendance);
+//            }
+//        }
+//
+//        List<Long> listOfUserIdsInAttendanceList = new ArrayList<>();
+//
+////        for (Attendance takenAttendance : allAttendances) {
+////            Long id = takenAttendance.getUser().getId();
+////            listOfUserIdsInAttendanceList.add(id);
+////        }
+//
+//        for (Attendance takenAttendance : attendanceListForToday) {
+//            Long userId = takenAttendance.getUser().getId();
+//            listOfUserIdsInAttendanceList.add(userId);
+//        }
+//
+//        for (EliteUser allNative : allNatives) {
+//            if (!listOfUserIdsInAttendanceList.contains(allNative.getId())) {
+//                Attendance newAttendance = new Attendance();
+//                newAttendance.setStatus(ABSENT);
+//                newAttendance.setIpAddress(EMPTY_STRING);
+//                newAttendance.setIpAddressConcat(EMPTY_STRING);
+//                newAttendance.setUser(allNative);
+//                newAttendance.setCohort(allNative.getCohort());
+//                attendanceRepository.save(newAttendance);
+//            }
+//        }
+//        AttendanceResponse response = new AttendanceResponse();
+//        response.setMessage(EXECUTION_COMPLETED);
+//        return response;
+//    }
     @Override
     public void checkAndNotifyAbsentStudents(List<EliteUser> allNatives) {
         for (EliteUser foundNative : allNatives) {
