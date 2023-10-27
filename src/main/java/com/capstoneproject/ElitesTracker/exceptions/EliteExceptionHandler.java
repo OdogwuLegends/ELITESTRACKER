@@ -14,7 +14,7 @@ public class EliteExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(BAD_REQUEST)
     public ResponseEntity<?> exceptionHandler(Exception exception){
-        var response =ApiResponse.builder().data(exception.getMessage()).build();
+        var response = ApiResponse.builder().data(exception.getMessage()).build();
         return ResponseEntity.badRequest().body(response);
     }
 }

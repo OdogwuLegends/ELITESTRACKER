@@ -411,7 +411,7 @@ public class EliteUserService implements UserService {
         attendanceService.setToAbsent(findAllNatives());
     }
     @Override
-    @Scheduled(cron = "0 0 18 ? * MON-FRI")
+    @Scheduled(cron = "0 0 18 ? * MON-FRI", zone = "Africa/Lagos")
     public void sendNotificationWhenAbsent() {
         attendanceService.checkAndNotifyAbsentStudents(findAllNatives());
     }
