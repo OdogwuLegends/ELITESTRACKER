@@ -1,10 +1,8 @@
 package com.capstoneproject.ElitesTracker.services.implementation;
 
-import com.capstoneproject.ElitesTracker.dtos.requests.AttendanceRequest;
-import com.capstoneproject.ElitesTracker.dtos.requests.EditAttendanceRequest;
-import com.capstoneproject.ElitesTracker.dtos.requests.PermissionForAttendanceRequest;
-import com.capstoneproject.ElitesTracker.dtos.requests.SetTimeRequest;
+import com.capstoneproject.ElitesTracker.dtos.requests.*;
 import com.capstoneproject.ElitesTracker.dtos.responses.AttendanceResponse;
+import com.capstoneproject.ElitesTracker.dtos.responses.UpdateUserResponse;
 import com.capstoneproject.ElitesTracker.dtos.responses.UserRegistrationResponse;
 import com.capstoneproject.ElitesTracker.exceptions.*;
 import com.capstoneproject.ElitesTracker.models.Attendance;
@@ -23,6 +21,7 @@ import static com.capstoneproject.ElitesTracker.enums.AttendanceStatus.PRESENT;
 import static com.capstoneproject.ElitesTracker.services.implementation.TestVariables.*;
 import static com.capstoneproject.ElitesTracker.utils.AppUtil.*;
 import static com.capstoneproject.ElitesTracker.utils.HardCoded.EDIT_STATUS_MESSAGE;
+import static com.capstoneproject.ElitesTracker.utils.HardCoded.PROFILE_UPDATE_SUCCESSFUL;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -34,6 +33,8 @@ class EliteAttendanceServiceTest {
     private EliteUserService eliteUserService;
     @Autowired
     private ElitesNativesService elitesNativesService;
+    @Autowired
+    private EliteAdminService eliteAdminService;
     private UserRegistrationResponse response;
     private UserRegistrationResponse userRegistrationResponse;
 
@@ -45,7 +46,7 @@ class EliteAttendanceServiceTest {
        assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
 
         EliteUser foundUser = eliteUserService.findUserByEmail("l.odogwu@native.semicolon.africa");
@@ -62,7 +63,7 @@ class EliteAttendanceServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser foundUser = eliteUserService.findUserByEmail("d.coutinho@native.semicolon.africa");
         assertThrows(DifferentWifiNetworkException.class,()-> eliteAttendanceService.saveAttendanceTest(coutinhoAttendance(),"1972.143.0.70",foundUser));
@@ -76,7 +77,7 @@ class EliteAttendanceServiceTest {
 
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser chiboy = eliteUserService.findUserByEmail("c.ugbo@native.semicolon.africa");
         AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(chiboyAttendance(),"172.16.0.71",chiboy);
@@ -93,7 +94,7 @@ class EliteAttendanceServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser foundUser = eliteUserService.findUserByEmail("f.chiemela@native.semicolon.africa");
         assertThrows(NotSameDeviceException.class,()-> eliteAttendanceService.saveAttendanceTest(blackAttendance(),"172.16.0.72",foundUser));
@@ -105,8 +106,23 @@ class EliteAttendanceServiceTest {
         userRegistrationResponse = eliteUserService.registerUser(buildInemReg());
         assertNotNull(userRegistrationResponse);
 
+        response = eliteAdminService.addNewAdmin(buildSikiru());
+        assertNotNull(response);
+        userRegistrationResponse = eliteUserService.registerUser(buildSikiruReg());
+        assertNotNull(userRegistrationResponse);
+
+        EditAdminPrivilegeRequest editAdminPrivilegeRequest = EditAdminPrivilegeRequest.builder()
+                .setFor("sikiru@semicolon.africa")
+                .privilege("SUB")
+                .build();
+
+        UpdateUserResponse updateUserResponse = eliteUserService.updateAdminPrivilegeForTest(editAdminPrivilegeRequest);
+        assertNotNull(updateUserResponse);
+        assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
+
+
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
         eliteUserService.setAttendancePermissionForNative(disableInemPermission());
 
         EliteUser foundUser = eliteUserService.findUserByEmail("i.udousoro@native.semicolon.africa");
@@ -136,7 +152,7 @@ class EliteAttendanceServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser foundUser = eliteUserService.findUserByEmail("b.osisiogu@native.semicolon.africa");
         AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(nedAttendance(),"172.16.0.75",foundUser);
@@ -160,7 +176,7 @@ class EliteAttendanceServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser jide = eliteUserService.findUserByEmail("b.farinde@native.semicolon.africa");
         AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(jideAttendance(),"172.16.0.76",jide);
@@ -185,7 +201,7 @@ class EliteAttendanceServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser kinzy = eliteUserService.findUserByEmail("s.lawal@native.semicolon.africa");
         assertThrows(NotPermittedException.class,()-> eliteAttendanceService.saveAttendanceTest(kinzyAttendance(),"172.16.0.77",kinzy));
@@ -198,7 +214,7 @@ class EliteAttendanceServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser malik = eliteUserService.findUserByEmail("a.alhaji@native.semicolon.africa");
         assertThrows(NotPermittedException.class,()-> eliteAttendanceService.saveAttendanceTest(malikAttendance(),"172.16.0.78",malik));
@@ -215,7 +231,7 @@ class EliteAttendanceServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser timi = eliteUserService.findUserByEmail("t.leyin@native.semicolon.africa");
         AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(timiAttendance(),"172.16.0.79",timi);
@@ -258,6 +274,7 @@ class EliteAttendanceServiceTest {
     private PermissionForAttendanceRequest disableInemPermission(){
         return PermissionForAttendanceRequest.builder()
                 .nativeSemicolonEmail("i.udousoro@native.semicolon.africa")
+                .adminSemicolonEmail("sikiru@semicolon.africa")
                 .cohort("15")
                 .permission(DISABLED)
                 .build();

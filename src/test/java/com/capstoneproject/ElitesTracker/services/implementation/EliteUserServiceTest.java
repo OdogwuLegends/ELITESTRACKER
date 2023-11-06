@@ -71,9 +71,9 @@ class EliteUserServiceTest {
     }
     @Test
     void loginUserWithWrongEmailThrowsException(){
-        response = eliteAdminService.addNewAdmin(buildGabriel());
+        response = eliteAdminService.addNewAdmin(buildGrace());
         assertNotNull(response);
-        userRegistrationResponse = eliteUserService.registerUser(buildGabrielReg());
+        userRegistrationResponse = eliteUserService.registerUser(buildGraceReg());
         assertNotNull(userRegistrationResponse);
 
         assertThrows(IncorrectDetailsException.class,()-> eliteUserService.loginUser(buildLoginRequestWithWrongEmail()));
@@ -110,12 +110,21 @@ class EliteUserServiceTest {
         userRegistrationResponse = eliteUserService.registerUser(buildSeyiReg());
         assertNotNull(userRegistrationResponse);
 
+        EditAdminPrivilegeRequest editAdminPrivilegeRequest = EditAdminPrivilegeRequest.builder()
+                .setFor("seyi@semicolon.africa")
+                .privilege("SUB")
+                .build();
+
+        UpdateUserResponse updateUserResponse = eliteUserService.updateAdminPrivilegeForTest(editAdminPrivilegeRequest);
+        assertNotNull(updateUserResponse);
+        assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
+
         EliteUser foundUser = eliteUserService.findUserByEmail("d.coutinho@native.semicolon.africa");
         assertNotNull(foundUser);
         assertEquals("DOMINIK",foundUser.getFirstName());
         assertEquals("14",foundUser.getCohort());
 
-        UpdateUserResponse updateUserResponse = eliteUserService.updateUserProfile(updateCoutinho());
+        updateUserResponse = eliteUserService.updateUserProfile(updateCoutinho());
         assertNotNull(updateUserResponse);
         assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
 
@@ -133,7 +142,7 @@ class EliteUserServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         AttendanceResponse attendanceResponse = eliteUserService.takeAttendanceTest(chiboyAttendanceDetails(),"172.16.0.70");
         assertNotNull(attendanceResponse);
@@ -147,7 +156,7 @@ class EliteUserServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         assertThrows(AdminsNotPermittedException.class,()-> eliteUserService.takeAttendanceTest(chibuzoAttendanceDetails(),"172.16.0.71"));
     }
@@ -159,14 +168,30 @@ class EliteUserServiceTest {
         userRegistrationResponse = eliteUserService.registerUser(buildWhiteReg());
         assertNotNull(userRegistrationResponse);
 
+        response = eliteAdminService.addNewAdmin(buildGabriel());
+        assertNotNull(response);
+        userRegistrationResponse = eliteUserService.registerUser(buildGabrielReg());
+        assertNotNull(userRegistrationResponse);
+
+        EditAdminPrivilegeRequest editAdminPrivilegeRequest = EditAdminPrivilegeRequest.builder()
+                .setFor("gabriel@semicolon.africa")
+                .privilege("SUB")
+                .build();
+
+        UpdateUserResponse updateUserResponse = eliteUserService.updateAdminPrivilegeForTest(editAdminPrivilegeRequest);
+        assertNotNull(updateUserResponse);
+        assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
+
+
         SetTimeRequest setTimeRequest = setTimeFrame();
-        eliteUserService.setTimeForAttendance(setTimeRequest);
+        eliteUserService.setTimeForAttendanceForTest(setTimeRequest);
 
         AttendanceResponse attendanceResponse = eliteUserService.takeAttendanceTest(whiteAttendanceDetails(),"172.16.0.72");
         assertThat(attendanceResponse).isNotNull();
 
         EditAttendanceRequest request = EditAttendanceRequest.builder()
                 .nativeSemicolonEmail("f.nwadike@native.semicolon.africa")
+                .adminSemicolonEmail("gabriel@semicolon.africa")
                 .cohort("15")
                 .date(localDateToString(LocalDate.now()))
                 .attendanceStatus(ABSENT)
@@ -184,7 +209,7 @@ class EliteUserServiceTest {
         assertNotNull(userRegistrationResponse);
 
        SetTimeRequest setTimeRequest = setTimeFrame();
-       eliteUserService.setTimeForAttendance(setTimeRequest);
+       eliteUserService.setTimeForAttendanceForTest(setTimeRequest);
 
         eliteUserService.takeAttendanceTest(kinzyAttendanceDetails(),"172.16.0.73");
         List<AttendanceSheetResponse> attendanceLog = eliteUserService.generateAttendanceReportForSelf(buildKinzySearchRequest());
@@ -192,7 +217,7 @@ class EliteUserServiceTest {
     }
     @Test
     void adminCanSetTimeForAttendance(){
-        TimeResponse response = eliteUserService.setTimeForAttendance(buildSetTimeFrameForAttendance());
+        TimeResponse response = eliteUserService.setTimeForAttendanceForTest(buildSetTimeFrameForAttendance());
         assertNotNull(response);
         assertEquals(response.getMessage(),TIME_SET_MESSAGE);
     }
@@ -209,7 +234,7 @@ class EliteUserServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest setTimeRequest = setTimeFrame();
-        eliteUserService.setTimeForAttendance(setTimeRequest);
+        eliteUserService.setTimeForAttendanceForTest(setTimeRequest);
 
         eliteUserService.takeAttendanceTest(blackAttendanceDetails(),"172.16.0.74");
         List<AttendanceSheetResponse> attendanceLog = eliteUserService.generateAttendanceReportForNative(buildBlackSearchRequest());
@@ -217,8 +242,24 @@ class EliteUserServiceTest {
     }
     @Test
     void adminCanGenerateAttendanceReportForCohort(){
+        response = elitesNativesService.addNewNative(buildBolaji());
+        assertNotNull(response);
+        userRegistrationResponse = eliteUserService.registerUser(buildBolajiReg());
+        assertNotNull(userRegistrationResponse);
+
+        response = eliteAdminService.addNewAdmin(buildKim());
+        assertNotNull(response);
+        userRegistrationResponse = eliteUserService.registerUser(buildKimReg());
+        assertNotNull(userRegistrationResponse);
+
+        SetTimeRequest setTimeRequest = setTimeFrame();
+        eliteUserService.setTimeForAttendanceForTest(setTimeRequest);
+
+        eliteUserService.takeAttendanceTest(bolajiAttendanceDetails(),"172.16.0.75");
+
         List<AttendanceSheetResponse> attendanceLog = eliteUserService.generateAttendanceReportForCohort(buildCohort15SearchRequest());
         assertNotNull(attendanceLog);
+        assertThat(attendanceLog.size()).isBetween(1,10);
     }
     @Test
     void adminCanSetAttendancePermissionForNative(){
@@ -231,6 +272,15 @@ class EliteUserServiceTest {
         assertNotNull(response);
         userRegistrationResponse = eliteUserService.registerUser(buildJonathanReg());
         assertNotNull(userRegistrationResponse);
+
+        EditAdminPrivilegeRequest editAdminPrivilegeRequest = EditAdminPrivilegeRequest.builder()
+                .setFor("jonathan@semicolon.africa")
+                .privilege("SUB")
+                .build();
+
+        UpdateUserResponse updateUserResponse = eliteUserService.updateAdminPrivilegeForTest(editAdminPrivilegeRequest);
+        assertNotNull(updateUserResponse);
+        assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
 
         EliteUser foundUser = eliteUserService.findUserByEmail("i.udousoro@native.semicolon.africa");
         assertEquals(ENABLED,foundUser.getPermission());
@@ -258,6 +308,15 @@ class EliteUserServiceTest {
         assertNotNull(response);
         userRegistrationResponse = eliteUserService.registerUser(buildPreciousReg());
         assertNotNull(userRegistrationResponse);
+
+        EditAdminPrivilegeRequest editAdminPrivilegeRequest = EditAdminPrivilegeRequest.builder()
+                .setFor("precious@semicolon.africa")
+                .privilege("SUB")
+                .build();
+
+        UpdateUserResponse updateUserResponse = eliteUserService.updateAdminPrivilegeForTest(editAdminPrivilegeRequest);
+        assertNotNull(updateUserResponse);
+        assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
 
         EliteUser foundUser = eliteUserService.findUserByEmail("b.osisiogu@native.semicolon.africa");
         assertEquals(ENABLED,foundUser.getPermission());
@@ -289,10 +348,19 @@ class EliteUserServiceTest {
         userRegistrationResponse = eliteUserService.registerUser(buildSecondBoyReg());
         assertNotNull(userRegistrationResponse);
 
-        response = eliteAdminService.addNewAdmin(buildKim());
+        response = eliteAdminService.addNewAdmin(buildTimothy());
         assertNotNull(response);
-        userRegistrationResponse = eliteUserService.registerUser(buildKimReg());
+        userRegistrationResponse = eliteUserService.registerUser(buildTimothyReg());
         assertNotNull(userRegistrationResponse);
+
+        EditAdminPrivilegeRequest editAdminPrivilegeRequest = EditAdminPrivilegeRequest.builder()
+                .setFor("timothy@semicolon.africa")
+                .privilege("SUPER")
+                .build();
+
+        UpdateUserResponse updateUserResponse = eliteUserService.updateAdminPrivilegeForTest(editAdminPrivilegeRequest);
+        assertNotNull(updateUserResponse);
+        assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
 
         DeleteResponse deleteResponse = eliteUserService.removeNative(removeSecondBoyInCohort14());
         assertThat(deleteResponse).isNotNull();
@@ -315,6 +383,15 @@ class EliteUserServiceTest {
         userRegistrationResponse = eliteUserService.registerUser(buildJerryReg());
         assertNotNull(userRegistrationResponse);
 
+        EditAdminPrivilegeRequest editAdminPrivilegeRequest = EditAdminPrivilegeRequest.builder()
+                .setFor("jerry@semicolon.africa")
+                .privilege("SUPER")
+                .build();
+
+        UpdateUserResponse updateUserResponse = eliteUserService.updateAdminPrivilegeForTest(editAdminPrivilegeRequest);
+        assertNotNull(updateUserResponse);
+        assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
+
         DeleteResponse deleteResponse = eliteUserService.removeCohort(removeCohort14());
         assertNotNull(deleteResponse);
         assertEquals(DELETE_USER_MESSAGE,deleteResponse.getMessage());
@@ -332,6 +409,15 @@ class EliteUserServiceTest {
         assertNotNull(response);
         userRegistrationResponse = eliteUserService.registerUser(buildSikiruReg());
         assertNotNull(userRegistrationResponse);
+
+        EditAdminPrivilegeRequest editAdminPrivilegeRequest = EditAdminPrivilegeRequest.builder()
+                .setFor("sikiru@semicolon.africa")
+                .privilege("SUB")
+                .build();
+
+        UpdateUserResponse updateUserResponse = eliteUserService.updateAdminPrivilegeForTest(editAdminPrivilegeRequest);
+        assertNotNull(updateUserResponse);
+        assertEquals(PROFILE_UPDATE_SUCCESSFUL,updateUserResponse.getMessage());
 
         EliteUser foundUser = eliteUserService.findUserByEmail("b.farinde@native.semicolon.africa");
         assertNotNull(foundUser);

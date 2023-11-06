@@ -223,7 +223,7 @@ public class EliteAttendanceService implements AttendanceService {
                 try {
                     emailService.sendAbsenteeismEmail(foundNative,currentStreak);
                 } catch (MessagingException | UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException(e.getMessage());
                 }
             }
         }
@@ -306,7 +306,6 @@ public class EliteAttendanceService implements AttendanceService {
                 currentStreak = 0; // Reset streak when the student is present
             }
         }
-
         return Math.max(maxStreak, currentStreak);
     }
 

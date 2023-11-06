@@ -214,12 +214,28 @@ public class EliteUserService implements UserService {
     }
 
     @Override
+    public TimeResponse setTimeForAttendanceForTest(SetTimeRequest request) {
+        return timeEligibilityService.setTimeForAttendance(request);
+    }
+
+    @Override
     public UpdateUserResponse updateAdminPrivilege(EditAdminPrivilegeRequest request) {
         String userEmail = request.getSetBy().replaceAll("\"", "");
         EliteUser foundSuperAdmin = findUserByEmail(userEmail);
         checkForSuperAdminPrivilege(foundSuperAdmin);
 
         userEmail = request.getSetFor().replaceAll("\"", "");
+        EliteUser foundAdmin = findUserByEmail(userEmail);
+
+        setNewAdminPrivilege(request,foundAdmin);
+        return UpdateUserResponse.builder()
+                .message(PROFILE_UPDATE_SUCCESSFUL)
+                .build();
+    }
+
+    @Override
+    public UpdateUserResponse updateAdminPrivilegeForTest(EditAdminPrivilegeRequest request) {
+        String userEmail = request.getSetFor().replaceAll("\"", "");
         EliteUser foundAdmin = findUserByEmail(userEmail);
 
         setNewAdminPrivilege(request,foundAdmin);
@@ -586,6 +602,7 @@ public class EliteUserService implements UserService {
             foundAdmin.getAdminPrivilegesList().add(SUB_ADMIN);
             eliteUserRepository.save(foundAdmin);
         } else if (request.getPrivilege().equalsIgnoreCase("SUPER")) {
+            foundAdmin.getAdminPrivilegesList().add(SUB_ADMIN);
             foundAdmin.getAdminPrivilegesList().add(SUPER_ADMIN);
             eliteUserRepository.save(foundAdmin);
         }

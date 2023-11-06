@@ -43,7 +43,7 @@ class EliteSearchServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
 
         EliteUser foundUser = eliteUserService.findUserByEmail("l.odogwu@native.semicolon.africa");
@@ -62,7 +62,7 @@ class EliteSearchServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
 
         EliteUser foundUser = eliteUserService.findUserByEmail("c.ugbo@native.semicolon.africa");
@@ -86,7 +86,7 @@ class EliteSearchServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser firstUser = eliteUserService.findUserByEmail("d.coutinho@native.semicolon.africa");
         AttendanceResponse attendanceResponse = eliteAttendanceService.saveAttendanceTest(coutinhoAttendance(),"172.16.0.72",firstUser);
@@ -109,7 +109,7 @@ class EliteSearchServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser foundUser = eliteUserService.findUserByEmail("f.nwadike@native.semicolon.africa");
         assertThrows(RecordNotFoundException.class,()-> eliteSearchService.searchAttendanceReportForSelf(whiteAttendanceReport(),foundUser));
@@ -122,7 +122,7 @@ class EliteSearchServiceTest {
         assertNotNull(userRegistrationResponse);
 
         SetTimeRequest request = setTimeFrame();
-        eliteUserService.setTimeForAttendance(request);
+        eliteUserService.setTimeForAttendanceForTest(request);
 
         EliteUser foundUser = eliteUserService.findUserByEmail("b.farinde@native.semicolon.africa");
         assertThrows(RecordNotFoundException.class,()-> eliteSearchService.searchAttendanceReportForNative(jideAttendanceReport(),foundUser));

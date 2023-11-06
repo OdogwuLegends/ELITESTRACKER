@@ -100,6 +100,13 @@ public class AppUtil {
         LocalDate formattedDate = LocalDate.parse(frontendDate, frontendFormat);
         return formattedDate.format(desiredFormat);
     }
+    public static String changeDateFormatForTest(String frontendDate){
+        DateTimeFormatter normalFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter desiredFormatForTest = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate formattedDate = LocalDate.parse(frontendDate, normalFormat);
+        return formattedDate.format(desiredFormatForTest);
+    }
     public static String subStringDate(String date) {
         int indexOfSpace = date.indexOf(' ');
 
