@@ -422,7 +422,7 @@ public class EliteUserService implements UserService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 13 ? * MON-FRI", zone = "Africa/Lagos")
+    @Scheduled(cron = "0 0 15 ? * MON-FRI", zone = "Africa/Lagos")
     public void setToAbsent() {
         attendanceService.setToAbsent(findAllNatives());
     }

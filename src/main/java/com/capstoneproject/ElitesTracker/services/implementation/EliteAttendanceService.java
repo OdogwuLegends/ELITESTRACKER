@@ -13,16 +13,12 @@ import com.capstoneproject.ElitesTracker.services.interfaces.TimeEligibilityServ
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.capstoneproject.ElitesTracker.enums.AttendancePermission.DISABLED;
@@ -177,57 +173,88 @@ public class EliteAttendanceService implements AttendanceService {
         return response;
     }
 
-//    @Override
-//    public AttendanceResponse setToAbsent(List<EliteUser> allNatives) {
-//        List<Attendance> allAttendances = findAllAttendances();
-//        List<Attendance> attendanceListForToday = new ArrayList<>();
-//
-//        for (Attendance foundAttendance : allAttendances) {
-//            if(foundAttendance.getDateTaken().equals(getCurrentDateForAttendance())){
-//                attendanceListForToday.add(foundAttendance);
-//            }
-//        }
-//
-//        List<Long> listOfUserIdsInAttendanceList = new ArrayList<>();
-//
-////        for (Attendance takenAttendance : allAttendances) {
-////            Long id = takenAttendance.getUser().getId();
-////            listOfUserIdsInAttendanceList.add(id);
-////        }
-//
-//        for (Attendance takenAttendance : attendanceListForToday) {
-//            Long userId = takenAttendance.getUser().getId();
-//            listOfUserIdsInAttendanceList.add(userId);
-//        }
-//
-//        for (EliteUser allNative : allNatives) {
-//            if (!listOfUserIdsInAttendanceList.contains(allNative.getId())) {
-//                Attendance newAttendance = new Attendance();
-//                newAttendance.setStatus(ABSENT);
-//                newAttendance.setIpAddress(EMPTY_STRING);
-//                newAttendance.setIpAddressConcat(EMPTY_STRING);
-//                newAttendance.setUser(allNative);
-//                newAttendance.setCohort(allNative.getCohort());
-//                attendanceRepository.save(newAttendance);
-//            }
-//        }
-//        AttendanceResponse response = new AttendanceResponse();
-//        response.setMessage(EXECUTION_COMPLETED);
-//        return response;
-//    }
     @Override
     public void checkAndNotifyAbsentStudents(List<EliteUser> allNatives) {
         for (EliteUser foundNative : allNatives) {
-            int currentStreak = calculateCurrentAbsenceStreak(foundNative);
-            if (currentStreak > 0 && currentStreak % 5 == 0) {
-                try {
-                    emailService.sendAbsenteeismEmail(foundNative,currentStreak);
-                } catch (MessagingException | UnsupportedEncodingException e) {
-                    throw new RuntimeException(e.getMessage());
+            calculateCurrentAbsenceStreak(foundNative);
+        }
+    }
+    private void calculateCurrentAbsenceStreak(EliteUser foundNative) {
+        List<Attendance> attendanceRecords = findAllAttendances();
+        int currentStreak = 0;
+
+        // Map to store milestones and their corresponding boolean flags
+        Map<Integer, Boolean> milestoneFlags = createMilestoneFlags();
+
+        for (Attendance record : attendanceRecords) {
+            if (foundNative.getId().equals(record.getUser().getId()) && record.getStatus().equals(ABSENT)) {
+                currentStreak++;
+
+                // Check for milestones
+                for (int milestone : milestoneFlags.keySet()) {
+                    if (currentStreak % milestone == 0 && currentStreak > 0 && !milestoneFlags.get(milestone)) {
+                        try {
+                            emailService.sendAbsenteeismEmail(foundNative, currentStreak);
+                        } catch (MessagingException | UnsupportedEncodingException e) {
+                            throw new RuntimeException(e.getMessage());
+                        }
+                        milestoneFlags.put(milestone, true); // Set the flag to true after sending the message
+                    }
                 }
+            } else {
+                currentStreak = 0;
+                resetMilestoneFlags(milestoneFlags); // Reset flags when absence streak is broken
             }
         }
     }
+    private Map<Integer, Boolean> createMilestoneFlags(){
+        Map<Integer, Boolean> daysAbsent = new HashMap<>();
+        for (int i = 5; i <= 365; i += 5) {
+            daysAbsent.put(i, false);
+        }
+        return daysAbsent;
+    }
+    private void resetMilestoneFlags(Map<Integer, Boolean> milestoneFlags) {
+        for (int milestone : milestoneFlags.keySet()) {
+            milestoneFlags.put(milestone, false);
+        }
+    }
+
+//    @Override
+//    public void checkAndNotifyAbsentStudents(List<EliteUser> allNatives) {
+//        for (EliteUser foundNative : allNatives) {
+//            int currentStreak = calculateCurrentAbsenceStreak(foundNative);
+//            if (currentStreak > 0 && currentStreak % 5 == 0) {
+//                try {
+//                    emailService.sendAbsenteeismEmail(foundNative,currentStreak);
+//                } catch (MessagingException | UnsupportedEncodingException e) {
+//                    throw new RuntimeException(e.getMessage());
+//                }
+//            }
+//        }
+//    }
+//
+
+//    private int calculateCurrentAbsenceStreak(EliteUser foundNative) {
+//        List<Attendance> attendanceRecords = findAllAttendances();
+//        int currentStreak = 0;
+//
+//        for (Attendance record : attendanceRecords) {
+//            if (foundNative.getId().equals(record.getUser().getId()) && record.getStatus().equals(ABSENT)) {
+//                currentStreak++;
+//                if (currentStreak > 0 && currentStreak % 5 == 0) {
+//                    try {
+//                        emailService.sendAbsenteeismEmail(foundNative,currentStreak);
+//                    } catch (MessagingException | UnsupportedEncodingException e) {
+//                        throw new RuntimeException(e.getMessage());
+//                    }
+//                }
+//            } else {
+//                currentStreak = 0; // Reset streak when the student is present
+//            }
+//        }
+//        return currentStreak;
+//    }
 
     private void checkTimeFrameAndBuildAttendance(EliteUser eliteUser, AttendanceResponse response,AttendanceRequest request){
         List<TimeEligibility> timeFrames = timeEligibilityService.findAllTimeFrames();
@@ -291,22 +318,6 @@ public class EliteAttendanceService implements AttendanceService {
     private boolean isAnotherDevice(AttendanceRequest request,EliteUser eliteUser){
         return !eliteUser.getScreenWidth().equals(request.getScreenWidth()) ||
                 !eliteUser.getScreenHeight().equals(request.getScreenHeight());
-    }
-    private int calculateCurrentAbsenceStreak(EliteUser foundNative) {
-        List<Attendance> attendanceRecords = findAllAttendances();
-
-        int currentStreak = 0;
-        int maxStreak = 0;
-
-        for (Attendance record : attendanceRecords) {
-            if (foundNative.getId().equals(record.getUser().getId()) && record.getStatus().equals(ABSENT)) {
-                currentStreak++;
-            } else {
-                maxStreak = Math.max(maxStreak, currentStreak);
-                currentStreak = 0; // Reset streak when the student is present
-            }
-        }
-        return Math.max(maxStreak, currentStreak);
     }
 
     private void timeTrial() {
